@@ -44,7 +44,7 @@ Name | Student ID | Feature Contribution |
 
 ## Technologies
 
-1. Design 
+1. Design:
 2. Back-end: 
 3. Front-end:
 4. Database: 
