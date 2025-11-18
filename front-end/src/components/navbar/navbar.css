@@ -14,6 +14,13 @@ ul.navbar {
 
 }
 
+ul.navbar li.right {
+    float: right;
+    display:flex;
+    padding-left: 5px;
+    padding:-right 5px;
+}
+
 ul.navbar li {
     float: left;
     display: inline;

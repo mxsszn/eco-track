@@ -1,0 +1,46 @@
+.container {
+  display: flex;
+  background-color: blueviolet;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  min-height: 90vh;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 5px;
+    background-color: blue;
+    min-width: 360px;
+    max-height: 60vh;
+
+}
+
+h1.formTitle {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.label-container {
+
+}
+
+
+label {
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    margin: 5px;
+}
+
+form.loginForm {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+
+}
