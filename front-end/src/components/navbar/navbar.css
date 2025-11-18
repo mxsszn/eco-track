@@ -1,0 +1,27 @@
+header {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+ul.navbar {
+
+    list-style-type: none;
+    margin: 0;
+    padding: 15px;
+    overflow: hidden;
+    background-color: gray;
+
+}
+
+ul.navbar li {
+    float: left;
+    display: inline;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+nav {
+    border-bottom: 1px solid black;
+}
