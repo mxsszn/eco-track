@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { createRoot }
+import { useState } from 'react'
 import './login.css'
 
 function LoginForm() {
@@ -12,23 +11,25 @@ function LoginForm() {
         setInputs(values => ({... values, [name]: value}))
     }
 
+    const handleSubmit = (e) => {
+        const submitData = {
+            username: inputs.username,
+            password: inputs.password,
+            repassword: inputs.repassword,
+        }
+    }
+
 
 
     return(
-    <div class="container">
+            <div class="container">
             <div class="login-container">
-                <h1 class="formTitle">Header</h1>
+                <h1 class="formTitle">Welcome back!</h1>
                 <form class="loginForm" onSubmit={handleSubmit}>
-                <label>Name: </label><br/>
-                <input type="text" name="firstname" value={inputs.firstname} onChange={handleChange}/><br/>
-                <label>Email: </label><br/>
-                <input type="text" name="email" value={inputs.email} onChange={handleChange}/><br/>
-                <label>Password: </label><br/>
-                <input type="password" name="password" value={inputs.password} onChange={handleChange}/><br/>
-                <label>Retype Password: </label><br/>
-                <input type="password" name="repassword" value={inputs.repassword} onChange={handleChange}/><br/>
-
-                <input type="submit"/>
+                <input type="text" name="username" class="textfield" placeholder="Username" value={inputs.username} onChange={handleChange}/>
+                <input type="password" name="password" class="textfield" placeholder="Password" value={inputs.password} onChange={handleChange}/>
+                <input type="password" name="repassword" class="textfield" placeholder="Confirm Password" value={inputs.repassword} onChange={handleChange}/>
+                <input class="button" type="submit" value="Log In"></input>
                 </form>
         </div>
     </div>

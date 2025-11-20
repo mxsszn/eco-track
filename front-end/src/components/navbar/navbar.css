@@ -4,31 +4,85 @@ header {
     width: 100%;
 }
 
-ul.navbar {
-
-    list-style-type: none;
-    margin: 0;
-    padding: 15px;
-    overflow: hidden;
-    background-color: gray;
+.navbar {
+  overflow: hidden;
+  background-color: #FCFFEB;
+  box-shadow: 0px -3px 8px rgba(123, 123, 123, 0.522) inset;
+  min-height: 4rem;
 
 }
 
-ul.navbar li.right {
+.navbar a {
+  float: left;
+  font-size: 16px;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  min-height: 2.5rem;
+}
+
+.navbar a.login {
     float: right;
-    display:flex;
-    padding-left: 5px;
-    padding:-right 5px;
 }
 
-ul.navbar li {
-    float: left;
-    display: inline;
-    padding-left: 5px;
-    padding-right: 5px;
+.dropdown {
+  float: right;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+.navbar a:hover, .dropdown:hover .dropbtn {
+    animation-name: hoverAnimation;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }
 
 
-nav {
-    border-bottom: 1px solid black;
+@keyframes hoverAnimation {
+    from {
+        background-color: #FCFAF9;
+        box-shadow: 0px -3px 8px rgba(123, 123, 123, 0.522) inset;
+    }
+    to {
+        background-color: #DB5375;
+        box-shadow: 0px -3px 8px rgba(123, 123, 123, 0.522) inset;
+    }
+
+
 }
