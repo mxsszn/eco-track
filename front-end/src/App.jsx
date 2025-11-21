@@ -10,6 +10,9 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 function App() {
 
+  if (!localStorage.getItem("loggedIn")) {
+    localStorage.setItem("loggedIn", false)
+  }
 
   return (
     <>

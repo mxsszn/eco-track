@@ -7,22 +7,18 @@ import LoginForm from "../login/login";
 
 
 
-
-
-
-
-
-    const loggedIn = true;
-
 function AccountDropdown() {
 
-    if (loggedIn == false) {
+    if (localStorage.getItem("loggedIn") == "false") {
             return(
-                <a class="login">Login</a>
+                <>
+                <Link to="/login" class="login">Login</Link>
+                <Link to="/register" class="login">Register</Link>
+                </>
             )
     }
 
-    if (loggedIn == true) {
+    if (localStorage.getItem("loggedIn") == "true") {
         return (
         <div class="dropdown">
             <button class="dropbtn">Account 
@@ -50,7 +46,6 @@ function Navbar() {
                 <Link to="/">Home</Link>
                 <Link to="/dashboard">Dashboard</Link>
                 <Link to="/about">About</Link>
-
                 <AccountDropdown/>
             </div>
         </header>

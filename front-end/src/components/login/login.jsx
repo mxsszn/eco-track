@@ -15,8 +15,18 @@ function LoginForm() {
         const submitData = {
             username: inputs.username,
             password: inputs.password,
-            repassword: inputs.repassword,
         }
+        handleLogin(submitData)
+    }
+
+
+
+    const handleLogin = (data) => {
+        if (data.username == localStorage.getItem("username") && data.password == localStorage.getItem("password")) {
+            alert("success!")
+            localStorage.setItem("loggedIn", true)
+
+        } 
     }
 
 
@@ -28,7 +38,6 @@ function LoginForm() {
                 <form class="loginForm" onSubmit={handleSubmit}>
                 <input type="text" name="username" class="textfield" placeholder="Username" value={inputs.username} onChange={handleChange}/>
                 <input type="password" name="password" class="textfield" placeholder="Password" value={inputs.password} onChange={handleChange}/>
-                <input type="password" name="repassword" class="textfield" placeholder="Confirm Password" value={inputs.repassword} onChange={handleChange}/>
                 <input class="button" type="submit" value="Log In"></input>
                 </form>
         </div>
