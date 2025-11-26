@@ -1,40 +1,41 @@
-import React, { useEffect, useState } from 'react'; // ✅ FIXED: Added useState
+import React, { useEffect, useState } from 'react';
 import './Dashboard.css';
-import { db } from '../firebase'; 
-import { collection, addDoc } from 'firebase/firestore'; 
+import { db } from '../firebase';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 /**
  * DASHBOARD COMPONENT
+ * Displays real-time stats fetched from Firebase.
  */
 const Dashboard = () => {
-  
-  // Status State
-  const [status, setStatus] = useState("⏳ Connecting to Firebase...");
 
-  // Connection Test
+  // State to hold the data (starts with default 0s)
+  const [userStats, setUserStats] = useState({
+    co2Saved: 0,
+    journeys: 0,
+    points: 0
+  });
+
+  // EFFECT: Fetch data when the page loads
   useEffect(() => {
-    const testConnection = async () => {
+    const fetchData = async () => {
       try {
-        await addDoc(collection(db, "test_connection"), {
-          message: "Mekael's Visual Test",
-          timestamp: new Date()
-        });
-        setStatus("✅ SUCCESS: Connected to Database!"); 
-      } catch (e) {
-        console.error(e);
-        setStatus("❌ ERROR: " + e.message);
+        // TODO: In Sprint 2, we will fetch real data here.
+        // Example logic for later:
+        // const q = query(collection(db, "journeys"), where("userId", "==", "current_user_id"));
+        // const querySnapshot = await getDocs(q);
+        // Calculate totals from snapshot...
+
+        console.log("Dashboard connected to DB. Waiting for Journey Data.");
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
       }
     };
 
-    testConnection(); 
+    fetchData();
   }, []);
 
-  const userStats = {
-    co2Saved: 12.5,
-    journeys: 8,
-    points: 450
-  };
-
+  // Destructure values for clean usage
   const { co2Saved, journeys, points } = userStats;
 
   return (
@@ -43,22 +44,6 @@ const Dashboard = () => {
       <header className="dash-header">
         <div>
           <h1>👋 Good Evening, Mekael</h1>
-          
-          {/* --- VISUAL STATUS BOX --- */}
-          <div style={{ 
-            marginTop: '10px', 
-            padding: '10px',
-            borderRadius: '5px',
-            backgroundColor: status.includes("SUCCESS") ? '#d4edda' : '#fff3cd',
-            color: status.includes("SUCCESS") ? '#155724' : '#856404',
-            border: '1px solid currentColor',
-            fontWeight: 'bold',
-            fontSize: '0.9rem',
-            maxWidth: 'fit-content' // Keeps the box neat
-          }}>
-            {status}
-          </div>
-
           <p>Here is your daily eco-impact.</p>
         </div>
         <div className="user-badge">🌱 Eco-Warrior Lvl 3</div>
@@ -87,9 +72,9 @@ const Dashboard = () => {
       <div className="content-section">
         <h2>Recent Activity</h2>
         <div className="activity-list">
+          {/* Mock Items for UI Demo - Will map() this later */}
           <ActivityItem icon="🚌" title="Bus to Campus" time="Today, 09:30 AM" impact="+1.2kg Saved" />
           <ActivityItem icon="🚶" title="Walk to Tesco" time="Yesterday, 18:45 PM" impact="+0.8kg Saved" />
-          <ActivityItem icon="🚗" title="Car Ride" time="Mon, 08:15 AM" impact="High Impact" isNegative={true} />
         </div>
       </div>
 
