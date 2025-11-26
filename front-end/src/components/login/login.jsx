@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import './login.css'
 
+
+
+
 function LoginForm() {
 
     const [inputs, setInputs] = useState({});
@@ -19,7 +22,7 @@ function LoginForm() {
         handleLogin(submitData)
     }
 
-
+    
 
     const handleLogin = (data) => {
         if (data.username == localStorage.getItem("username") && data.password == localStorage.getItem("password")) {
@@ -29,16 +32,14 @@ function LoginForm() {
         } 
     }
 
-
-
     return(
-            <div class="container">
-            <div class="login-container">
-                <h1 class="formTitle">Welcome back!</h1>
-                <form class="loginForm" onSubmit={handleSubmit}>
-                <input type="text" name="username" class="textfield" placeholder="Username" value={inputs.username} onChange={handleChange}/>
-                <input type="password" name="password" class="textfield" placeholder="Password" value={inputs.password} onChange={handleChange}/>
-                <input class="button" type="submit" value="Log In"></input>
+            <div className="container">
+            <div className="login-container">
+                <h1 className="formTitle">Welcome back!</h1>
+                <form className="loginForm" onSubmit={handleSubmit}>
+                <input type="text" name="username" className="textfield" placeholder="Username" value={inputs.username} onChange={handleChange}/>
+                <input type="password" name="password" className="textfield" placeholder="Password" value={inputs.password} onChange={handleChange}/>
+                <input className="button" type="submit" value="Log In"></input>
                 </form>
         </div>
     </div>

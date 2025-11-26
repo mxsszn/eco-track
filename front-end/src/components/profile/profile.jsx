@@ -2,6 +2,7 @@
 import "./profile.css"
 import pfp from "./testimg1.jpg"
 
+
 const dummyData = {
     username : "placeholder30",
     registerDate : "18-Mar-2025",
@@ -13,28 +14,40 @@ const dummyData = {
 function Profile() {
     return (
         <>
-        <div class="profile-grid">
-            <div class="griditem1">
-                <div class="flexitem1">
-                    <img class="profile-picture" src={pfp} alt="tygrys"/>
-                    <div class="userdata">
-                    <div class="line1">
+        <div className="profile-grid">
+            <div className="griditem1">
+                <div className="flexitem1">
+                    <img className="profile-picture" src={pfp} alt="tygrys"/>
+                    <div className="userdata">
+                    <div className="line1">
                         <p1>{dummyData.username}</p1>
                         <p2>Eco rank {dummyData.ecorank}</p2>
                     </div>
                         <p3>A user since <b>{dummyData.registerDate}</b></p3>
                     </div>                     
                 </div>                 
-                    <div class="infobox">
-                    <desctitle>Here is a short description about myself!</desctitle>
+                    <div className="infobox">
+                    <desctitle>About me</desctitle>
                     <description>
                         {dummyData.description}
                     </description>
                     </div>
                 </div>
-            <div class="griditem2">
-            <div>test</div>
-
+            <div className="griditem2">
+                  <img className="profile-picture" src={pfp} alt="tygrys"/>
+                    <div className="userdata">
+                    <div className="line1">
+                        <p1>{dummyData.username}</p1>
+                        <p2>Eco rank {dummyData.ecorank}</p2>
+                    </div>
+                        <p3>A user since <b>{dummyData.registerDate}</b></p3>
+                    </div>                                     
+                    <div className="infobox">
+                    <desctitle>About me</desctitle>
+                    <description>
+                        {dummyData.description}
+                    </description>
+            </div> 
             </div>
             </div>
         </>

@@ -45,20 +45,20 @@ const clearLocalStorage = () => {
 
 
     return(
-            <div class="container">
+            <div className="container">
             <button onClick={clearLocalStorage}>clear storage</button>
-            <div class="register-container">
-                <h1 class="formTitle">Thank you for signing up!</h1>
-                <form class="loginForm" onSubmit={handleSubmit}>
-                <input type="text" name="username" class="textfield" placeholder="username" value={inputs.username} onChange={handleChange}/>
-                <div class="namediv">
-                <input type="text" name="firstname" class="textfield" placeholder="First Name" value={inputs.firstname} onChange={handleChange}/>
-                <input type="text" name="lastname" class="textfield" placeholder="Last Name" value={inputs.lastname} onChange={handleChange}/>
+            <div className="register-container">
+                <h1 className="formTitle">Thank you for signing up!</h1>
+                <form className="loginForm" onSubmit={handleSubmit}>
+                <input type="text" name="username" className="textfield" placeholder="username" value={inputs.username} onChange={handleChange}/>
+                <div className="namediv">
+                <input type="text" name="firstname" className="textfield" placeholder="First Name" value={inputs.firstname} onChange={handleChange}/>
+                <input type="text" name="lastname" className="textfield" placeholder="Last Name" value={inputs.lastname} onChange={handleChange}/>
                 </div>
-                <input type="text" name="email" class="textfield" placeholder="Email" value={inputs.email} onChange={handleChange}/>
-                <input type="password" name="password" class="textfield" placeholder="Password" value={inputs.password} onChange={handleChange}/>
-                <input type="password" name="repassword" class="textfield" placeholder="Confirm Password" value={inputs.repassword} onChange={handleChange}/>
-                <input class="button" type="submit" value="Sign Up"></input>
+                <input type="text" name="email" className="textfield" placeholder="Email" value={inputs.email} onChange={handleChange}/>
+                <input type="password" name="password" className="textfield" placeholder="Password" value={inputs.password} onChange={handleChange}/>
+                <input type="password" name="repassword" className="textfield" placeholder="Confirm Password" value={inputs.repassword} onChange={handleChange}/>
+                <input className="button" type="submit" value="Sign Up"></input>
                 </form>
         </div>
     </div>

@@ -1,22 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Navbar from './components/navbar/navbar.jsx'
-import LoginForm from './components/login/login.jsx'
-import RegisterForm from './components/Register/register.jsx'
+import Home from './components/home/home.jsx'
 import Profile from './components/profile/profile.jsx'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import RegisterForm from './components/Register/register.jsx'
+import LoginForm from './components/login/login.jsx'
+
+
+
 
 function App() {
 
   if (!localStorage.getItem("loggedIn")) {
-    localStorage.setItem("loggedIn", false)
+    localStorage.setItem("loggedIn", true)
   }
 
   return (
     <>
+    <BrowserRouter>
     <Navbar/>
+
+    <Routes>
+    <Route path="/" element={<Home/>}/>
+    <Route path="/profile" element={<Profile/>}/>
+    <Route path="/register" element={<RegisterForm/>}/>
+    <Route path="/login" element={<LoginForm/>}/>
+    </Routes>
+    </BrowserRouter>
     </>
   )
 }
