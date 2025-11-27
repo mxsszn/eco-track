@@ -1,27 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Navbar from './components/navbar/navbar.jsx'
+import Home from './components/home/home.jsx'
+import Profile from './components/profile/profile.jsx'
+import RegisterForm from './components/Register/register.jsx'
+import LoginForm from './components/login/login.jsx'
+
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  if (!localStorage.getItem("loggedIn")) {
+    localStorage.setItem("loggedIn", true)
+  }
 
   return (
     <>
+    <BrowserRouter>
     <Navbar/>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+    <Routes>
+    <Route path="/" element={<Home/>}/>
+    <Route path="/profile" element={<Profile/>}/>
+    <Route path="/register" element={<RegisterForm/>}/>
+    <Route path="/login" element={<LoginForm/>}/>
+    </Routes>
+    </BrowserRouter>
     </>
   )
 }

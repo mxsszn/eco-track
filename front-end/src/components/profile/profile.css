@@ -1,0 +1,134 @@
+
+
+.profile-grid {
+    margin: 20px;
+    display: grid;
+    background-color: inherit;
+    grid-template-columns: auto auto;
+    
+}
+
+
+
+
+
+div.griditem1 {
+    margin: 10px;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    border-radius: 25px;
+    background-color: #FCFAF9;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+    }
+
+    
+div.griditem2 {
+    margin: 10px;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    border-radius: 25px;
+    background-color: #FCFAF9;
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.283), -10px -10px 15px rgba(0, 0, 0, 0.283);
+}
+
+div.griditem2 div {
+    padding: 10px;
+}
+
+
+
+.userdata {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+
+
+.flexitem1 {
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+.infobox {
+    display: flex;
+    flex-direction: column;
+}
+
+.infobox desctitle {
+    font-size: 25px;
+    font-weight: bold;
+    padding: 8px;
+}
+
+.infobox description {
+    font-size: 20px;
+    background-color: #e6e6e6;
+    border-radius: 25px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #a4a4a4;
+    padding: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+
+.userdata .line1 {
+    display: flex;
+    margin-left: 10px;
+    font-size: 56px;
+}
+
+.userdata p1 {
+    font-weight: bold;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    border-bottom: #c3c3c3;
+    border-style: none none solid none;
+    border-width: 2px;
+}
+
+
+.userdata p2 {
+    align-self: center;
+    font-size: 16px;
+    margin-left: 25px;
+    margin-right: 25px;
+    border-radius: 20px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #48E5C2;
+    padding: 8px;
+    background-color: #48ebc7;
+    font-weight: bolder
+
+
+}
+
+.userdata p3 {
+    text-align:left;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+
+.profile-picture {
+    width: 180px;
+    height: 180px;
+    margin: 25px;
+    margin-right: 10px;
+    border-radius: 50%;
+    border-width: 4px;
+    border-style: solid;
+    border-color: #48E5C2;
+}
