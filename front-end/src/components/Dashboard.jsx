@@ -4,10 +4,7 @@ import './Dashboard.css';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
-/**
- * DASHBOARD COMPONENT
- * Displays key metrics, recent activity, and progress charts.
- */
+
 const Dashboard = () => {
 
   // Mock Data: Based on average UK transport emissions (Gov.uk 2023 figures)
