@@ -43,6 +43,7 @@ function AccountDropdown() {
 function Navbar() {
     return(
         <>
+    <BrowserRouter>
         <header>
             <div className="navbar">
                 <Link to="/">Home</Link>
@@ -51,8 +52,14 @@ function Navbar() {
                 <AccountDropdown/>
             </div>
         </header>
-
-        </>
+    <Routes>
+    <Route path="/" element={<Home/>}/>
+    <Route path="/profile" element={<Profile/>}/>
+    <Route path="/register" element={<RegisterForm/>}/>
+    <Route path="/login" element={<LoginForm/>}/>
+    </Routes>
+    </BrowserRouter>
+    </>
     );
 }
 

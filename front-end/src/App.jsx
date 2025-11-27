@@ -17,16 +17,7 @@ function App() {
 
   return (
     <>
-    <BrowserRouter>
-    <Navbar/>
-
-    <Routes>
-    <Route path="/" element={<Home/>}/>
-    <Route path="/profile" element={<Profile/>}/>
-    <Route path="/register" element={<RegisterForm/>}/>
-    <Route path="/login" element={<LoginForm/>}/>
-    </Routes>
-    </BrowserRouter>
+      <Navbar/>
     </>
   )
 }
