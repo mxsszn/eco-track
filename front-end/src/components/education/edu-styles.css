@@ -1,0 +1,137 @@
+
+.edu-page{
+    background-color: #fcfaf9;
+    color: #202020;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    font-family: 'SF Pro Rounded', sans-serif;
+    height: 600vh;
+}
+
+.edu-hero{
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.Live-data-section{
+    background-color: #090020;
+    color: #ffffff;
+    padding: 4rem 5rem;
+    text-align: center;
+}
+.live-data{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.live-news{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+    color: #202020;
+    padding: 4rem 5rem;
+    text-align: center;
+}
+
+.news-articles{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    align-items: top;
+    gap: 2rem;
+    margin-top: 2rem;
+    width: 60%;
+}
+
+.news{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+.news-summary{
+    text-align: left;
+}
+
+.join-cta{
+    margin-top: 3rem;
+}
+.live-chart-container{
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    /* border-radius: 30px; */
+    /* background-color: rgb(24, 0, 81); */
+    background-image: linear-gradient(to bottom, rgba(33, 0, 125, 0.558), rgba(0, 0, 0, 0));
+    padding: 2rem;
+}
+
+.emission-sources{
+    padding: 4rem 1rem;
+    text-align: center;
+}
+.emissions-list{
+    list-style-type: none;
+    padding: 0;
+    margin: 2rem auto;
+    max-width: 400px;
+    text-align: left;
+    text-decoration: none;
+}
+
+button{
+    background-color: #ba426c;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: #626262;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+    border-radius: 30px;
+}
+
+h1{
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.1;
+}
+
+h2{
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.2;
+}
+h3{
+    margin-bottom: 1rem;
+    max-width: 400px;
+}
+
+p{
+    max-width: 600px;
+    margin: 1rem auto;
+    line-height: 1.6;
+    font-weight: light;
+    font-size: 1rem;
+    font-family: 'SF Pro', sans-serif;
+}

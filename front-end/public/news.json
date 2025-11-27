@@ -1,0 +1,46 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "Global Transport Emissions Rise in 2024",
+      "summary": "According to the latest reports, global transport emissions have risen by 3% in the first quarter of 2024, driven primarily by increased air travel and freight transport.",
+      "link": "#",
+      "category": "transport"
+    },
+    {
+      "id": 2,
+      "title": "New Electric Bus Fleet Launched in Major Cities",
+      "summary": "Several major cities worldwide have launched new electric bus fleets as part of their efforts to reduce urban air pollution and lower carbon footprints.",
+      "link": "#",
+      "category": "transport"
+    },
+    {
+      "id": 3,
+      "title": "Innovations in Sustainable Aviation Fuel",
+      "summary": "Researchers have made significant advancements in sustainable aviation fuel, which could reduce the carbon emissions of air travel by up to 80% compared to traditional jet fuels.",
+      "link": "#",
+      "category": "transport"
+    },
+    {
+      "id": 4,
+      "title": "Carbon Tax Policies Expanded in EU",
+      "summary": "EU governments have implemented new carbon tax policies to incentivize cleaner energy usage across industries.",
+      "link": "#",
+      "category": "carbon"
+    },
+    {
+      "id": 5,
+      "title": "Renewable Energy Investment Hits Record High",
+      "summary": "Investments in renewable energy sources have hit a record high in 2024, signaling a major shift toward green energy.",
+      "link": "#",
+      "category": "energy"
+    },
+    {
+      "id": 6,
+      "title": "Urban Cycling Programs Reduce Emissions",
+      "summary": "Cities adopting large-scale urban cycling programs have seen measurable reductions in carbon emissions from daily commuting.",
+      "link": "#",
+      "category": "transport"
+    }
+  ]
+}
