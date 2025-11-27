@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
 // We keep these imports so they are ready for Sprint 2 integration
-import { db } from '../firebase';
+import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
 

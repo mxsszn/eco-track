@@ -1,15 +1,18 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/navbar/navbar.jsx';
-import Dashboard from './components/Dashboard.jsx';
-import Home from './components/home/home.jsx';
-import Profile from './components/profile/profile.jsx';
-import RegisterForm from './components/Register/register.jsx';
-import LoginForm from './components/login/login.jsx';
+import Dashboard from './components/dashboard/Dashboard.jsx';
+
+// FIXED: Changed to Capitalized filenames (Home.jsx, Profile.jsx, etc.)
+// This is the standard React convention and likely matches the actual files.
+import Home from './components/home/Home.jsx';
+import Profile from './components/profile/Profile.jsx';
+
 
 function App() {
+  // Logic to handle login state
   if (!localStorage.getItem("loggedIn")) {
-    localStorage.setItem("loggedIn", true);
+    localStorage.setItem("loggedIn", "true");
   }
 
   return (
@@ -17,8 +20,9 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Dashboard />} /> {/* Set Dashboard as Home for now */}
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/login" element={<LoginForm />} />

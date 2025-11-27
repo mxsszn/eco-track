@@ -1,0 +1,32 @@
+/* Global App Styles */
+
+/* Patrick's Container Logic (Kept for compatibility) */
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+}
+
+/* Base App Reset */
+.App {
+  text-align: center;
+  min-height: 100vh;
+  /* Use the light grey background from your Dashboard theme globally */
+  background-color: #f4f6f8; 
+  font-family: 'Futura', 'Century Gothic', sans-serif;
+}
+
+/* Ensure links don't have ugly defaults */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Utility Class for centering content if needed */
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
