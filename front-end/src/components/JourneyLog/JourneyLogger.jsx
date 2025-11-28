@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 import './JourneyLogger.css';
 
 const JourneyLogger = () => {
@@ -18,39 +20,66 @@ const JourneyLogger = () => {
     { id: 'walk', name: 'Walk', icon: '🚶', profile: 'foot-walking' }
   ];
 
+  // Helper: Add context to search if missing
+  const enhanceQuery = (query) => {
+    if (!query.toLowerCase().includes('uk') && !query.toLowerCase().includes('london')) {
+      return `${query}, London, UK`; // Default to London/UK context
+    }
+    return query;
+  };
+
   const getCoords = async (location) => {
     try {
+      const enhancedLoc = enhanceQuery(location);
+      console.log(`Searching for: ${enhancedLoc}`); // Debug log
+
       const res = await fetch(
-        `https://api.openrouteservice.org/geocode/search?api_key=${API_KEY}&text=${location}`
+        `https://api.openrouteservice.org/geocode/search?api_key=${API_KEY}&text=${encodeURIComponent(enhancedLoc)}`
       );
       const data = await res.json();
-      if (data.features?.[0]) return data.features[0].geometry.coordinates;
-      throw new Error('Location not found');
+      
+      if (data.features && data.features.length > 0) {
+        return data.features[0].geometry.coordinates;
+      }
+      throw new Error(`Could not find location: "${location}"`);
     } catch (err) {
-      throw new Error('Failed to fetch coordinates');
+      console.error(err);
+      throw err; // Re-throw to be caught in submit
     }
   };
 
-  const getDistance = async (start, end, profile) => {
+  const getDistance = async (startCoords, endCoords, profile) => {
     try {
       const res = await fetch(
         `https://api.openrouteservice.org/v2/directions/${profile}?api_key=${API_KEY}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ coordinates: [start, end] })
+          body: JSON.stringify({ coordinates: [startCoords, endCoords] })
         }
       );
       const data = await res.json();
-      if (!data.routes) throw new Error('No route found');
+      
+      if (!data.routes || data.routes.length === 0) {
+         // Fallback: If driving route fails, try foot-walking (sometimes roads are blocked)
+         if (profile === 'driving-car') {
+            console.log("Driving route failed, trying walking fallback...");
+            return getDistance(startCoords, endCoords, 'foot-walking');
+         }
+         throw new Error('No route found between these locations.');
+      }
+
+      // Return distance in miles
       return (data.routes[0].summary.distance * 0.000621371).toFixed(1);
     } catch (err) {
-      throw new Error('Failed to calculate distance');
+      console.error(err);
+      throw err;
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!form.start || !form.end || !form.transport) {
       setError('Please fill all fields');
       return;
@@ -58,45 +87,71 @@ const JourneyLogger = () => {
 
     setLoading(true);
     setError('');
+    setResult(null);
 
     try {
       const selectedTransport = transports.find(t => t.id === form.transport);
+      
+      // 1. Get Coords
       const startCoords = await getCoords(form.start);
       const endCoords = await getCoords(form.end);
-      const distance = await getDistance(startCoords, endCoords, selectedTransport.profile);
       
+      // 2. Get Distance
+      const distanceMiles = await getDistance(startCoords, endCoords, selectedTransport.profile);
+      
+      // 3. Calculate CO2 (Logic from Dashboard)
+      // Factors (kg/km): Car=0.17, Bus=0.1, Train=0.04
+      // Convert miles to km for calc: 1 mile = 1.60934 km
+      const distanceKm = parseFloat(distanceMiles) * 1.60934;
+      
+      let factor = 0.17; 
+      if(selectedTransport.id === 'bus') factor = 0.1;
+      if(selectedTransport.id === 'train') factor = 0.04;
+      if(selectedTransport.id === 'walk') factor = 0;
+      
+      const co2 = (distanceKm * factor).toFixed(2);
+
+      // 4. Save to Firebase
+      const journeyData = {
+         userId: localStorage.getItem('userId') || 'guest',
+         from: form.start,
+         to: form.end,
+         distance: distanceKm.toFixed(1),
+         mode: selectedTransport.name,
+         co2Saved: parseFloat(co2),
+         date: new Date().toISOString()
+      };
+
+      await addDoc(collection(db, "journeys"), journeyData);
+
+      // 5. Show Result
       setResult({
         from: form.start,
         to: form.end,
         mode: selectedTransport,
-        distance
+        distance: distanceMiles
       });
+
     } catch (err) {
-      setError('Could not calculate distance. Please check your location spellings.');
+      console.error(err);
+      setError(err.message || 'An error occurred. Try being more specific (e.g. "West Acton Station").');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleContinue = () => {
-    if (!result) {
-      console.error("No result available");
-      return;
-    }
+    if (!result) return;
     
-    // Convert miles to km
+    // Save for calculator page
     const distanceKm = (parseFloat(result.distance) * 1.60934).toFixed(1);
-    
-    // Save to localStorage
     const journeyData = {
       from: result.from,
       to: result.to,
       distance: distanceKm,
       transport: result.mode.id
     };
-    
     localStorage.setItem('journeyData', JSON.stringify(journeyData));
-    
-    // Navigate to calculator
     navigate('/calculator');
   };
 
@@ -118,7 +173,7 @@ const JourneyLogger = () => {
                 type="text"
                 value={form.start}
                 onChange={(e) => setForm({...form, start: e.target.value})}
-                placeholder="e.g. London, UK"
+                placeholder="e.g. West Acton Station"
                 disabled={loading}
               />
             </div>
@@ -131,7 +186,7 @@ const JourneyLogger = () => {
                 type="text"
                 value={form.end}
                 onChange={(e) => setForm({...form, end: e.target.value})}
-                placeholder="e.g. Manchester, UK"
+                placeholder="e.g. West Ealing Broadway"
                 disabled={loading}
               />
             </div>
