@@ -1,21 +1,14 @@
 import "./navbar.css"
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Home from "../home/home";
-import Profile from "../profile/profile";
-import RegisterForm from "../Register/register";
-import LoginForm from "../login/login";
-
-
+import { Link } from 'react-router-dom';
 
 function AccountDropdown() {
-
     if (localStorage.getItem("loggedIn") == "false") {
-            return(
-                <>
-                <Link to="/login" className="login">Login</Link>
-                <Link to="/register" className="login">Register</Link>
-                </>
-            )
+        return(
+            <>
+            <Link to="/login" className="login">Login</Link>
+            <Link to="/register" className="login">Register</Link>
+            </>
+        )
     }
 
     if (localStorage.getItem("loggedIn") == "true") {
@@ -26,40 +19,25 @@ function AccountDropdown() {
             </button>
             <div className="dropdown-content">
                 <Link to="/profile">Profile</Link>
-                <Link to="settings">Settings</Link>
-                <Link to="logout">Log Out</Link>
+                <Link to="/settings">Settings</Link>
+                <Link to="/logout">Log Out</Link>
             </div>
         </div>
-
         )
-
     }
 }
 
-
-
-
-
 function Navbar() {
     return(
-        <>
-    <BrowserRouter>
         <header>
             <div className="navbar">
-                <Link to="/">Home</Link>
-                <Link to="/dashboard">Dashboard</Link>
-                <Link to="/about">About</Link>
+                <Link to="/">Dashboard</Link>
+                <Link to="/log-journey">Log Journey</Link>
+                <Link to="/calculator">Carbon Calculator</Link> 
+                <Link to="/education">Learn</Link>
                 <AccountDropdown/>
             </div>
         </header>
-    <Routes>
-    <Route path="/" element={<Home/>}/>
-    <Route path="/profile" element={<Profile/>}/>
-    <Route path="/register" element={<RegisterForm/>}/>
-    <Route path="/login" element={<LoginForm/>}/>
-    </Routes>
-    </BrowserRouter>
-    </>
     );
 }
 

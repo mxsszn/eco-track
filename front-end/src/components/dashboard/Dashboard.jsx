@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
-// We keep these imports so they are ready for Sprint 2 integration
+// Imports for future database connection (Sprint 2)
 import { db } from '../../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
-
 const Dashboard = () => {
 
-  // Mock Data: Based on average UK transport emissions (Gov.uk 2023 figures)
-  // Car (avg) = 0.17 kg/km | Bus = 0.10 kg/km | Train = 0.035 kg/km
+  // 1. STATE: Mock Data with realistic UK values
+  // Car: 0.17kg/km | Bus: 0.10kg/km | Train: 0.035kg/km
   const [userStats] = useState({
-    co2Saved: 24.5, // kg (Cumulative)
-    journeys: 12,   // Total trips
-    points: 1250    // 10 points per 0.2kg saved
+    co2Saved: 24.5, // Total kg saved so far
+    journeys: 12,   // Total number of trips logged
+    points: 1250    // 10 points awarded per 0.2kg saved
   });
 
+  // Destructure for cleaner HTML
   const { co2Saved, journeys, points } = userStats;
 
   return (
     <div className="dashboard-container">
 
-      {/* --- HEADER --- */}
+      {/* HEADER */}
       <header className="dash-header">
         <div>
           <h1>👋 Good Evening, Mekael</h1>
@@ -29,7 +29,7 @@ const Dashboard = () => {
         <div className="user-badge">🌱 Eco-Warrior Lvl 3</div>
       </header>
 
-      {/* --- KEY METRICS GRID --- */}
+      {/* METRICS GRID */}
       <div className="stats-grid">
         <div className="stat-card green">
           <h3>CO₂ Saved</h3>
@@ -48,23 +48,21 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* --- CHARTS SECTION --- */}
+      {/* CHARTS SECTION */}
       <div className="charts-section">
         <div className="chart-header">
           <h2>📊 Weekly Impact</h2>
           <span className="chart-subtitle">Points earned per day based on CO₂ savings</span>
         </div>
         <div className="chart-container">
-          {/* Visual representation of daily points */}
           <SimpleBarChart />
         </div>
       </div>
 
-      {/* --- RECENT ACTIVITY --- */}
+      {/* RECENT ACTIVITY */}
       <div className="content-section">
         <h2>Recent Journeys</h2>
         <div className="activity-list">
-          {/* Calculated using: (Car Emission - Bus Emission) * Distance */}
           <ActivityItem 
             icon="🚌" 
             title="Bus to Brunel Uni (5km)" 
@@ -86,7 +84,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* --- INSPIRATIONAL QUOTE FOOTER --- */}
+      {/* QUOTE FOOTER */}
       <footer className="quote-section">
         <div className="quote-container">
           <span className="quote-icon">❝</span>
@@ -101,9 +99,8 @@ const Dashboard = () => {
   );
 };
 
-/**
- * Helper: Individual Activity Item
- */
+// --- HELPER COMPONENTS ---
+
 const ActivityItem = ({ icon, title, time, impact, isNegative }) => (
   <div className="activity-item">
     <span className="icon">{icon}</span>
@@ -115,67 +112,23 @@ const ActivityItem = ({ icon, title, time, impact, isNegative }) => (
   </div>
 );
 
-/**
- * Helper: Simple CSS Bar Chart
- * Represents points earned over the last 7 days
- */
 const SimpleBarChart = () => (
   <div className="simple-chart">
-    {/* Day 1: 200 pts */}
-    <div className="chart-col">
-      <div className="chart-bar" style={{height: '40%'}}>
-        <span className="tooltip">200 pts</span>
-      </div>
-      <span className="bar-label">Mon</span>
-    </div>
-    
-    {/* Day 2: 350 pts */}
-    <div className="chart-col">
-      <div className="chart-bar" style={{height: '70%'}}>
-        <span className="tooltip">350 pts</span>
-      </div>
-      <span className="bar-label">Tue</span>
-    </div>
+    {/* Visual-only bars for Sprint 1 Demo */}
+    <ChartBar height="40%" label="Mon" />
+    <ChartBar height="70%" label="Tue" />
+    <ChartBar height="30%" label="Wed" />
+    <ChartBar height="90%" label="Thu" />
+    <ChartBar height="60%" label="Fri" />
+    <ChartBar height="20%" label="Sat" />
+    <ChartBar height="5%" label="Sun" />
+  </div>
+);
 
-    {/* Day 3: 150 pts */}
-    <div className="chart-col">
-      <div className="chart-bar" style={{height: '40%'}}>
-        <span className="tooltip">150 pts</span>
-      </div>
-      <span className="bar-label">Wed</span>
-    </div>
-
-    {/* Day 4: 450 pts (High activity) */}
-    <div className="chart-col">
-      <div className="chart-bar" style={{height: '90%'}}>
-        <span className="tooltip">450 pts</span>
-      </div>
-      <span className="bar-label">Thu</span>
-    </div>
-
-    {/* Day 5: 300 pts */}
-    <div className="chart-col">
-      <div className="chart-bar" style={{height: '60%'}}>
-        <span className="tooltip">300 pts</span>
-      </div>
-      <span className="bar-label">Fri</span>
-    </div>
-
-    {/* Day 6: 100 pts */}
-    <div className="chart-col">
-      <div className="chart-bar" style={{height: '20%'}}>
-        <span className="tooltip">100 pts</span>
-      </div>
-      <span className="bar-label">Sat</span>
-    </div>
-
-    {/* Day 7: 0 pts */}
-    <div className="chart-col">
-      <div className="chart-bar" style={{height: '5%'}}>
-        <span className="tooltip">0 pts</span>
-      </div>
-      <span className="bar-label">Sun</span>
-    </div>
+const ChartBar = ({ height, label }) => (
+  <div className="chart-col">
+    <div className="chart-bar" style={{ height }}></div>
+    <span className="bar-label">{label}</span>
   </div>
 );
 
