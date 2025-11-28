@@ -3,14 +3,14 @@ import './App.css';
 import Navbar from './components/navbar/navbar.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 
-// FIXED: Changed to Capitalized filenames (Home.jsx, Profile.jsx, etc.)
-// This is the standard React convention and likely matches the actual files.
-import Home from './components/home/Home.jsx';
-import Profile from './components/profile/Profile.jsx';
-
+// Temporarily commenting out other components to focus on Dashboard & Navbar
+// import Home from './components/home/Home.jsx';
+// import Profile from './components/profile/Profile.jsx';
+// import RegisterForm from './components/register/Register.jsx';
+// import LoginForm from './components/login/Login.jsx';
 
 function App() {
-  // Logic to handle login state
+  // Logic to handle login state (keeping this as requested)
   if (!localStorage.getItem("loggedIn")) {
     localStorage.setItem("loggedIn", "true");
   }
@@ -20,12 +20,15 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Dashboard />} /> {/* Set Dashboard as Home for now */}
+          {/* PRIORITY: Dashboard is now the main view */}
+          <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/login" element={<LoginForm />} />
+
+          {/* Temporarily disabled routes */}
+          {/* <Route path="/home" element={<Home />} /> */}
+          {/* <Route path="/profile" element={<Profile />} /> */}
+          {/* <Route path="/register" element={<RegisterForm />} /> */}
+          {/* <Route path="/login" element={<LoginForm />} /> */}
         </Routes>
       </BrowserRouter>
     </>
