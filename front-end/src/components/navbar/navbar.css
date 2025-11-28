@@ -85,3 +85,21 @@ header {
 .dropdown:hover .dropdown-content {
   display: block;
 }
+/* Add this to your existing CSS */
+.logout-btn {
+    background: none;
+    border: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.logout-btn:hover {
+    background-color: #ddd;
+}
