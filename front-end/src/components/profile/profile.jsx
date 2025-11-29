@@ -1,6 +1,10 @@
 import ProfileChart from "./ProfileChart"
 import "./profile.css"
 import pfp from "./testimg1.jpg"
+import Leaderboard from "./ProfileLeaderboard"
+
+
+
 
 const dummyData = {
     username : "placeholder30",
@@ -14,6 +18,9 @@ const dummyUser = {
     displayName : "testUser",
     ecorank: 5,
     userId : "1",
+    totalEP: "1040",
+    weekEP: "134",
+    CO2Disp: "560g"
 }
 
 
@@ -42,12 +49,11 @@ function Profile() {
                     </div>
                 </div>
             <div className="div2">
-                <div className="leaderboardTitle">Weekly Leaderboard</div>
-                <div className="leaderboardEntry">ENTRY 1</div>
-
-
-
-
+            <div className="leaderboardTitle">Weekly Leaderboard</div>
+                <Leaderboard/>
+                <div className="leaderboardButtonContainer">
+                    <div className="leaderboardLink">View full leaderboard</div>
+                </div>
             </div>
             <div className="div3">
             <div className="divTitle">Recent planet saving activity (ECO points)</div>

@@ -34,27 +34,93 @@ align-content: start;
     text-align: center;
     font-size: 2rem;
     padding-top: 15px;
-    padding-bottom: 3px;
+    padding-bottom: 15px;
     border-style: none none solid none;
     border-color: #DB5375;
 
 }
 
 
-.leaderboardEntry {
 
 
 
+div .entryParent {
+display: grid;
+grid-template-columns: 1fr;
+grid-template-rows: 1fr 0.5fr;
+grid-column-gap: 0px;
+grid-row-gap: 0px;
+border-style: none none solid none;
+border-color: #DB5375;
+
+
+
+}
+
+
+.leaderboardButtonContainer {
+    align-self: center;
+    margin-top: 10px;
     
+
+}
+
+
+div .leaderboardLink {
+    align-self: center;
+    text-align: center;
 }
 
 
 
+.leaderboardTop {
+     grid-area: 1 / 1 / 2 / 2;
+     display: flex;
+     flex-direction: row; 
+    }
+
+div.leaderboardTop .leaderboard-pfp {
+    border-radius: 50%;
+    margin: 15px;
+    height: 64px;
+    width: 64px;
+    border-width: 2.5px;
+    border-style: solid;
+    border-color: #DB5375;
+}
+
+div.leaderboardTop .ecorank {
+    font-size: 1rem;
+    text-align: center;
+    align-self: center;
+    color: #FCFAF9;
+    background-color: #DB5375;
+    margin-left: 10px;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 35px;
+
+}
+
+div.leaderboardTop .username {
+    font-size: 1.5rem;
+    text-align: center;
+    align-content: center;
+}
+
+div.leaderboardTop .totalEP {
+    align-self: center;
+    text-align: center;
+    font-size: 1rem;
+}
 
 
 
-
-
+.leaderboardBottom { 
+    padding-left: 16px;
+    grid-area: 2 / 1 / 3 / 2;
+}
 
 .div3 {
     display: flex;
@@ -156,6 +222,7 @@ div .description {
     border-radius: 20px;
     border-width: 2px;
     border-style: solid;
+    color:#FCFAF9;
     border-color: #DB5375;
     padding: 8px;
     background-color: #DB5375;
