@@ -1,4 +1,3 @@
-// src/components/MapPanel.jsx
 import React, { useMemo, useEffect } from "react";
 import {
   MapContainer,
