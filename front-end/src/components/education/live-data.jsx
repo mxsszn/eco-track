@@ -1,10 +1,11 @@
 import LiveChart from "./live-charts";
+import LineRevealText from "./text-reveal";
 
 function LiveData() {
   return (
     <div className="Live-data-section">
       <h2>Live Data on Transportation Emissions</h2>
-      <p>
+      <p className="width-fix">
         Explore real-time statistics and trends in transportation emissions
         worldwide. Understand the impact of various modes of transport on our
         environment.
@@ -29,6 +30,7 @@ function LiveData() {
           <h3>World Average Carbon Footprint Compared to UK Average </h3>
           <p>Road transport emissions increased by 2.5% in 2023</p>
         </div>
+        <LineRevealText selector="p, h2" />
       </div>
       <button>Compare Past Data</button>
     </div>

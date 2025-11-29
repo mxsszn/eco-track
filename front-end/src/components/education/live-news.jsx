@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import LineRevealText from "./text-reveal";
 function LiveNews() {
   const [articles, setArticles] = useState([]);
 
@@ -29,8 +30,10 @@ function LiveNews() {
 
   return (
     <div className="live-news">
-      <h2>Live news about CO2 emissions and their impacts</h2>
-      <p>Learn about what's happening recently</p>
+      <h2 className="width-fix">
+        Live news about CO2 emissions and their impacts
+      </h2>
+      <p className="width-fix">Learn about what's happening recently</p>
 
       <div className="news-articles grid">
         {articles.map((article) => (
@@ -47,6 +50,7 @@ function LiveNews() {
         <p>Join us to choose your preferred news updates!</p>
         <button>Sign up</button>
       </div>
+      <LineRevealText selector="h2, p" />
     </div>
   );
 }

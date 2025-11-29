@@ -1,40 +1,38 @@
-//App.js
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { useInView } from "./inView";
 
-import { useState } from "react";
-import { PieChart, Pie, Tooltip, Cell } from "recharts";
+const data = [
+  { name: "Road", value: 400 },
+  { name: "Aviation", value: 300 },
+  { name: "Rail", value: 200 },
+  { name: "Marine", value: 100 },
+];
 
-function LivePieChart() {
-  const [activeIndex, setActiveIndex] = useState(-1);
+const COLORS = ["#00d5ffff", "#3f5b96ff", "#34407fff", "#21304fff"];
 
-  const data = [
-    { name: "Geeksforgeeks", students: 400 },
-    { name: "Technical scripter", students: 700 },
-  ];
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-
-  const onPieEnter = (_, index) => {
-    setActiveIndex(index);
-  };
+export default function PieChartOnView() {
+  const { ref, inView } = useInView({ threshold: 0.3 });
 
   return (
-    <PieChart width={700} height={700}>
-      <Pie
-        activeIndex={activeIndex}
-        data={data}
-        dataKey="students"
-        outerRadius={250}
-        fill="green"
-        onMouseEnter={onPieEnter}
-        style={{ cursor: "pointer", outline: "none" }} // Ensure no outline on focus
-      >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-      <Tooltip />
-    </PieChart>
+    <div ref={ref} style={{ height: "350px" }}>
+      {inView && (
+        <PieChart width={400} height={300}>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            outerRadius={120}
+            dataKey="value"
+            isAnimationActive={true}
+          >
+            {data.map((entry, index) => (
+              <Cell key={index} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      )}
+    </div>
   );
 }
-
-export default LivePieChart;

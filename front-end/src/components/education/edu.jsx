@@ -3,7 +3,11 @@ import Navbar from "../navbar/navbar";
 import Hero from "./hero";
 import LiveData from "./live-data";
 import LiveNews from "./live-news";
-import EmissionSources from "./sources";
+import TransportType from "./transport-type";
+import Impacts from "./impacts";
+import Solutions from "./solutions";
+import CTA from "./cta";
+import LineRevealText from "./text-reveal";
 
 function Page() {
   return (
@@ -14,11 +18,14 @@ function Page() {
       {/* why transport emissions matter */}
       <LiveData />
       <LiveNews />
-      <EmissionSources />
       {/* how much transport contributes to overall carbon footprint (piechart showing how much transport contributes in comparison to other sources) */}
+      <TransportType />
       {/* Impacts of COs (environmental, economical, health, social) */}
+      <Impacts />
       {/* Solutions */}
-      {/* challenges */}
+      <Solutions />
+      {/* conclusion (cta and footer) */}
+      <CTA />
     </div>
   );
 }
