@@ -1,79 +1,71 @@
-import React, { useMemo, useEffect } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Polyline,
-  useMap,
-} from "react-leaflet";
-import L from "leaflet";
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
-// Fix Leaflet marker icons (works well in Vite)
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: new URL(
-    "leaflet/dist/images/marker-icon-2x.png",
-    import.meta.url
-  ).toString(),
-  iconUrl: new URL(
-    "leaflet/dist/images/marker-icon.png",
-    import.meta.url
-  ).toString(),
-  shadowUrl: new URL(
-    "leaflet/dist/images/marker-shadow.png",
-    import.meta.url
-  ).toString(),
+// Fix for default marker icons in Leaflet with React
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
 });
 
-function FitRouteBounds({ coordinates }) {
+L.Marker.prototype.options.icon = DefaultIcon;
+
+// Helper component to auto-zoom the map to fit the route
+function MapUpdater({ coords }) {
   const map = useMap();
-
   useEffect(() => {
-    if (!coordinates || coordinates.length === 0) return;
-    const bounds = L.latLngBounds(coordinates);
-    map.fitBounds(bounds, { padding: [30, 30] });
-  }, [coordinates, map]);
-
+    if (coords && coords.length > 0) {
+      const bounds = L.latLngBounds(coords);
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, [coords, map]);
   return null;
 }
 
-export default function MapPanel({ routeCoords }) {
-  const hasRoute = routeCoords && routeCoords.length > 0;
-
-  const center = useMemo(() => {
-    if (!hasRoute) {
-      // default roughly over the UK
-      return [54.5, -3];
-    }
-    return routeCoords[0];
-  }, [hasRoute, routeCoords]);
+const MapPanel = ({ routeCoords }) => {
+  // Default position (London) if no route
+  const defaultCenter = [51.505, -0.09];
 
   return (
-    <div className="card map-card">
-      <h2 className="card-title">Map</h2>
+    <div className="map-container" style={{ height: '400px', width: '100%', borderRadius: '12px', overflow: 'hidden' }}>
+      <MapContainer 
+        center={defaultCenter} 
+        zoom={13} 
+        style={{ height: '100%', width: '100%' }}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        
+        {/* Draw the Route Line if coordinates exist */}
+        {routeCoords && routeCoords.length > 0 && (
+          <>
+            <Polyline positions={routeCoords} color="blue" weight={5} opacity={0.7} />
+            
+            {/* Start Marker */}
+            <Marker position={routeCoords[0]}>
+              <Popup>Start</Popup>
+            </Marker>
 
-      <div className="map-wrapper">
-        <MapContainer
-          center={center}
-          zoom={6}
-          scrollWheelZoom={false}
-          className="map"
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+            {/* End Marker */}
+            <Marker position={routeCoords[routeCoords.length - 1]}>
+              <Popup>Destination</Popup>
+            </Marker>
 
-          {hasRoute && (
-            <>
-              <FitRouteBounds coordinates={routeCoords} />
-              <Polyline positions={routeCoords} />
-              <Marker position={routeCoords[0]} />
-              <Marker position={routeCoords[routeCoords.length - 1]} />
-            </>
-          )}
-        </MapContainer>
-      </div>
+            {/* Auto-zoom helper */}
+            <MapUpdater coords={routeCoords} />
+          </>
+        )}
+      </MapContainer>
     </div>
   );
-}
+};
+
+export default MapPanel;

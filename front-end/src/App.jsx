@@ -6,7 +6,7 @@ import './App.css';
 
 import Navbar from './components/navbar/navbar.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
-import JourneyLogger from './components/JourneyLog/JourneyLogger.jsx';
+import JourneyPage from './components/JourneyLog/JourneyPage.jsx';
 import Profile from './components/profile/profile.jsx';
 import RegisterForm from './components/register/register.jsx';
 import LoginForm from './components/login/login.jsx';
@@ -25,7 +25,7 @@ function App() {
       if (currentUser) {
         localStorage.setItem("loggedIn", "true");
       } else {
-        localStorage.removeItem("loggedIn");
+        localStorage.setItem("loggedIn", "false");
       }
     });
     return () => unsubscribe();
@@ -40,14 +40,14 @@ function App() {
       <Navbar user={user} />
       
       <Routes>
-        {/* Public Routes - Redirect to Dashboard if already logged in */}
-        <Route path="/" element={user ? <Navigate to="/dashboard" /> : <RegisterForm />} />
+        {/* Public Routes - Landing page is Register/Signup */}
+        <Route path="/" element={<RegisterForm />} />
         <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <RegisterForm />} />
         <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <LoginForm />} />
 
         {/* Protected Routes - Only accessible if logged in */}
         <Route path="/dashboard" element={<RequireAuth user={user}><Dashboard /></RequireAuth>} />
-        <Route path="/log-journey" element={<RequireAuth user={user}><JourneyLogger /></RequireAuth>} />
+        <Route path="/log-journey" element={<RequireAuth user={user}><JourneyPage /></RequireAuth>} />
         <Route path="/calculator" element={<RequireAuth user={user}><CarbonCalculator /></RequireAuth>} />
         {/* <Route path="/education" element={<RequireAuth user={user}><Education /></RequireAuth>} /> */}
         <Route path="/profile" element={<RequireAuth user={user}><Profile /></RequireAuth>} />
