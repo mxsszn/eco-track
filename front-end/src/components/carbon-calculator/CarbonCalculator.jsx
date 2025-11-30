@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./CarbonCalculator.css";
 
 const EMISSION_FACTORS = {
-  car: 0.17, // Using your updated UK factor
+  car: 0.17, 
   bus: 0.10,
   train: 0.04,
   motorbike: 0.12,
@@ -38,7 +38,7 @@ export default function CarbonCalculator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // 1. Auto-fill if coming from Journey Logger
+  // 1. Auto-fill logic
   useEffect(() => {
     const journeyData = localStorage.getItem('journeyData');
     if (journeyData) {
@@ -47,24 +47,19 @@ export default function CarbonCalculator() {
         if(data.from) setFrom(data.from);
         if(data.to) setTo(data.to);
         if(data.distance) setDistance(String(data.distance));
-        
-        // We do NOT clear it immediately anymore, so it persists if they refresh
-        // localStorage.removeItem('journeyData'); 
       } catch (e) {
         console.error("Error parsing data", e);
       }
     }
   }, []);
 
-  // --- API LOGIC (COPIED FROM JOURNEY FORM) ---
-  
+  // --- API LOGIC ---
   const isPostcode = (text) => {
     const cleaned = text.replace(/\s/g, '').toUpperCase();
     return /^[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}$/.test(cleaned);
   };
 
   const getCoordinates = async (location) => {
-    // Strategy A: Postcode
     if (isPostcode(location)) {
       const response = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(location)}`);
       const data = await response.json();
@@ -72,7 +67,6 @@ export default function CarbonCalculator() {
         return [data.result.longitude, data.result.latitude];
       }
     }
-    // Strategy B: Place Name
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&countrycodes=gb&limit=1`;
     const response = await fetch(url);
     const data = await response.json();
@@ -85,7 +79,7 @@ export default function CarbonCalculator() {
     const response = await fetch(url);
     const data = await response.json();
     if (data.code !== "Ok" || !data.routes || data.routes.length === 0) throw new Error("No route found");
-    return data.routes[0].distance / 1000; // Convert meters to km
+    return data.routes[0].distance / 1000;
   };
 
   const handleManualCalculate = async (e) => {
@@ -94,7 +88,6 @@ export default function CarbonCalculator() {
       setError("Please enter both locations");
       return;
     }
-
     setLoading(true);
     setError("");
 
@@ -128,19 +121,78 @@ export default function CarbonCalculator() {
       }));
   }, [distanceKm]);
 
-  // Sort: Lowest emission first
   const sortedByEmission = useMemo(
     () => [...modes].sort((a, b) => a.emission - b.emission),
     [modes]
   );
 
-  const bestOption = sortedByEmission[0];
-  const worstOption = sortedByEmission[sortedByEmission.length - 1];
+  // --- SMART SUGGESTION LOGIC ---
+  const suggestionText = useMemo(() => {
+    if (distanceKm === 0) return null;
+    const miles = distanceKm * 0.621371;
+    
+    if (miles < 3) {
+      return (
+        <div className="cc-suggestion walk-suggestion">
+          <strong>🌿 Eco Tip:</strong> This trip is only {miles.toFixed(1)} miles. 
+          Consider <strong>Walking</strong> or <strong>Cycling</strong> for zero emissions and better health!
+        </div>
+      );
+    } else {
+      return (
+        <div className="cc-suggestion transit-suggestion">
+          <strong>🚆 Eco Tip:</strong> For longer trips ({miles.toFixed(1)} miles), 
+          public transport like <strong>Trains</strong> or <strong>Buses</strong> are significantly cleaner than driving.
+        </div>
+      );
+    }
+  }, [distanceKm]);
+
+  // --- CARD SELECTION LOGIC ---
+  const cardsToShow = useMemo(() => {
+    if (distanceKm === 0) return [];
+
+    const miles = distanceKm * 0.621371;
+    const car = modes.find(m => m.key === 'car');
+    let best, middle;
+
+    if (miles < 3) {
+      // Short trip: Prioritize Walking/Cycling
+      best = modes.find(m => m.key === 'walk'); // Force Walk as best
+      middle = modes.find(m => m.key === 'cycle'); // Force Cycle as middle
+    } else {
+      // Long trip: Prioritize Train/Bus/Cycle
+      best = sortedByEmission[0]; // Usually Cycle or Train depending on factors, but sortedByEmission handles eco logic
+      
+      // Try to find public transport for middle option
+      middle = sortedByEmission.find(m => 
+        (m.key === 'train' || m.key === 'bus') && m.key !== best.key
+      ) || sortedByEmission[1];
+    }
+
+    // Filter duplicates and return list
+    const list = [best, middle, car].filter((item, index, self) => 
+      item && self.findIndex(t => t.key === item.key) === index
+    );
+
+    return list;
+  }, [sortedByEmission, modes, distanceKm]);
 
   function getCardStyle(modeKey) {
-    if (modeKey === bestOption?.key) return "cc-card best";
-    if (modeKey === "car") return "cc-card worst"; // Highlight car as bad usually
+    if (modeKey === 'car') return "cc-card worst";
+    if (modeKey === sortedByEmission[0].key) return "cc-card best";
     return "cc-card neutral";
+  }
+
+  function getBadgeLabel(modeKey) {
+    if (modeKey === 'car') return "HIGH IMPACT";
+    
+    // Custom labels for short trips
+    const miles = distanceKm * 0.621371;
+    if (miles < 3 && modeKey === 'walk') return "HEALTHY CHOICE";
+    
+    if (modeKey === sortedByEmission[0].key) return "ECO CHOICE";
+    return "ALTERNATIVE";
   }
 
   return (
@@ -191,16 +243,17 @@ export default function CarbonCalculator() {
         </form>
       </div>
 
-      {/* Results Grid - Only show if distance > 0 */}
+      {/* Dynamic Suggestion Banner */}
+      {suggestionText}
+
+      {/* Results Grid - Shows Smart Selection based on distance */}
       {distanceKm > 0 && (
         <>
-          <h3 style={{marginTop: '30px', color: '#2c3e50'}}>Travel Alternatives</h3>
+          <h3 style={{marginTop: '30px', color: '#2c3e50'}}>Impact Comparison</h3>
           <div className="cc-grid">
-            {sortedByEmission.slice(0, 3).map((mode) => (
+            {cardsToShow.map((mode) => (
               <div className={getCardStyle(mode.key)} key={mode.key}>
-                <div className="cc-badge">
-                   {mode.key === bestOption.key ? "ECO CHOICE" : "ALTERNATIVE"}
-                </div>
+                <div className="cc-badge">{getBadgeLabel(mode.key)}</div>
                 
                 <div className="cc-card-icon">{mode.icon}</div>
                 
@@ -209,6 +262,15 @@ export default function CarbonCalculator() {
                   <div className="cc-card-emission">
                     {mode.emission.toFixed(2)} <span>kg CO₂e</span>
                   </div>
+                </div>
+
+                {/* Comparison Footer */}
+                <div className="cc-card-footer" style={{fontSize: '0.85rem', marginTop: '10px', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '8px'}}>
+                    {mode.key === 'car' ? (
+                        <span><strong>Baseline</strong> (Heaviest Impact)</span>
+                    ) : (
+                        <span>Saves <strong>{(EMISSION_FACTORS.car * distanceKm - mode.emission).toFixed(2)} kg</strong> vs Car</span>
+                    )}
                 </div>
               </div>
             ))}

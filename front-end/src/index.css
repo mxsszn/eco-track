@@ -1,90 +1,123 @@
+/* --- SF Pro Text Definitions --- */
+
+/* Light (300) */
 @font-face {
   font-family: "SF Pro Text";
   font-style: normal;
-  font-weight: lighter;
+  font-weight: 300; 
   src: url("https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Light.ttf");
 }
 
+/* Regular (400) */
 @font-face {
   font-family: "SF Pro Text";
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
   src: url("https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Regular.ttf");
 }
 
+/* Medium (500) - Often used for 'bold' in UI if 700 is too heavy */
 @font-face {
   font-family: "SF Pro Text";
   font-style: normal;
-  font-weight:bold;
+  font-weight: 500;
   src: url("https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Medium.ttf");
 }
 
+/* Bold (700) */
 @font-face {
   font-family: "SF Pro Text";
   font-style: normal;
-  font-weight: bolder;
+  font-weight: 700;
   src: url("https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Bold.ttf");
 }
 
+/* --- SF Pro Rounded Definitions --- */
+
+/* Light (300) */
 @font-face {
   font-family: "SF Pro Rounded";
   font-style: normal;
-  font-weight: lighter;
+  font-weight: 300;
   src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/master/SF-Pro-Rounded-Light.otf");
 }
 
+/* Regular (400) */
 @font-face {
   font-family: "SF Pro Rounded";
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
   src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/master/SF-Pro-Rounded-Regular.otf");
 }
 
+/* Medium (500) */
 @font-face {
   font-family: "SF Pro Rounded";
   font-style: normal;
-  font-weight: bold;
+  font-weight: 500;
   src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/master/SF-Pro-Rounded-Medium.otf");
 }
 
-
+/* Bold (700) */
 @font-face {
   font-family: "SF Pro Rounded";
   font-style: normal;
-  font-weight: bolder;
+  font-weight: 700;
   src: url("https://raw.githubusercontent.com/sahibjotsaggu/San-Francisco-Pro-Fonts/master/SF-Pro-Rounded-Bold.otf");
 }
 
+/* --- Global Variables & Resets --- */
 
 :root {
-  font-family: "SF Pro Text";
+  /* Use numeric weight by default (400 = Normal) */
+  font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400; 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
-
+  
+  /* Shared Theme Variables (optional but good practice) */
+  --primary-color: #27ae60;
+  --bg-color: #FCFAF9;
+  --text-main: rgb(37, 37, 47);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  color: rgb(37, 37, 47);
-  background-color: #FCFAF9;
+  color: var(--text-main);
+  background-color: var(--bg-color);
+  /* Fallback fonts are critical */
+  font-family: "SF Pro Text", sans-serif;
+}
+
+/* --- Headings --- */
+
+body h1, body h2, body h3 {
+  font-family: "SF Pro Rounded", sans-serif;
+  /* Reset weight to ensure it uses the specific font file */
+  font-weight: 700; 
 }
 
 body h1 {
-  font-family: "SF Pro Rounded";
   font-size: 3rem;
+  letter-spacing: -0.02em; /* Tighter spacing for display fonts */
 }
 
 body h2 {
-  font-family: "SF Pro Rounded";
   font-size: 2rem;
+  font-weight: 500; /* Use Medium weight for h2 */
 }
 
 body h3 {
-  font-family: "SF Pro Rounded";
-  font-size: 1rem;
+  font-size: 1.25rem;
+  font-weight: 500;
 }
+
+/* Utility Classes for Patrick to use */
+.font-light { font-weight: 300; }
+.font-regular { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-bold { font-weight: 700; }

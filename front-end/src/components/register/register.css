@@ -1,54 +1,229 @@
-.error-message {
-    background: #fee2e2;
-    color: #c0392b;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-weight: bold;
-    text-align: center;
+/* Inherits global styles from login.css if imported together, but kept standalone for safety */
+
+/* Global Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* Main Container - Shared Background */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  
+  /* Same beautiful background image */
+  background: url("https://cdn.wallpapersafari.com/48/69/HEPCs2.jpg") no-repeat center center fixed; 
+  background-size: cover;
+  position: relative;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45); /* Slightly darker overlay for register page focus */
+  z-index: 1;
+}
+
+/* Register Card - Slightly wider than login to accommodate name fields */
+.register-container {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 480px; /* Wider than login */
+  text-align: center;
+  backdrop-filter: blur(12px);
+  animation: slideUp 0.6s ease-out;
+  margin: 20px; /* Margin for mobile view so it doesn't touch edges */
+}
+
+/* Title */
+.formTitle {
+  color: #1e293b;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+/* Error Box */
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid #fecaca;
+  text-align: left; /* Align text left for longer error messages */
+}
+
+/* Form Layout */
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Name Row (First Name / Last Name side-by-side) */
+.namediv {
+  display: flex;
+  gap: 15px;
+}
+
+.namediv .textfield {
+  width: 50%; /* Equal width split */
+}
+
+/* Inputs */
+.textfield {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
+  color: #334155;
+}
+
+.textfield:focus {
+  border-color: #27ae60; /* Green highlight for registration */
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1);
+}
+
+.textfield::placeholder {
+  color: #94a3b8;
+}
+
+/* Sign Up Button */
+.button {
+  width: 100%;
+  padding: 14px;
+  background-color: #27ae60; /* Green for "Go/Start" */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.button:hover {
+  background-color: #219150;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+/* Google Section */
 .google-section {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .divider-text {
-    margin-bottom: 10px;
-    color: #666;
-    font-size: 0.9rem;
+  color: #64748b;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.divider-text::before,
+.divider-text::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #cbd5e1;
+  margin: 0 10px;
 }
 
 .google-btn {
-    padding: 12px 24px;
-    background: #4285F4;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.95rem;
-    transition: background 0.2s;
-    width: 100%;
-    max-width: 300px;
+  background-color: #fff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .google-btn:hover {
-    background: #357ae8;
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
 }
 
+/* Switch Auth Link */
 .switch-auth {
-    margin-top: 25px;
-    text-align: center;
-    color: #333;
+  margin-top: 25px;
+  font-size: 0.9rem;
+  color: #64748b;
 }
 
 .switch-auth a {
-    color: #27ae60;
-    font-weight: bold;
-    text-decoration: none;
+  color: #27ae60;
+  text-decoration: none;
+  font-weight: 700;
+  margin-left: 5px;
 }
 
 .switch-auth a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
+
+/* Animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 550px) {
+  .namediv {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .namediv .textfield {
+    width: 100%;
+  }
+
+  .register-container {
+    padding: 30px 20px;
+    margin: 15px;
+  }
+  
+  .formTitle {
+    font-size: 1.8rem;
+  }
 }
