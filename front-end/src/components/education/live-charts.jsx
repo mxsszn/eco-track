@@ -17,13 +17,15 @@ export default function LiveChart() {
     const interval = setInterval(() => {
       setData((prev) => {
         const nextTime = prev.length;
-        const nextValue = Math.floor(Math.random() * 100);
+        const prevValue = prev[prev.length - 1].value;
+        const target = Math.floor(Math.random() * 100);
+        const nextValue = prevValue + (target - prevValue) * 0.15; // 15% toward target
 
         // Add new point
         const updated = [...prev, { time: nextTime, value: nextValue }];
 
-        // Keep only last 30 points
-        return updated.slice(-30);
+        // Keep only last 24 points
+        return updated.slice(-24);
       });
     }, 60000); // speed of data update (60 seconds)
 
@@ -36,8 +38,11 @@ export default function LiveChart() {
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="time" />
         <YAxis />
-        <Tooltip />
-        <Line type="monotone" dataKey="value" stroke="#00fff756" />
+        <Tooltip
+          formatter={(value) => value.toFixed(2) + " Mt CO2e"}
+          labelFormatter={(label) => `Time: ${label} hrs`}
+        />
+        <Line type="monotone" dataKey="value" stroke="#00647bff" />
       </LineChart>
     </ResponsiveContainer>
   );

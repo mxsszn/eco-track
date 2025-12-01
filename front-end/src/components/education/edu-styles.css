@@ -7,7 +7,6 @@
     padding: 0;
     font-family: 'SF Pro Rounded', sans-serif;
     height: auto;
-    min-height: 750vh;
 }
 
 
@@ -106,15 +105,13 @@
     background-color: #fcfaf9; /* cell background */
 }
 
-.rail{
-   
-}
 
 .source-description{
     margin: 0;
     font-size: 1rem;
     line-height: 1.5;
     color: #404040;
+    max-width: 28rem;
 }
 
 .piechart-container{
@@ -123,8 +120,8 @@
 
 /* Container */
 .impacts-section {
-  padding: 60px 20px;
-  max-width: 1100px;
+  padding: 5rem 2rem;
+  max-width: 72vw;
   margin: 0 auto;
   text-align: center;
 }
@@ -143,7 +140,6 @@
   line-height: 1.6;
 }
 
-/* Grid */
 .impact-cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -152,19 +148,16 @@
     grid-row-gap: 2rem;
 }
 
-/* Bento Cards */
 .impact-card {
     display: flex;
     flex-direction: column;
     justify-content: end;
     min-height: 20rem;
     background: rgba(255, 255, 255, 0.75);
-     /* backdrop-filter: blur(6px); */
      border: 1px solid #e8e8e8;
      border-radius: 35px;
      padding: 1.5rem;
      text-align: left;
-        /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06); */
     transition: all 0.3s ease;
 }
 
@@ -237,7 +230,7 @@
 }
 
 .logger-card{
-    width:40vw
+    width:28rem
 }
 
 
@@ -271,6 +264,20 @@ button{
 
 button:hover{
     background-color: #626262;
+}
+
+button.timeframe{
+    background-color: #e8e8e800;
+    /* border-color: #ba426c; */
+    color: #ffffff;
+    border-radius: 0;
+    border-bottom: #ffffff 2px solid;
+    margin: 0 2rem;
+}
+
+button.timeframe:hover{
+    color: #ba426c;
+    /* border-color: #ba426c; */
 }
 
 img{
@@ -355,6 +362,7 @@ p.cta{
     margin-top: 0;
     font-weight: light;
     width:20vw
+    
 }
 
 .drop-wrapper {
@@ -374,4 +382,97 @@ p.cta{
 .line {
   display: inline-block;
   will-change: transform;
+}
+
+@media screen and (max-width: 768px) {
+    .edu-page{
+        font-size: 14px;
+    }
+    .news-articles{
+        grid-template-columns: repeat(1, 1fr);
+        width: 100%;
+    }
+    .news{
+        width: 80vw;
+        text-align: center;
+    }
+    .edu-hero{
+        padding: 4rem 1rem;
+    }
+
+    .cta-section{
+        padding: 2rem 1rem;
+    }
+    .emission-sources{
+        padding: 2rem 1rem;
+    }
+    .live-news{
+        padding: 2rem 1rem;
+    }
+    
+    .Live-data-section{
+        padding: 2rem 1rem;
+    }
+    
+
+    .live-data{
+        flex-direction: column;
+    }
+
+    .solution-cards{
+        width: 80vw;
+    }
+
+    p{
+        max-width: 80vw;
+    }
+
+    .width-fix{
+        width: 80vw;
+    }
+
+    .impact-cards {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: auto;
+    }
+
+    .impact-card {
+        grid-column: auto;
+        grid-row: auto;
+    }
+    .impact-card.one{
+    grid-column: auto;
+    grid-row: auto;
+}
+.impact-card.two{
+    grid-column: auto;
+    grid-row: auto;
+}
+.impact-card.three{
+    grid-column: auto;
+    grid-row: auto;
+}
+.impact-card.four{
+    grid-column: auto;
+    grid-row: auto;
+}
+
+
+    .source-grid {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: auto;
+    }
+
+    .logger-card{
+        width:80vw
+    }
+
+    .source {
+        padding: 1rem;
+        width: 85vw;
+    }
+    
+    .live-chart-container{
+        width: 70vw;
+    }
 }

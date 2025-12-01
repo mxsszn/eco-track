@@ -18,7 +18,7 @@ function LiveData() {
         {/* line/area chart showing live co2 footprint trend in the world and transport emissions(starting with daily, users can switch to yearly, monthly, daily,hourly)*/}
         {/* pie chart showing how much transport and UK contributes to overall carbon footprint */}
 
-        <div className="data-card">
+        {/* <div className="data-card">
           <h3>Global CO2 Emissions from Transport Today</h3>
           <p>1.9 billion tonnes</p>
         </div>
@@ -29,10 +29,13 @@ function LiveData() {
         <div className="data-card">
           <h3>World Average Carbon Footprint Compared to UK Average </h3>
           <p>Road transport emissions increased by 2.5% in 2023</p>
-        </div>
+        </div> */}
         <LineRevealText selector="p, h2" />
       </div>
-      <button>Compare Past Data</button>
+      <button className="timeframe">HOURLY</button>
+      <button className="timeframe">DAILY</button>
+      <button className="timeframe">MONTHLY</button>
+      <button className="timeframe">YEARLY</button>
     </div>
   );
 }

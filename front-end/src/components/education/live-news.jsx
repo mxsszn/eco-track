@@ -28,6 +28,13 @@ function LiveNews() {
     return past.toISOString();
   };
 
+  const truncate = (text, maxLength) => {
+    if (!text) return "";
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
+  };
+
   return (
     <div className="live-news">
       <h2 className="width-fix">
@@ -36,10 +43,10 @@ function LiveNews() {
       <p className="width-fix">Learn about what's happening recently</p>
 
       <div className="news-articles grid">
-        {articles.map((article) => (
+        {articles.slice(0, 6).map((article) => (
           <div key={article.id} className="news">
             <h3>{article.title}</h3>
-            <p className="news-summary">{article.summary}</p>
+            <p className="news-summary">{truncate(article.summary, 120)}</p>
             <a href={article.link}>Read more</a>
           </div>
         ))}
@@ -47,8 +54,8 @@ function LiveNews() {
 
       <div className="join-cta">
         <h3>Want a more tailored news experience?</h3>
-        <p>Join us to choose your preferred news updates!</p>
-        <button>Sign up</button>
+        <p>Pick your preferred news updates!</p>
+        <button>Categories</button>
       </div>
       <LineRevealText selector="h2, p" />
     </div>

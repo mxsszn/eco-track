@@ -31,7 +31,7 @@ export default function CTA() {
           now
         </p>
 
-        <button className="cta-button">Sign Up</button>
+        <button className="cta-button">Go to Dashboard</button>
       </div>
     </div>
   );
