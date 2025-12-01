@@ -11,7 +11,7 @@ import Profile from './components/profile/profile.jsx';
 import RegisterForm from './components/register/register.jsx';
 import LoginForm from './components/login/login.jsx';
 import CarbonCalculator from './components/carbon-calculator/CarbonCalculator.jsx';
-// import Education from './components/education/edu.jsx'; 
+import Education from './components/education/edu.jsx'; 
 
 function App() {
   const [user, setUser] = useState(null);
@@ -49,7 +49,7 @@ function App() {
         <Route path="/dashboard" element={<RequireAuth user={user}><Dashboard /></RequireAuth>} />
         <Route path="/log-journey" element={<RequireAuth user={user}><JourneyPage /></RequireAuth>} />
         <Route path="/calculator" element={<RequireAuth user={user}><CarbonCalculator /></RequireAuth>} />
-        {/* <Route path="/education" element={<RequireAuth user={user}><Education /></RequireAuth>} /> */}
+        <Route path="/education" element={<RequireAuth user={user}><Education /></RequireAuth>} /> 
         <Route path="/profile" element={<RequireAuth user={user}><Profile /></RequireAuth>} />
       </Routes>
     </>

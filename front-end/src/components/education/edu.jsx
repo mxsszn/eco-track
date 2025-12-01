@@ -1,26 +1,44 @@
+import React from 'react';
 import "./edu-styles.css";
-import Navbar from "../navbar/navbar";
-import Hero from "./hero";
-import LiveData from "./live-data";
-import LiveNews from "./live-news";
-import EmissionSources from "./sources";
 
-function Education() {
+// We remove the local Navbar import because App.jsx provides a global one.
+// import Navbar from "../navbar/navbar"; 
+
+import Hero from "./hero.jsx";
+import LiveData from "./live-data.jsx";
+import LiveNews from "./live-news.jsx";
+import TransportType from "./transport-type.jsx";
+import Impacts from "./impacts.jsx";
+import Solutions from "./solutions.jsx";
+import CTA from "./cta.jsx";
+// import LineRevealText from "./text-reveal.jsx"; // Uncomment if available
+
+function Page() {
   return (
     <div className="edu-page">
-      <Navbar />
+      {/* <Navbar />  <-- Removed to prevent double navbar */}
+      
       <Hero />
-      {/* what is carbon footprint and transport emissions */}
-      {/* why transport emissions matter */}
+      
+      {/* Live Data Section */}
       <LiveData />
+      
+      {/* Live News Feed */}
       <LiveNews />
-      <EmissionSources />
-      {/* how much transport contributes to overall carbon footprint (piechart showing how much transport contributes in comparison to other sources) */}
-      {/* Impacts of COs (environmental, economical, health, social) */}
-      {/* Solutions */}
-      {/* challenges */}
+      
+      {/* Transport Breakdown (Pie Chart) */}
+      <TransportType />
+      
+      {/* Environmental & Social Impacts */}
+      <Impacts />
+      
+      {/* Solutions Section */}
+      <Solutions />
+      
+      {/* Call to Action & Footer */}
+      <CTA />
     </div>
   );
 }
 
-export default Education;
+export default Page;

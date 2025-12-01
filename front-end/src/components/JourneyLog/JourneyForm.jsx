@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// Remove useNavigate import since we aren't redirecting anymore
 import { db } from '../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
 export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded, selectedJourney }) {
-  const navigate = useNavigate();
+  // navigate hook removed
 
   // --- 1. HELPER: LOAD SAVED STATE SAFELY ---
   const getSavedState = () => {
@@ -18,8 +18,7 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
 
   const savedData = getSavedState();
 
-  // --- 2. STATE INITIALIZATION (LAZY LOADING) ---
-  // We check storage FIRST. If data exists, use it. If not, use defaults.
+  // --- 2. STATE INITIALIZATION ---
   const [form, setForm] = useState(savedData ? savedData.form : {
     from: "",
     to: "",
@@ -47,19 +46,16 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
 
   // --- 3. RESTORE MAP ON LOAD ---
   useEffect(() => {
-    // If we have saved coordinates, draw the line immediately
     if (savedData && savedData.routeCoords && onRouteCalculated) {
       onRouteCalculated(savedData.routeCoords);
     }
-  }, []); // Runs once on mount
+  }, []); 
 
   // --- 4. SAVE STATE ON EVERY CHANGE ---
   useEffect(() => {
-    // Whenever form or result changes, update storage
     const stateToSave = {
       form,
       result,
-      // We grab the coords from the savedData if they exist, or wait for a new calc
       routeCoords: savedData?.routeCoords || [] 
     };
     sessionStorage.setItem('journeyFormState', JSON.stringify(stateToSave));
@@ -140,10 +136,8 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
       const endCoords = await getCoordinates(form.to, "To");
       const { distanceMeters, flippedCoords } = await getRouteData(startCoords, endCoords, form.mode);
 
-      // Update Map
       if (onRouteCalculated) onRouteCalculated(flippedCoords);
 
-      // IMPORTANT: Save coords to storage so map restores on refresh
       const currentState = JSON.parse(sessionStorage.getItem('journeyFormState') || '{}');
       currentState.routeCoords = flippedCoords;
       sessionStorage.setItem('journeyFormState', JSON.stringify(currentState));
@@ -174,6 +168,12 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
     }
 
     try {
+      // Calculate Points
+      const carEmission = result.distanceKm * 0.17;
+      let savings = carEmission - result.co2Kg;
+      if (savings < 0) savings = 0;
+      const pointsEarned = Math.floor(savings * 100);
+
       await addDoc(collection(db, "journeys"), {
         userId: userId,
         from: form.from,
@@ -187,15 +187,25 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
       });
 
       setSaveMessage("Saved!");
+
+      // STORE MESSAGE FOR DASHBOARD (Don't redirect)
+      // This puts a little note in the browser's pocket.
+      // The Dashboard will check this pocket when you eventually go there.
+      const flashData = {
+        points: pointsEarned,
+        co2: savings.toFixed(2),
+        timestamp: Date.now() // Add time to ensure it's fresh
+      };
+      localStorage.setItem('dashboardFlashMessage', JSON.stringify(flashData));
       
-      // ONLY Clear data on success
+      // Reset Form Logic
       setTimeout(() => {
          setSaveMessage("");
          setForm({ ...form, from: "", to: "" }); 
          setResult({ distanceMiles: null, distanceKm: null, co2Kg: null });
          if (onRouteCalculated) onRouteCalculated([]); 
-         sessionStorage.removeItem('journeyFormState'); // Clear persistent state
-      }, 1500);
+         sessionStorage.removeItem('journeyFormState'); 
+      }, 1000);
 
       if (onJourneyAdded) onJourneyAdded();
 
@@ -203,16 +213,6 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
       console.error("Error saving:", e);
       setError("Save failed.");
     }
-  };
-
-  const handleContinueToCalculator = () => {
-    if (!result.distanceKm) {
-        setError("Calculate a route first.");
-        return;
-    }
-    const journeyData = { from: form.from, to: form.to, distance: result.distanceKm };
-    localStorage.setItem('journeyData', JSON.stringify(journeyData));
-    navigate('/calculator');
   };
 
   const handleClear = () => {
@@ -273,14 +273,6 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
           Save Journey
         </button>
       </div>
-
-      {result.distanceKm && (
-        <div style={{marginTop: '15px'}}>
-          <button type="button" className="btn btn-success" style={{width:'100%', background:'#27ae60', color:'white'}} onClick={handleContinueToCalculator}>
-            View Alternatives →
-          </button>
-        </div>
-      )}
 
       {error && <div className="alert alert-error">{error}</div>}
       {saveMessage && <div className="alert alert-success">{saveMessage}</div>}

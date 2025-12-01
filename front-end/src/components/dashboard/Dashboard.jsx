@@ -6,8 +6,11 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
-  const [userName, setUserName] = useState("Eco-Warrior"); // Default name
+  const [userName, setUserName] = useState("Eco-Warrior"); 
   
+  // State for the "Flash Message" banner
+  const [flashMsg, setFlashMsg] = useState(null);
+
   const [stats, setStats] = useState({
     co2Saved: 0,
     journeysCount: 0,
@@ -17,18 +20,35 @@ const Dashboard = () => {
   const [dailyPoints, setDailyPoints] = useState([0,0,0,0,0,0,0]); 
   const auth = getAuth();
 
-  // 1. Fetch User & Name
+  // 1. CHECK FOR FLASH MESSAGE IN LOCAL STORAGE
+  useEffect(() => {
+    const storedMsg = localStorage.getItem('dashboardFlashMessage');
+    if (storedMsg) {
+      const parsedMsg = JSON.parse(storedMsg);
+      
+      // Show if less than 1 hour old
+      if (Date.now() - parsedMsg.timestamp < 3600000) {
+        setFlashMsg(parsedMsg);
+        
+        // Auto-hide banner after 6 seconds
+        const timer = setTimeout(() => {
+          setFlashMsg(null);
+        }, 6000);
+      }
+      
+      // Clear message so it doesn't persist on refresh
+      localStorage.removeItem('dashboardFlashMessage');
+    }
+  }, []);
+
+  // 2. AUTHENTICATION LISTENER
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      
       if (currentUser) {
-        // Option A: Use Google Display Name
         if (currentUser.displayName) {
-          setUserName(currentUser.displayName.split(' ')[0]); // First name only
-        } 
-        // Option B: Fetch from Firestore (if registered via form)
-        else {
+          setUserName(currentUser.displayName.split(' ')[0]); 
+        } else {
           try {
             const userDocRef = doc(db, "users", currentUser.uid);
             const userSnap = await getDoc(userDocRef);
@@ -44,7 +64,7 @@ const Dashboard = () => {
     return () => unsubscribe();
   }, []);
 
-  // 2. Fetch Dashboard Data (Same as before)
+  // 3. DATA FETCHING LOGIC (Weekly Reset)
   useEffect(() => {
     if (!user) return;
 
@@ -64,7 +84,7 @@ const Dashboard = () => {
       let totalCo2 = 0;
       let count = 0;
       let totalPoints = 0;
-      const pointsPerDay = [0,0,0,0,0,0,0];
+      const pointsPerDay = [0,0,0,0,0,0,0]; // Mon=0, Sun=6
 
       const thisWeekData = allData.filter(journey => {
         const jDate = journey.timestamp.toDate ? journey.timestamp.toDate() : new Date(journey.timestamp);
@@ -74,13 +94,11 @@ const Dashboard = () => {
       thisWeekData.forEach(j => {
         const carEmission = j.distanceKm * 0.17;
         const actualEmission = j.co2Saved; 
-        
         let savedAmount = carEmission - actualEmission; 
         if (savedAmount < 0) savedAmount = 0; 
 
         totalCo2 += savedAmount;
         count += 1;
-        
         const pts = Math.floor(savedAmount * 100);
         totalPoints += pts;
 
@@ -95,7 +113,7 @@ const Dashboard = () => {
       });
       
       setDailyPoints(pointsPerDay);
-      setRecentJourneys(allData.slice(0, 3));
+      setRecentJourneys(allData.slice(0, 3)); 
     };
 
     fetchDashboardData();
@@ -105,9 +123,23 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      
+      {/* --- FLASH MESSAGE BANNER --- */}
+      {flashMsg && (
+        <div className="flash-banner">
+          <div className="flash-content">
+            <span className="flash-icon">🎉</span>
+            <div>
+              <h4>Journey Saved!</h4>
+              <p>You saved <strong>{flashMsg.co2} kg</strong> CO₂ and earned <strong>{flashMsg.points} Points</strong>!</p>
+            </div>
+          </div>
+          <button onClick={() => setFlashMsg(null)} className="flash-close">×</button>
+        </div>
+      )}
+
       <header className="dash-header">
         <div>
-          {/* ✅ UPDATED WELCOME MESSAGE */}
           <h1>👋 Good Evening, {userName}</h1>
           <p>Your weekly eco-impact summary.</p>
         </div>
@@ -115,17 +147,18 @@ const Dashboard = () => {
       </header>
 
       <div className="stats-grid">
-        <div className="stat-card green">
+        {/* Clean White Cards with Accents */}
+        <div className="stat-card maroon">
           <h3>CO₂ Saved (Week)</h3>
           <div className="stat-value">{stats.co2Saved} kg</div>
           <p>Vs. Driving a car 🚗</p>
         </div>
-        <div className="stat-card blue">
+        <div className="stat-card black">
           <h3>Journeys (Week)</h3>
           <div className="stat-value">{stats.journeysCount}</div>
           <p>Trips logged</p>
         </div>
-        <div className="stat-card yellow">
+        <div className="stat-card red">
           <h3>Eco Points</h3>
           <div className="stat-value">{stats.points}</div>
           <p>Earned this week</p>
@@ -138,7 +171,12 @@ const Dashboard = () => {
         </div>
         <div className="simple-chart">
           {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((day, i) => (
-             <ChartBar key={day} label={day} value={dailyPoints[i]} max={Math.max(...dailyPoints, 100)} />
+             <ChartBar 
+               key={day} 
+               label={day} 
+               value={dailyPoints[i]} 
+               max={Math.max(...dailyPoints, 100)} 
+             />
           ))}
         </div>
       </div>
@@ -166,11 +204,21 @@ const Dashboard = () => {
   );
 };
 
+// Helper for Chart Bars with Tooltip
 const ChartBar = ({ label, value, max }) => {
   const height = max > 0 ? `${(value / max) * 100}%` : '5%';
+  
   return (
     <div className="chart-col">
-      <div className="chart-bar" style={{ height: height, backgroundColor: value > 0 ? '#27ae60' : '#e0e0e0' }}></div>
+      <div className="tooltip">{value} pts</div>
+      <div 
+        className="chart-bar" 
+        style={{ 
+          height: height, 
+          // Maroon Gradient for bars
+          background: value > 0 ? 'linear-gradient(to top, #800000, #c0392b)' : '#e0e0e0' 
+        }}
+      ></div>
       <span className="bar-label">{label}</span>
     </div>
   );

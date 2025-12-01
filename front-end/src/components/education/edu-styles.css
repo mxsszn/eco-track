@@ -1,3 +1,4 @@
+
 .edu-page{
     background-color: #fcfaf9;
     color: #202020;
@@ -5,12 +6,21 @@
     margin: 0;
     padding: 0;
     font-family: 'SF Pro Rounded', sans-serif;
-    height: 600vh;
+    height: auto;
 }
+
 
 .edu-hero{
     padding: 4rem 1rem;
     text-align: center;
+}
+
+.hero-image{
+    width: 100%;
+    max-width: 40%;
+    height: auto;
+    border-radius: 30px;
+    margin-bottom: 2rem;
 }
 
 .Live-data-section{
@@ -23,7 +33,6 @@
     display: flex;
     justify-content: center;
     gap: 2rem;
-    flex-wrap: wrap;
     margin-top: 2rem;
 }
 
@@ -72,16 +81,175 @@
 }
 
 .emission-sources{
-    padding: 4rem 1rem;
+    background-color: #fcfaf9;
+
+    flex-shrink: 0;
+    padding: 4rem 5rem;
     text-align: center;
 }
-.emissions-list{
-    list-style-type: none;
-    padding: 0;
-    margin: 2rem auto;
-    max-width: 400px;
+.source-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: .5px; /* gap between the cells */
+    background-color: #a4a4a4; /* this becomes the "border" color */
+    padding: 0px; /* optional: spacing around the whole grid */
+}
+
+.source {
+    display: flex;
+    flex-direction: column;
+    align-items: left; /* left-align content */
     text-align: left;
-    text-decoration: none;
+    padding: 2rem;
+    background-color: #fcfaf9; /* cell background */
+}
+
+
+.source-description{
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #404040;
+    max-width: 28rem;
+}
+
+.piechart-container{
+    grid-template-rows: span 2;
+}
+
+/* Container */
+.impacts-section {
+  padding: 5rem 2rem;
+  max-width: 72vw;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.impacts-section h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.impacts-description {
+  max-width: 700px;
+  margin: 0 auto 40px auto;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.impact-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 2rem;
+    grid-row-gap: 2rem;
+}
+
+.impact-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    min-height: 20rem;
+    background: rgba(255, 255, 255, 0.75);
+     border: 1px solid #e8e8e8;
+     border-radius: 35px;
+     padding: 1.5rem;
+     text-align: left;
+    transition: all 0.3s ease;
+}
+
+.impact-card.one{
+    grid-column: 1 / 2;
+    grid-row: 1 / span 2;
+}
+.impact-card.two{
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+}
+.impact-card.three{
+    grid-column: 3 / 4;
+    grid-row: 1 / span 2;
+}
+.impact-card.four{
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+
+.impact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.025);
+}
+
+.impact-header {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #a22338;
+  font-weight: 600;
+}
+
+.impact-card p {
+  font-size: 0.725rem;
+  color: #00000080;
+  line-height: 1.5;
+  font-weight: light;
+  margin: 0;
+}
+
+/* .impact-card{
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    max-width: 300px;
+    text-align: left;
+} */
+
+.solutions-section{
+    background-color: #fcfaf9;
+    color: #202020;
+    padding: 4rem 5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.solution-cards{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    width: 30vw;
+    text-align: left;
+}
+
+.logger-card{
+    width:28rem
+}
+
+
+.cta-section{
+    background-color: #1b1b1b;
+    color: #ececec;
+    padding: 4rem 5rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cta{
+    margin-top: 3rem;
+    
+    max-width: 600px;
+    text-align: center;
 }
 
 button{
@@ -98,6 +266,20 @@ button:hover{
     background-color: #626262;
 }
 
+button.timeframe{
+    background-color: #e8e8e800;
+    /* border-color: #ba426c; */
+    color: #ffffff;
+    border-radius: 0;
+    border-bottom: #ffffff 2px solid;
+    margin: 0 2rem;
+}
+
+button.timeframe:hover{
+    color: #ba426c;
+    /* border-color: #ba426c; */
+}
+
 img{
     max-width: 100%;
     height: auto;
@@ -111,6 +293,7 @@ h1{
     margin-left: auto;
     margin-right: auto;
     line-height: 1.1;
+    white-space: normal;
 }
 
 h2{
@@ -120,17 +303,176 @@ h2{
     margin-left: auto;
     margin-right: auto;
     line-height: 1.2;
+    white-space: normal;
 }
+
+h2.cta{
+    font-weight: light;
+    font-size: 2.5rem;
+    /* color: rgb(183, 183, 183); */
+}
+
 h3{
     margin-bottom: 1rem;
     max-width: 400px;
+    white-space: normal;
+}
+
+h3.impact-header{
+    max-width: 100vw;
 }
 
 p{
-    max-width: 600px;
+    max-width: 40vw;
+
     margin: 1rem auto;
     line-height: 1.6;
     font-weight: light;
     font-size: 1rem;
     font-family: 'SF Pro', sans-serif;
+    white-space: normal;
+}
+
+.width-fix{
+    width: 50vw;
+}
+
+/* .news>p, .data-card>p{
+    max-width: 15vw;
+    margin: 0;
+    
+    line-height: 1.4;
+}
+
+.impact-card>p{
+    width: 100%;
+    margin: 0;
+} */
+
+p.logger-solution{
+    font-weight: normal;
+    font-size: 1.15rem;
+    margin-top: 2rem;
+    margin-bottom: 0;
+    line-height: 1.4;
+    color: #dfdfdf;
+}
+
+p.cta{
+    margin-top: 0;
+    font-weight: light;
+    width:20vw
+    
+}
+
+.drop-wrapper {
+  display: block;        /* very important */
+  width: 100%;
+  white-space: normal !important;
+}
+
+
+
+.line-mask {
+  display: block;
+  width: 100%;
+  overflow: hidden; /* creates the mask */
+}
+
+.line {
+  display: inline-block;
+  will-change: transform;
+}
+
+@media screen and (max-width: 768px) {
+    .edu-page{
+        font-size: 14px;
+    }
+    .news-articles{
+        grid-template-columns: repeat(1, 1fr);
+        width: 100%;
+    }
+    .news{
+        width: 80vw;
+        text-align: center;
+    }
+    .edu-hero{
+        padding: 4rem 1rem;
+    }
+
+    .cta-section{
+        padding: 2rem 1rem;
+    }
+    .emission-sources{
+        padding: 2rem 1rem;
+    }
+    .live-news{
+        padding: 2rem 1rem;
+    }
+    
+    .Live-data-section{
+        padding: 2rem 1rem;
+    }
+    
+
+    .live-data{
+        flex-direction: column;
+    }
+
+    .solution-cards{
+        width: 80vw;
+    }
+
+    p{
+        max-width: 80vw;
+    }
+
+    .width-fix{
+        width: 80vw;
+    }
+
+    .impact-cards {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: auto;
+    }
+
+    .impact-card {
+        grid-column: auto;
+        grid-row: auto;
+    }
+    .impact-card.one{
+    grid-column: auto;
+    grid-row: auto;
+}
+.impact-card.two{
+    grid-column: auto;
+    grid-row: auto;
+}
+.impact-card.three{
+    grid-column: auto;
+    grid-row: auto;
+}
+.impact-card.four{
+    grid-column: auto;
+    grid-row: auto;
+}
+
+
+    .source-grid {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: auto;
+    }
+
+    .logger-card{
+        width:80vw
+    }
+
+    .source {
+        padding: 1rem;
+        width: 85vw;
+    }
+    
+    .live-chart-container{
+        width: 70vw;
+    }
 }

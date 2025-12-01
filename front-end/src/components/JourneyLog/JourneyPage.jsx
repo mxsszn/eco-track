@@ -11,7 +11,8 @@ const JourneyPage = () => {
   const [journeys, setJourneys] = useState([]);
   const [user, setUser] = useState(null);
   const [currentRoute, setCurrentRoute] = useState([]); 
-  const [selectedJourney, setSelectedJourney] = useState(null); // Holds the data to fill
+  const [selectedJourney, setSelectedJourney] = useState(null); // New State for "Click to Fill"
+
   const auth = getAuth();
 
   useEffect(() => {
@@ -41,10 +42,10 @@ const JourneyPage = () => {
     setCurrentRoute(routeData);
   };
 
+  // NEW: Handler for clicking a saved journey
   const handlePopulateForm = (journeyData) => {
-    // 1. Set the state that the Form listens to
     setSelectedJourney(journeyData);
-    // 2. Scroll to top so user sees the form filled
+    // Scroll to top on mobile so they see the form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -56,11 +57,12 @@ const JourneyPage = () => {
           <JourneyForm 
             userId={user?.uid} 
             onRouteCalculated={handleRouteCalculated}
-            selectedJourney={selectedJourney} 
+            selectedJourney={selectedJourney} // Pass the data down
           />
         </div>
         <div className="journey-right">
           <MapPanel routeCoords={currentRoute} />
+          {/* Pass the handler down */}
           <SavedJourneys 
             journeys={journeys} 
             onSelectJourney={handlePopulateForm} 

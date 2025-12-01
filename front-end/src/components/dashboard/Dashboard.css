@@ -1,12 +1,14 @@
 /* Global Dashboard Reset */
 .dashboard-container {
   padding: 40px;
-  background-color: #f8f9fa; /* Light grey background to make white cards pop */
+  background-color: #ffffff;
   min-height: 100vh;
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: #2d3436;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 40px auto;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
 }
 
 /* --- HEADER SECTION --- */
@@ -19,6 +21,7 @@
   padding: 25px 30px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border-bottom: 2px solid #800000; /* Maroon Accent */
 }
 
 .dash-header h1 {
@@ -36,15 +39,15 @@
 }
 
 .user-badge {
-  background-color: #e8f5e9; /* Light Green */
-  color: #27ae60;
+  background-color: #2d3436; /* Dark Grey/Black */
+  color: #ffffff;
   padding: 8px 16px;
   border-radius: 20px;
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border: 1px solid #c3e6cb;
+  border: 1px solid #000;
 }
 
 /* --- STATS GRID --- */
@@ -65,6 +68,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  border-left: 5px solid transparent; /* Prepare for accent border */
 }
 
 .stat-card:hover {
@@ -95,24 +99,15 @@
   font-weight: 500;
 }
 
-/* Stat Card Colors (Matching Calculator Gradients lightly) */
-.stat-card.green .stat-value { 
-  background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+/* Maroon Theme Colors */
+.stat-card.green { border-left-color: #800000; } /* CO2 Saved -> Maroon */
+.stat-card.green .stat-value { color: #800000; }
 
-.stat-card.blue .stat-value { 
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+.stat-card.blue { border-left-color: #2d3436; } /* Journeys -> Black */
+.stat-card.blue .stat-value { color: #2d3436; }
 
-.stat-card.yellow .stat-value { 
-  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+.stat-card.yellow { border-left-color: #c0392b; } /* Points -> Red */
+.stat-card.yellow .stat-value { color: #c0392b; }
 
 /* --- CHARTS SECTION --- */
 .charts-section {
@@ -152,21 +147,63 @@
   width: 10%;
   height: 100%;
   justify-content: flex-end;
-  group: hover;
+  position: relative; /* For tooltip positioning */
 }
 
 .chart-bar {
   width: 100%;
-  background: linear-gradient(to top, #27ae60, #2ecc71);
+  /* Maroon Gradient */
+  background: linear-gradient(to top, #800000, #a93226);
   border-radius: 8px 8px 0 0;
   transition: height 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s;
   min-height: 6px;
-  opacity: 0.85;
+  opacity: 0.9;
+  cursor: pointer; /* Interaction hint */
 }
 
 .chart-bar:hover {
   opacity: 1;
   transform: scaleX(1.1);
+  background: #c0392b; /* Brighter red on hover */
+}
+
+/* Tooltip Style (Hidden by default) */
+.tooltip {
+  visibility: hidden;
+  background-color: #2d3436;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%; /* Position above the bar */
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px; /* Space between bar and tooltip */
+  font-size: 0.8rem;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+/* Show tooltip on hover of the column */
+.chart-col:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Arrow for tooltip */
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #2d3436 transparent transparent transparent;
 }
 
 .bar-label {
@@ -205,6 +242,7 @@
   border-radius: 16px;
   background-color: #f8f9fa;
   transition: background-color 0.2s;
+  border-left: 4px solid #800000; /* Maroon accent */
 }
 
 .activity-item:hover {
@@ -243,10 +281,10 @@
 }
 
 .save-badge {
-  color: #27ae60;
+  color: #800000; /* Maroon text */
   font-weight: 700;
   font-size: 0.9rem;
-  background: #e8f8f5;
+  background: #fadbd8; /* Light red background */
   padding: 6px 12px;
   border-radius: 12px;
 }
@@ -270,4 +308,60 @@
   .simple-chart {
     gap: 5px;
   }
+}
+/* Flash Message Styles */
+.flash-banner {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: slideDown 0.5s ease-out;
+  box-shadow: 0 8px 20px rgba(39, 174, 96, 0.15);
+}
+
+.flash-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.flash-icon {
+  font-size: 2rem;
+}
+
+.flash-content h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f5132;
+}
+
+.flash-content p {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  color: #146c43;
+}
+
+.flash-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #155724;
+  cursor: pointer;
+  opacity: 0.6;
+  line-height: 1;
+}
+
+.flash-close:hover {
+  opacity: 1;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
