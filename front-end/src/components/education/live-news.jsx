@@ -57,6 +57,14 @@ function LiveNews() {
         <p>Pick your preferred news updates!</p>
         <button>Categories</button>
       </div>
+      <div className="categories">
+        <ul>
+          <li className="categories-list-item">WildLife</li>
+          <li className="categories-list-item">Economy</li>
+          <li className="categories-list-item">Health</li>
+          <li className="categories-list-item">Technology</li>
+        </ul>
+      </div>
       <LineRevealText selector="h2, p" />
     </div>
   );
