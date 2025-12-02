@@ -83,8 +83,8 @@ label.formlabel {
 
 }
 
-input[type="text"],
-input[type="password"] {
+.loginForm input[type="text"],
+.loginForm input[type="password"] {
     margin-bottom: 20px;
     margin-top: 20px;
     margin-left: 10px;
@@ -102,10 +102,10 @@ input[type="password"] {
     transition: background-color 0.15s ease-out;
 }
 
-input[type=text]:focus,
-input[type=text]:hover,
-input[type=password]:hover,
-input[type=password]:focus {
+.loginForm [type=text]:focus,
+.loginForm input[type=text]:hover,
+.loginForm input[type=password]:hover,
+.loginForm input[type=password]:focus {
     background-color: #e3e3e3;
 }
 
