@@ -1,6 +1,15 @@
-import React from "react";
+import React from 'react';
 import { db } from '../../firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
+
+const MODE_ICONS = {
+  car: "🚗",
+  bus: "🚌",
+  train: "🚆",
+  bike: "🚲",
+  walk: "🚶",
+  cycle: "🚲"
+};
 
 export default function SavedJourneys({ journeys = [], onJourneyDeleted, onSelectJourney }) {
   
@@ -16,68 +25,78 @@ export default function SavedJourneys({ journeys = [], onJourneyDeleted, onSelec
     }
   };
 
+  // Helper to format date nicely
+  const formatDate = (dateVal) => {
+    if (!dateVal) return '';
+    const date = dateVal.toDate ? dateVal.toDate() : new Date(dateVal);
+    return date.toLocaleDateString('en-GB', { 
+      day: 'numeric', 
+      month: 'short' 
+    });
+  };
+
   return (
     <div className="card saved-card">
-      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px'}}>
-        <h2 className="card-title" style={{margin:0}}>Recent Activity</h2>
-        <span style={{fontSize: '0.8rem', color: '#888'}}>{journeys.length} saved</span>
+      <div className="saved-header">
+        <h3 className="card-title">Recent Activity</h3>
+        <span className="saved-badge">{journeys.length} Saved</span>
       </div>
-      
-      <p style={{fontSize: '0.85rem', color: '#666', marginBottom: '15px'}}>
-        Tap a journey to load it into the form.
-      </p>
 
-      {journeys.length === 0 ? (
-        <div style={{padding: '20px', textAlign: 'center', color: '#999', background: '#f8f9fa', borderRadius: '8px'}}>
-          <p>No journeys saved yet.</p>
-        </div>
-      ) : (
-        /* SCROLLABLE CONTAINER START */
-        <div className="saved-list-container" style={{
-          maxHeight: '400px', // Matches the Map height roughly
-          overflowY: 'auto',  // Adds scrollbar when needed
-          paddingRight: '5px' // Space for scrollbar
-        }}>
+      <div className="saved-list-wrapper">
+        {journeys.length === 0 ? (
+          <div className="empty-state">
+            <p>No journeys saved yet.</p>
+            <small style={{display:'block', marginTop:'5px'}}>Your history will appear here.</small>
+          </div>
+        ) : (
           <div className="saved-list">
             {journeys.map((j) => (
               <div 
                 key={j.id} 
-                className="saved-item" 
+                className="saved-item-card" 
                 onClick={() => onSelectJourney && onSelectJourney(j)}
-                style={{cursor: 'pointer', transition: 'background 0.2s'}}
-                title="Click to fill form"
+                title="Tap to load details"
               >
-                <div className="saved-main">
-                  <div className="saved-header">
-                    <span className="saved-route">
-                      {j.from} <span className="arrow">→</span> {j.to}
-                    </span>
+                {/* 1. Icon Avatar (Matches CSS .mode-avatar) */}
+                <div className={`mode-avatar ${j.mode}`}>
+                  {MODE_ICONS[j.mode] || "📍"}
+                </div>
+
+                {/* 2. Content Info (Matches CSS .saved-content) */}
+                <div className="saved-content">
+                  <div className="route-line">
+                    <span className="location">{j.from ? j.from.split(',')[0] : 'Unknown'}</span>
+                    <span className="arrow">→</span>
+                    <span className="location">{j.to ? j.to.split(',')[0] : 'Unknown'}</span>
                   </div>
-                  <div className="saved-meta">
-                    <span className="mode-badge">{j.mode}</span>
-                    <span>{j.distanceMiles?.toFixed(1)} miles</span>
-                    <span className="saved-date">{j.date}</span>
+                  <div className="meta-line">
+                    <span className="date">{formatDate(j.date || j.timestamp)}</span>
+                    <span className="dot">•</span>
+                    <span className="dist">{j.distanceMiles?.toFixed(1)} miles</span>
                   </div>
                 </div>
-                
-                <div className="saved-right">
-                  <div className="saved-co2">
-                    {j.co2Saved?.toFixed(2)} kg
+
+                {/* 3. Action Side (CO2 Tag + Delete) */}
+                <div className="saved-action" style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'5px'}}>
+                  <div className="co2-tag">
+                    +{j.co2Saved?.toFixed(1)} <small>kg</small>
                   </div>
+                  
                   <button
                     className="btn-delete"
                     onClick={(e) => handleDelete(e, j.id)}
-                    title="Delete"
+                    title="Delete entry"
+                    style={{fontSize:'0.8rem', padding:'2px 6px', marginTop:'2px'}}
                   >
-                    ✕
+                    Remove
                   </button>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-        /* SCROLLABLE CONTAINER END */
-      )}
+        )}
+      </div>
+      <p className="hint-text">Tap a journey to load it into the form.</p>
     </div>
   );
 }

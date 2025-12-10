@@ -1,377 +1,276 @@
-/* Journey Log Page Container */
-.journey-log-page {
+/* =========================================
+   1. MAIN PAGE LAYOUT
+   ========================================= */
+.journey-page-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f4f6f8;
+  padding: 2rem 3rem; /* Extra padding for spacious feel */
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #f8fafc; /* Light gray background */
   min-height: 100vh;
 }
 
-/* Card Styles */
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* BIG TOP-LEFT TITLE */
+.page-main-title {
+  font-size: 2.2rem;
+  color: #0f172a;
+  font-weight: 800; /* Extra Bold */
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
 }
 
-.journey-card {
-  grid-column: 1;
+.page-subtitle {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem; /* Space between title and content */
+}
+
+/* The Main Grid: Form (Left) | Map & Activity (Right) */
+.journey-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr; 
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* Right Column */
+.journey-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* =========================================
+   2. SHARED CARD STYLING
+   ========================================= */
+.card {
+  background: white;
+  border-radius: 20px; /* Modern Soft Roundness */
+  padding: 2.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); /* Softer shadow */
+  border: 1px solid #f1f5f9;
 }
 
 .card-title {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  color: #2c3e50;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0 0 1.5rem 0;
 }
 
-/* Form Grid */
+/* =========================================
+   3. FORM STYLING
+   ========================================= */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
 }
 
 .form-group label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #34495e;
-}
-
-.required {
-  color: #e74c3c;
-  margin-left: 2px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-group input,
 .form-group select {
-  padding: 10px;
-  border: 2px solid #ecf0f1;
-  border-radius: 8px;
+  padding: 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
   font-size: 1rem;
-  transition: border-color 0.2s;
+  background: #f8fafc;
+  transition: all 0.2s;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-/* Distance Display */
+/* Metrics Row (Distance) */
 .distance-row {
   display: flex;
-  gap: 1rem;
-  align-items: center;
+  justify-content: space-between;
+  align-items: center; /* Vertically centers the button and text */
+  background: #f1f5f9;
+  padding: 1.25rem 1.5rem; /* Balanced padding */
+  border-radius: 16px;
   margin-bottom: 1rem;
+  border: 1px solid #e2e8f0; /* Subtle border to define edges */
 }
 
 .distance-pill {
-  flex: 1;
   display: flex;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: #f8f9fa;
-  border-radius: 20px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px; /* Space between label and value */
 }
 
 .distance-label {
-  font-weight: 600;
-  color: #7f8c8d;
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 800; /* Extra bold */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
 }
 
 .distance-value {
-  font-weight: bold;
-  color: #2c3e50;
-  font-size: 0.95rem;
+  font-size: 1.6rem; /* Larger for emphasis */
+  color: #0f172a;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.5px;
 }
 
-/* CO2 Display */
-.co2-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-  background: #e8f5e9;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-}
-
-.co2-label {
-  font-weight: 600;
-  color: #27ae60;
-}
-
-.co2-value {
-  font-weight: bold;
-  color: #27ae60;
-}
-
-/* Buttons */
-.btn {
+/* Specific override for the Calculate button inside this row */
+.distance-row .btn-primary {
+  width: auto; /* Prevent full width stretching */
   padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  height: fit-content; /* Ensures it doesn't stretch vertically */
+  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2); /* Lift effect */
 }
 
-.btn-primary {
-  background: #3498db;
-  color: white;
-}
-
-.btn-primary:hover {
-  background: #2980b9;
-}
-
-.btn-primary:disabled {
-  background: #95a5a6;
-  cursor: not-allowed;
-}
-
-.btn-blue {
-  background: #0ea5e9;
-  color: white;
-}
-
-.btn-blue:hover {
-  background: #0284c7;
-}
-
-.btn-blue:disabled {
-  background: #95a5a6;
-  cursor: not-allowed;
-}
-
-.btn-danger {
-  background: #e74c3c;
-  color: white;
-}
-
-.btn-danger:hover {
-  background: #c0392b;
-}
-
-.btn-delete {
-  background: transparent;
-  border: none;
-  color: #e74c3c;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 4px 8px;
-  transition: all 0.2s;
-}
-
-.btn-delete:hover {
-  background: #fee2e2;
-  border-radius: 4px;
-}
-
-.btn.small {
-  padding: 6px 12px;
-  font-size: 0.85rem;
-}
-
-.full-radius {
-  border-radius: 20px;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-
-/* Alerts */
-.alert {
-  padding: 12px;
-  border-radius: 8px;
-  margin-top: 1rem;
-}
-
-.alert-error {
-  background: #fee2e2;
-  color: #c0392b;
-}
-
-.alert-success {
-  background: #d1fae5;
-  color: #059669;
-}
-
-/* Map Styles */
-.map-card {
-  grid-row: 1 / 3;
-  grid-column: 2;
-}
-
-.map-wrapper {
-  height: 500px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.map {
-  height: 100%;
-  width: 100%;
-}
-
-/* Saved Journeys */
-.saved-card {
-  max-height: 600px;
-  overflow-y: auto;
-  grid-column: 1;
-}
-
-.saved-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.muted {
-  color: #95a5a6;
-  font-style: italic;
-  text-align: center;
-  padding: 2rem;
-}
-
-.saved-item {
-  padding: 1rem;
-  border: 1px solid #ecf0f1;
-  border-radius: 8px;
+/* CO2 Row */
+.co2-row {
+  background: #ecfdf5;
+  padding: 1.2rem;
+  border-radius: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: box-shadow 0.2s;
+  margin-bottom: 2rem;
+  border: 1px solid #d1fae5;
 }
 
-.saved-item:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.co2-label { color: #059669; font-weight: 700; }
+.co2-value { color: #059669; font-weight: 800; font-size: 1.2rem; }
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
-.saved-main {
-  flex: 1;
+.btn {
+  padding: 14px 24px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.1s;
+}
+.btn:active { transform: scale(0.98); }
+
+.btn-primary { background-color: #3b82f6; color: white; width: 100%; } 
+.btn-blue { background-color: #1e40af; color: white; }
+.btn-teal { background-color: #10b981; color: white; }
+.btn-teal:hover { background-color: #059669; }
+
+.btn-clear {
+  background: none; border: none; color: #ef4444; font-size: 0.9rem; cursor: pointer; text-decoration: underline;
+}
+
+/* =========================================
+   4. MAP PANEL
+   ========================================= */
+.map-wrapper {
+  height: 420px;
+  width: 100%;
+  border-radius: 20px; /* Matching Card Radius */
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================================
+   5. RECENT ACTIVITY CARD (Fixes from before)
+   ========================================= */
+.saved-card {
+  display: flex;
+  flex-direction: column;
+  height: 550px; /* Taller fixed height */
+  padding: 2rem;
 }
 
 .saved-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.saved-route {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 1rem;
+.saved-badge {
+  background: #f1f5f9; color: #64748b; font-size: 0.8rem; font-weight: 700; padding: 6px 12px; border-radius: 20px;
 }
 
-.arrow {
-  color: #3498db;
-  margin: 0 8px;
+.saved-list-wrapper {
+  flex: 1; overflow-y: auto; padding-right: 8px;
 }
 
-.saved-meta {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.9rem;
-  color: #7f8c8d;
+/* Scrollbar */
+.saved-list-wrapper::-webkit-scrollbar { width: 6px; }
+.saved-list-wrapper::-webkit-scrollbar-track { background: transparent; }
+.saved-list-wrapper::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+
+/* List Items */
+.saved-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.saved-item-card {
+  display: flex; align-items: center; padding: 16px;
+  background: #fff; border: 1px solid #f1f5f9; border-radius: 16px;
+  cursor: pointer; transition: all 0.2s ease;
+}
+.saved-item-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.06); border-color: #3b82f6; }
+
+.mode-avatar {
+  width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; border-radius: 14px; margin-right: 16px; background: #f8fafc; flex-shrink: 0;
+}
+/* Mode Colors */
+.mode-avatar.train { background: #eff6ff; }
+.mode-avatar.car { background: #fef2f2; }
+.mode-avatar.bus { background: #fff7ed; }
+.mode-avatar.walk, .mode-avatar.bike { background: #ecfdf5; }
+
+.saved-content { flex: 1; overflow: hidden; }
+.route-line { font-size: 1rem; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.arrow { color: #94a3b8; margin: 0 6px; font-size: 0.85rem; }
+.meta-line { font-size: 0.85rem; color: #64748b; margin-top: 2px; }
+
+.co2-tag {
+  background: #ecfdf5; color: #059669; font-weight: 700; font-size: 0.85rem; padding: 4px 10px; border-radius: 8px; white-space: nowrap;
 }
 
-.mode-badge {
-  background: #e8f5e9;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #27ae60;
-}
+.btn-delete { background: transparent; border: none; color: #cbd5e1; font-size: 1.2rem; cursor: pointer; padding: 0 0 0 10px; }
+.btn-delete:hover { color: #ef4444; }
 
-.saved-date {
-  font-size: 0.85rem;
-  color: #95a5a6;
-}
-
-.saved-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.5rem;
-}
-
-.saved-co2 {
-  font-weight: bold;
-  color: #27ae60;
-  font-size: 1.1rem;
-}
+/* Alert Styles */
+.alert { padding: 12px; border-radius: 12px; margin-top: 1rem; text-align: center; }
+.alert-error { background: #fee2e2; color: #b91c1c; }
+.alert-success { background: #d1fae5; color: #047857; }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .journey-log-page {
-    grid-template-columns: 1fr;
-  }
-  
-  .journey-card {
-    grid-column: 1;
-  }
-  
-  .map-card {
-    grid-row: auto;
-    grid-column: 1;
-  }
-  
-  .saved-card {
-    grid-column: 1;
-  }
-}
-
-@media (max-width: 768px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .distance-row {
-    flex-direction: column;
-  }
-  
-  .actions {
-    flex-direction: column;
-  }
-  
-  .btn {
-    width: 100%;
-  }
-}
-
-/* Custom Scrollbar for the History List */
-.saved-list-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.saved-list-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-.saved-list-container::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
-}
-
-.saved-list-container::-webkit-scrollbar-thumb:hover {
-  background: #aaa;
+  .journey-grid { grid-template-columns: 1fr; }
+  .journey-page-container { padding: 1.5rem; }
 }

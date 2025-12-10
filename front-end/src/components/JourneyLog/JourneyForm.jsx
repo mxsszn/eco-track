@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-// Remove useNavigate import since we aren't redirecting anymore
+import { useNavigate } from 'react-router-dom'; // RESTORED
 import { db } from '../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
 export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded, selectedJourney }) {
-  // navigate hook removed
+  const navigate = useNavigate(); // RESTORED HOOK
 
   // --- 1. HELPER: LOAD SAVED STATE SAFELY ---
   const getSavedState = () => {
@@ -70,6 +70,7 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
         date: new Date().toISOString().split('T')[0],
         mode: selectedJourney.mode
       });
+      // We reset results so they have to hit calculate again to get fresh route data
       setResult({ distanceMiles: null, distanceKm: null, co2Kg: null });
     }
   }, [selectedJourney]);
@@ -168,7 +169,6 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
     }
 
     try {
-      // Calculate Points
       const carEmission = result.distanceKm * 0.17;
       let savings = carEmission - result.co2Kg;
       if (savings < 0) savings = 0;
@@ -188,17 +188,13 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
 
       setSaveMessage("Saved!");
 
-      // STORE MESSAGE FOR DASHBOARD (Don't redirect)
-      // This puts a little note in the browser's pocket.
-      // The Dashboard will check this pocket when you eventually go there.
       const flashData = {
         points: pointsEarned,
         co2: savings.toFixed(2),
-        timestamp: Date.now() // Add time to ensure it's fresh
+        timestamp: Date.now() 
       };
       localStorage.setItem('dashboardFlashMessage', JSON.stringify(flashData));
       
-      // Reset Form Logic
       setTimeout(() => {
          setSaveMessage("");
          setForm({ ...form, from: "", to: "" }); 
@@ -223,12 +219,24 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
     setError("");
   };
 
+  // --- NEW: NAVIGATE TO CALCULATOR ---
+  const handleViewAlternatives = () => {
+    navigate('/calculator', { 
+      state: { 
+        distanceKm: result.distanceKm, 
+        from: form.from, 
+        to: form.to,
+        mode: form.mode 
+      } 
+    });
+  };
+
   return (
     <div className="card journey-card">
-      <div style={{display:'flex', justifyContent:'space-between'}}>
-        <h2 className="card-title">Log a journey</h2>
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        <h2 className="card-title">Log a Journey</h2>
         {(form.from || form.to) && (
-            <button onClick={handleClear} style={{background:'none', border:'none', color:'#e74c3c', cursor:'pointer', fontSize:'0.9rem'}}>Clear</button>
+            <button onClick={handleClear} className="btn-clear">Clear Form</button>
         )}
       </div>
       
@@ -259,7 +267,7 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
           <span className="distance-value">{result.distanceMiles ? result.distanceMiles.toFixed(1) + " mi" : "-"}</span>
         </div>
         <button type="button" className="btn btn-primary" onClick={handleCalculate} disabled={isCalculating}>
-          {isCalculating ? "..." : "Calculate Route"}
+          {isCalculating ? "Calculating..." : "Calculate Route"}
         </button>
       </div>
 
@@ -268,7 +276,15 @@ export default function JourneyForm({ userId, onRouteCalculated, onJourneyAdded,
         <span className="co2-value">{result.co2Kg ? result.co2Kg.toFixed(2) + " kg" : "-"}</span>
       </div>
 
+      {/* --- ACTION BUTTONS (Save & View Alternatives) --- */}
       <div className="actions">
+        {/* Only show this button if we have a calculated result */}
+        {result.distanceMiles && (
+           <button type="button" className="btn btn-teal" onClick={handleViewAlternatives}>
+             View Alternatives
+           </button>
+        )}
+
         <button type="button" className="btn btn-blue" onClick={handleSave} disabled={!result.distanceMiles}>
           Save Journey
         </button>
