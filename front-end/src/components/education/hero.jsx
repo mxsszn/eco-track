@@ -18,7 +18,7 @@ function Hero() {
         transportation drives emissions across the globe.
       </p>
       <LineRevealText selector=".animate-lines" />
-      <button>Join now</button>
+      <p className="pink">Scroll to learn more</p>
     </div>
   );
 }

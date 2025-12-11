@@ -22,7 +22,9 @@ function Impacts() {
           <h3 className="impact-header">Health Impact</h3>
           <p>
             Air pollution from vehicle emissions causes respiratory diseases,
-            cardiovascular problems, and premature deaths.
+            cardiovascular problems, and premature deaths. Over 4000 premature
+            deaths were contributed by Air pollution in 2019(London Assembly,
+            2020).
           </p>
         </div>
 

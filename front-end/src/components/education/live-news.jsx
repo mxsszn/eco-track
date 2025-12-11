@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import LineRevealText from "./text-reveal";
 function LiveNews() {
   const [articles, setArticles] = useState([]);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     fetch("/news.json")
@@ -15,7 +16,7 @@ function LiveNews() {
       setArticles((prev) => {
         if (prev.length === 0) return prev;
         const rotated = [...prev.slice(1), prev[0]]; // move first to end
-        return rotated.map((a) => ({ ...a, timestamp: randomTimestamp() }));
+        return rotated.map((a) => ({ ...a, timestamp: randomTimestamp() })); //timestamp update
       });
     }, 30000); // 30 seconds
     return () => clearInterval(interval);
@@ -55,16 +56,18 @@ function LiveNews() {
       <div className="join-cta">
         <h3>Want a more tailored news experience?</h3>
         <p>Pick your preferred news updates!</p>
-        <button>Categories</button>
+        <button onClick={() => setShow(!show)}>Categories</button>
       </div>
-      <div className="categories">
-        <ul>
-          <li className="categories-list-item">WildLife</li>
-          <li className="categories-list-item">Economy</li>
-          <li className="categories-list-item">Health</li>
-          <li className="categories-list-item">Technology</li>
-        </ul>
-      </div>
+      {show && (
+        <div className="categories">
+          <ul>
+            <li className="categories-list-item">WildLife</li>
+            <li className="categories-list-item">Economy</li>
+            <li className="categories-list-item">Health</li>
+            <li className="categories-list-item">Technology</li>
+          </ul>
+        </div>
+      )}
       <LineRevealText selector="h2, p" />
     </div>
   );

@@ -29,10 +29,13 @@ export default function TransportType() {
                   passenger than the equivalent journey by coach, or 3 times
                   more CO2e per passenger than an electric car (taking into
                   account emissions from electricity generation and
-                  distribution).(GOV.UK, 2023)
+                  distribution)(Department For Transport, 2023).
                 </p>
               </div>
               <div className="source piechart-container">
+                <h3>
+                  Emissions in % for cars, vans, HGVs, Buses and Coaches in 2021
+                </h3>
                 <MyPieChart />
               </div>
               <div className="source">

@@ -14,17 +14,11 @@ function Page() {
     <div className="edu-page">
       <Navbar />
       <Hero />
-      {/* what is carbon footprint and transport emissions */}
-      {/* why transport emissions matter */}
       <LiveData />
       <LiveNews />
-      {/* how much transport contributes to overall carbon footprint (piechart showing how much transport contributes in comparison to other sources) */}
       <TransportType />
-      {/* Impacts of COs (environmental, economical, health, social) */}
       <Impacts />
-      {/* Solutions */}
       <Solutions />
-      {/* conclusion (cta and footer) */}
       <CTA />
     </div>
   );

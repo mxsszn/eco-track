@@ -2,10 +2,10 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { useInView } from "./inView";
 
 const data = [
-  { name: "Road", value: 400 },
-  { name: "Aviation", value: 300 },
-  { name: "Rail", value: 200 },
-  { name: "Marine", value: 100 },
+  { name: "Cars", value: 57 },
+  { name: "Vans", value: 18 },
+  { name: "HGVs", value: 21 },
+  { name: "Buses & Coaches", value: 3 },
 ];
 
 const COLORS = ["#00d5ffff", "#3f5b96ff", "#34407fff", "#21304fff"];

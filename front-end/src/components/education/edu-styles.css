@@ -271,12 +271,11 @@ button.timeframe{
     /* border-color: #ba426c; */
     color: #ffffff;
     border-radius: 0;
-    border-bottom: #ffffff 2px solid;
     margin: 0 2rem;
 }
 
 button.timeframe:hover{
-    color: #ba426c;
+    border-bottom: #ffffff 2px solid;
     /* border-color: #ba426c; */
 }
 
@@ -363,6 +362,11 @@ p.cta{
     font-weight: light;
     width:20vw
     
+}
+
+p.pink{
+    color: #ba426c;
+    font-weight: bolder;
 }
 
 .drop-wrapper {

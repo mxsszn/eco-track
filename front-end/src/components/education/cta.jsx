@@ -8,7 +8,7 @@ export default function CTA() {
         <div>
           <img src={Imgwalk} alt="" />
         </div>
-        <p className="logger-solution animate-lines">
+        {/* <p className="logger-solution animate-lines">
           Our carbon-footprint logger offers a practical and impactful way to
           reduce transport-related emissions. This application provides
           real-time data on the amount of carbon produced by a person's mode of
@@ -20,7 +20,7 @@ export default function CTA() {
           urban planning. As a result, the carbon-emission logger strengthens
           several of the solutions outlined and acts as an essential tool in
           reducing the environmental impact of transport.
-        </p>
+        </p> */}
         <LineRevealText selector=".animate-lines" />
       </div>
       <div className="cta">
