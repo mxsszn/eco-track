@@ -34,6 +34,9 @@ public class Profile {
     String profile_image_url;
 
     @NotNull
+    boolean private_profile;
+
+    @NotNull
     Integer total_points;
 
     @NotNull
@@ -51,7 +54,7 @@ public class Profile {
     }
 
 
-    public Profile(User user, String display_name, String bio, String profile_image_url, Integer total_points,  Float total_co2_saved, Tier tier) {
+    public Profile(User user, String display_name, String bio, String profile_image_url, Integer total_points,  Float total_co2_saved, Tier tier, boolean private_profile) {
         super();
         this.user = user;
         this.display_name = display_name;
@@ -60,6 +63,7 @@ public class Profile {
         this.total_points = total_points;
         this.total_co2_saved = total_co2_saved;
         this.tier = tier;
+        this.private_profile = private_profile;
     }
 
 
@@ -151,6 +155,18 @@ public class Profile {
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
     }
+
+
+    public boolean isPrivate_profile() {
+        return private_profile;
+    }
+
+
+    public void setPrivate_profile(boolean private_profile) {
+        this.private_profile = private_profile;
+    }
+
+
 
 
 }
