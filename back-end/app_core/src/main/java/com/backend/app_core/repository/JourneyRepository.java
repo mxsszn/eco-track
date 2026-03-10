@@ -1,14 +1,20 @@
 package com.backend.app_core.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import com.backend.app_core.model.*;
+import com.backend.app_core.model.Journey;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
 
-public interface JourneyRepository extends CrudRepository<Journey, Long> {
+public interface JourneyRepository extends JpaRepository<Journey, Long> {
 
-    List<Journey> findByUser_UserIdAndJourneyDateBetween(Long userId, Date startDate, Date endDate);
+    @Query("SELECT j FROM Journey j WHERE j.user.user_id = :userId AND j.journey_date BETWEEN :startDate AND :endDate")
+    List<Journey> findJourneysByUserIdAndDateBetween(@Param("userId") Long userId,
+                                                     @Param("startDate") Date startDate,
+                                                     @Param("endDate") Date endDate);
 
-    List<Journey> findTop3ByUser_UserIdOrderByJourneyDateDesc(Long userId);
+    @Query("SELECT j FROM Journey j WHERE j.user.user_id = :userId ORDER BY j.journey_date DESC")
+    List<Journey> findRecentJourneysByUserId(@Param("userId") Long userId);
 }

@@ -28,23 +28,19 @@ public class DashboardService {
     }
 
     public DashboardDTO getDashboardData(Long userId) {
-        // 1. Find profile
-        Profile profile = profileRepository.findByUser_UserId(userId)
+        Profile profile = profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Profile not found for user id: " + userId));
 
-        // 2. Get start and end of current week
         Date startOfWeek = getStartOfWeek();
         Date endOfWeek = getEndOfWeek();
 
-        // 3. Get weekly journeys
         List<Journey> weeklyJourneys = journeyRepository
-                .findByUser_UserIdAndJourneyDateBetween(userId, startOfWeek, endOfWeek);
+                .findJourneysByUserIdAndDateBetween(userId, startOfWeek, endOfWeek);
 
-        // 4. Weekly totals
         int weeklyJourneysCount = weeklyJourneys.size();
 
         int weeklyPoints = weeklyJourneys.stream()
-                .mapToInt(journey -> journey.getPoints_awarded())
+                .mapToInt(Journey::getPoints_awarded)
                 .sum();
 
         float weeklyCo2Saved = 0;
@@ -52,11 +48,12 @@ public class DashboardService {
             weeklyCo2Saved += journey.getCo2_saved();
         }
 
-        // 5. Weekly chart data
         List<WeeklyPointsDTO> weeklyPointsChart = buildWeeklyPointsChart(weeklyJourneys);
 
-        // 6. Recent 3 journeys
-        List<Journey> recentJourneys = journeyRepository.findTop3ByUser_UserIdOrderByJourneyDateDesc(userId);
+        List<Journey> recentJourneys = journeyRepository.findRecentJourneysByUserId(userId);
+        if (recentJourneys.size() > 3) {
+            recentJourneys = recentJourneys.subList(0, 3);
+        }
 
         List<RecentJourneyDTO> recentJourneyDTOs = new ArrayList<>();
         for (Journey journey : recentJourneys) {
@@ -74,13 +71,11 @@ public class DashboardService {
             ));
         }
 
-        // 7. Tier name
         String tierName = null;
         if (profile.getTier() != null) {
             tierName = profile.getTier().getTier_name();
         }
 
-        // 8. Return DTO
         return new DashboardDTO(
                 profile.getDisplay_name(),
                 tierName,
@@ -105,7 +100,6 @@ public class DashboardService {
 
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-            // Java Calendar: Sunday=1, Monday=2, ..., Saturday=7
             int index;
             if (dayOfWeek == Calendar.SUNDAY) {
                 index = 6;

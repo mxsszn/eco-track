@@ -64,7 +64,7 @@ public class AchievementService {
     }
 
     public List<User_achievement> getAchievementsForUser(Long userId) {
-        return userAchievementRepository.findByUserId(userId);
+        return userAchievementRepository.findAchievementsByUserId(userId);
     }
 
     public User_achievement assignAchievementToUser(AchievementDTO dto) {
@@ -79,7 +79,7 @@ public class AchievementService {
                 .orElseThrow(() -> new RuntimeException("Achievement not found with id: " + dto.getAchievementId()));
 
         boolean alreadyExists = userAchievementRepository
-                .existsByUserIdAndAchievementId(dto.getUserId(), dto.getAchievementId());
+                .existsByUserAndAchievement(dto.getUserId(), dto.getAchievementId());
 
         if (alreadyExists) {
             throw new RuntimeException("This user already has this achievement.");
@@ -95,7 +95,7 @@ public class AchievementService {
 
     public void removeAchievementFromUser(Long userId, Long achievementId) {
         User_achievement existing = userAchievementRepository
-                .findByUserIdAndAchievementId(userId, achievementId)
+                .findByUserAndAchievement(userId, achievementId)
                 .orElseThrow(() -> new RuntimeException("User achievement record not found."));
 
         userAchievementRepository.delete(existing);
