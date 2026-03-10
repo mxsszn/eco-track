@@ -50,7 +50,6 @@ public class Profile {
     private Date updated_at;
 
     public Profile() {
-        super();
     }
 
 
