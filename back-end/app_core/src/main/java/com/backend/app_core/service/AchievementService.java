@@ -88,7 +88,7 @@ public class AchievementService {
         User_achievement userAchievement = new User_achievement();
         userAchievement.setUser(user);
         userAchievement.setAchievement(achievement);
-        userAchievement.setEarnedAt(new Date());
+        userAchievement.setEarned_at(new Date());
 
         return userAchievementRepository.save(userAchievement);
     }

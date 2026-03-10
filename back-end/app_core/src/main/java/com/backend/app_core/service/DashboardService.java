@@ -9,6 +9,8 @@ import com.backend.app_core.repository.JourneyRepository;
 import com.backend.app_core.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,11 +60,16 @@ public class DashboardService {
 
         List<RecentJourneyDTO> recentJourneyDTOs = new ArrayList<>();
         for (Journey journey : recentJourneys) {
+            LocalDateTime journeyDateTime = journey.getJourney_date()
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+
             recentJourneyDTOs.add(new RecentJourneyDTO(
                     journey.getStart_location(),
                     journey.getDestination(),
                     journey.getDistance_km(),
-                    journey.getJourney_date(),
+                    journeyDateTime,
                     journey.getTransport_mode().getMode_name()
             ));
         }
