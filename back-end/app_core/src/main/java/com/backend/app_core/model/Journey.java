@@ -68,8 +68,10 @@ public class Journey {
         super();
     }
 
-    public Journey(String start_location, String destination, Date journey_date, Float distance_km, Float selected_mode_emission, Float co2_saved, Integer points_awarded, String route_geometry) {
+    public Journey(User user, Transport_mode transport_mode, String start_location, String destination, Date journey_date, Float distance_km, Float selected_mode_emission, Float co2_saved, Integer points_awarded, String route_geometry) {
         super();
+        this.user = user;
+        this.transport_mode = transport_mode;
         this.start_location = start_location;
         this.destination = destination;
         this.journey_date = journey_date;
@@ -183,6 +185,7 @@ public class Journey {
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
     }
+
     
 }
 

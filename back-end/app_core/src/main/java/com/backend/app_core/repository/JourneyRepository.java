@@ -20,6 +20,10 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
     List<Journey> findRecentJourneysByUserId(@Param("userId") Long userId);
 
 
+   @Query("SELECT j FROM Journey j WHERE j.user.user_id = :userId")
+    List<Journey> findAllJourneysForUserId(@Param("userId") Long userId);
+
+
     @Query("SELECT j FROM Journey j WHERE j.user.user_id = :userId AND j.journey_date BETWEEN :startDate AND :endDate ORDER BY j.co2_saved DESC LIMIT 1")
     Optional<Journey> findJourneyWithHighestCo2SavedByIdAndDateRange(
         @Param("userId") Long userId,

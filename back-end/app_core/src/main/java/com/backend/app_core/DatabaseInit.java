@@ -40,31 +40,45 @@ public class DatabaseInit implements CommandLineRunner {
 
         userRepository.deleteAll();
         profileRepository.deleteAll();
+        journeyRepository.deleteAll();
+        tierRepository.deleteAll();
+
 
 
         User testUser = new User("testemail@sample.com", "testusername", "superhashedpassword");
+        User testUser2 = new User("testemail2@gmail.com", "testusername2", "hashpsaasword");
+        User testUser3 = new User("testemai2342@gmail.com", "testusername3", "hashpsaasword");
         userRepository.save(testUser);
+        userRepository.save(testUser2);
+        userRepository.save(testUser3);
 
-        Tier testTier = new Tier("placeholder tier", 10, 25, "awesome placeholder tier");
+        Tier testTier = new Tier("starter tier 1", 0, 0, "first tier assigned to everyone");
+        Tier testTier2 = new Tier("tier 2", 15, 10, "placeholder tier 2");
+        Tier testTier3 = new Tier("tier 3", 30, 10, "placeholder tier 3");
         tierRepository.save(testTier);
+        tierRepository.save(testTier2);
+        tierRepository.save(testTier3);
 
-        Profile testProfile = new Profile(testUser, "testUserIsCool", "hello im test user", "nourlfornow", 400, 300f, testTier, false);
+
+        Profile testProfile = new Profile(testUser2, "testUserIsCool", "hello im test user", "nourlfornow", 0, 0f, testTier, false);
+        Profile testProfile2 = new Profile(testUser3, "test profile 2", "some bio", "url", 0, 0f, testTier, false);
+
         profileRepository.save(testProfile);
+        profileRepository.save(testProfile2);
 
+        
         Transport_mode testTransport = new Transport_mode("test transport", 300f, false);
+        transport_modeRepository.save(testTransport);
 
         Date testDate1 = new Date();
         testDate1.getTime();
 
-        Journey testJourney1 = new Journey("location 1 ", "destionation lcoation", testDate1, 30f, 2f, 30f, 3, "lelel lelel");
-
-        
-
-
-
-
-
-
+        Journey testJourney1 = new Journey(testUser, testTransport,"location 1 ", "destionation lcoation", testDate1, 25f, 2f, 30f, 15, "lell lelel");
+        Journey testJourney2 = new Journey(testUser, testTransport, "location 2 ", "destionation lcoation 2", testDate1, 30f, 2f, 35f, 3, "lelel lelel");
+        Journey testJourney3 = new Journey(testUser, testTransport, "location 3 ", "destionation lcoation 2", testDate1, 30f, 3f, 3f, 30, "lelel lelel");
+        journeyRepository.save(testJourney1);
+        journeyRepository.save(testJourney2);
+        journeyRepository.save(testJourney3);
 
 
     }
