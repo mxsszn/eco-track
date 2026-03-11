@@ -1,14 +1,13 @@
-Login,Signup,Profile -> Patrick
+Maps page - Tayyab
+Journey Logging - Tayyab
+Leaderboards - Patrick
+Settings Page - Patrick
+Profile - Patrick
+Educational Page - Basit
+Home page - Basit
+Dashbaord - Mekael
+Carbon Calculator - Dipta
 
 
-Pages to choose from:
-Maps page - wireframe done
-Saved Routes Page - to do
-Leaderboards - to do
-Settings Page - to do
-Help page - to do
-Home page - to do
-Dashbaord - to do
-About us page - to do 
 
 To use and edit the wireframes.af file, download Affinity from Affinity.studio
