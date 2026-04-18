@@ -3,6 +3,7 @@ package com.backend.app_core;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.backend.app_core.model.*;
 import com.backend.app_core.repository.*;
@@ -43,9 +44,13 @@ public class DatabaseInit implements CommandLineRunner {
         journeyRepository.deleteAll();
         tierRepository.deleteAll();
 
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 
-        User testUser = new User("testemail@sample.com", "testusername", "superhashedpassword");
+
+
+
+        User testUser = new User("testemail@sample.com", "testusername", encoder.encode("superhashedpassword"));
         User testUser2 = new User("testemail2@gmail.com", "testusername2", "hashpsaasword");
         User testUser3 = new User("testemai2342@gmail.com", "testusername3", "hashpsaasword");
         userRepository.save(testUser);
