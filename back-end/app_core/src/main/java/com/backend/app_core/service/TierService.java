@@ -4,7 +4,7 @@ package com.backend.app_core.service;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import com.backend.app_core.model.Journey;
-import com.backend.app_core.dto.ProfileDTO;
+import com.backend.app_core.dto.UpdateProfileDTO;
 import com.backend.app_core.repository.JourneyRepository;
 import com.backend.app_core.repository.ProfileRepository;
 import com.backend.app_core.repository.TierRepository;

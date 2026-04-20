@@ -30,6 +30,38 @@ align-content: start;
 }
 
 
+.badgeTitle {
+    font-size: 20px;
+}
+
+.parent3 {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-template-rows: 1fr;
+grid-column-gap: 0px;
+grid-row-gap: 0px;
+}
+
+
+.profileBadge {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    text-align: center;
+
+}
+
+.badgeImage {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    align-self: center;
+    max-width: 30%;
+}
+
+
+
+
+
 .leaderboardTitle {
     text-align: center;
     font-size: 2rem;

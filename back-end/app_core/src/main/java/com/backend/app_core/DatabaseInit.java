@@ -51,11 +51,7 @@ public class DatabaseInit implements CommandLineRunner {
 
 
         User testUser = new User("testemail@sample.com", "test", encoder.encode("test"));
-        User testUser2 = new User("testemail2@gmail.com", "testusername2", "hashpsaasword");
-        User testUser3 = new User("testemai2342@gmail.com", "testusername3", "hashpsaasword");
         userRepository.save(testUser);
-        userRepository.save(testUser2);
-        userRepository.save(testUser3);
 
         Tier testTier = new Tier("starter tier 1", 0, 0, "first tier assigned to everyone");
         Tier testTier2 = new Tier("tier 2", 15, 10, "placeholder tier 2");
@@ -65,11 +61,9 @@ public class DatabaseInit implements CommandLineRunner {
         tierRepository.save(testTier3);
 
 
-        Profile testProfile = new Profile(testUser, "testUserIsCool", "hello im test user", "nourlfornow", 0, 0f, testTier, false);
-        Profile testProfile2 = new Profile(testUser3, "test profile 2", "some bio", "url", 0, 0f, testTier, false);
+        Profile testProfile = new Profile(testUser, "testUserIsCool", "hello im test user", "http://localhost:5173/src/components/profile/testimg1.jpg", 0, 0f, testTier, false);
 
         profileRepository.save(testProfile);
-        profileRepository.save(testProfile2);
 
         
         Transport_mode testTransport = new Transport_mode("test transport", 300f, false);

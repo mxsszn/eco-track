@@ -1,5 +1,5 @@
 import "./navbar.css"
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Home from "../home/home";
 import Profile from "../profile/profile";
 import RegisterForm from "../register/register";
@@ -8,6 +8,17 @@ import LoginForm from "../login/login";
 
 
 function AccountDropdown() {
+
+
+    const logoutLogic = (e) => {
+        localStorage.clear();
+        localStorage.setItem("loggedIn", false)
+        Navigate("/");
+    }
+
+
+
+
 
     if (localStorage.getItem("loggedIn") == "false") {
             return(
@@ -27,7 +38,7 @@ function AccountDropdown() {
             <div className="dropdown-content">
                 <Link to="/profile">Profile</Link>
                 <Link to="settings">Settings</Link>
-                <Link to="logout">Log Out</Link>
+                <Link to="/logout">Log Out</Link>
             </div>
         </div>
 
@@ -35,9 +46,6 @@ function AccountDropdown() {
 
     }
 }
-
-
-
 
 
 function Navbar() {

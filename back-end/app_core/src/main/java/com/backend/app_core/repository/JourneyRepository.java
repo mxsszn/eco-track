@@ -31,5 +31,17 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
         @Param("endDate") Date endDate
     );
 
+    @Query("SELECT j FROM Journey j WHERE j.user.user_id = :userId ORDER BY j.co2_saved DESC LIMIT 1")
+    Optional<Journey> findJourneyWithHighestCo2SavedById(
+        @Param("userId") Long userId
+    );
+
+
+
+
+
+
+
+
 
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './login.css'
+import Navbar from '../navbar/navbar';
 
 
 
@@ -29,11 +30,30 @@ function LoginForm() {
                 body: JSON.stringify(submitData)
             }).then(response => response.json())
             localStorage.setItem("userdata", JSON.stringify(response))
+            loadProfileData()
+            localStorage.setItem("loggedIn", true)
             navigate("/profile")
 
         } catch (error) {
             
         }
+    }
+
+    const loadProfileData = async () => {
+        console.log("loading profile data")
+        let userdata = JSON.parse((localStorage.getItem("userdata")))
+        let userId = userdata.user_id
+        try {
+            const response = await fetch (`http://localhost:8080/api/profile/${userId}`, {
+                method: "GET",
+                headers: {"Content-Type": "application/json"}
+            }).then(response => response.json())
+            localStorage.setItem("profiledata", JSON.stringify(response))
+        } catch (error) {
+            
+        }
+
+
     }
 
     

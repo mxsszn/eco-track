@@ -45,9 +45,10 @@ public class SecurityConfiguration {
     http.addFilterBefore(new LoginFilter("/login", authenticationManager), UsernamePasswordAuthenticationFilter.class)
     .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-    http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(HttpMethod.POST, "/**").permitAll().requestMatchers("/h2-console/**").permitAll().anyRequest().authenticated());
-
+    http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(HttpMethod.POST, "/**").permitAll().requestMatchers("/h2-console/**").permitAll());
+    http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(HttpMethod.GET, "/**").permitAll().requestMatchers("/h2-console/**").permitAll().anyRequest().authenticated());
     http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
+
 
     return http.build();
     }

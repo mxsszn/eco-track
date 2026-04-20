@@ -1,6 +1,7 @@
 package com.backend.app_core.controller;
 
 import com.backend.app_core.dto.ProfileDTO;
+import com.backend.app_core.dto.UpdateProfileDTO;
 import com.backend.app_core.model.Achievement;
 import com.backend.app_core.service.ProfileService;
 import com.backend.app_core.service.UserService;
@@ -72,11 +73,12 @@ public class ProfileController {
         return new ResponseEntity<Profile>(created, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{profileId}")
-    public ResponseEntity<Profile> updateProfile(@RequestBody Profile profile, @PathVariable Long profileId) {
-        return ResponseEntity.ok(profileService.updateProfile(profile, profileId));
 
+    @PostMapping("/update/{profileId}")
+    public ResponseEntity<Profile> updateProfile(@RequestBody UpdateProfileDTO profile, @PathVariable Long profileId) {
+        return ResponseEntity.ok(profileService.updateProfile(profile, profileId));
     }
+
 
     @DeleteMapping("/{profileId}")
     public ResponseEntity<String> deleteProfile(@PathVariable Long profileId) {

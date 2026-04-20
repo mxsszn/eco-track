@@ -1,60 +1,54 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import '../login/login.css'
 import axios from 'axios'
 
+
+
 function RegisterForm() {
 
-    const username = useRef();
-    const email = useRef();
-    const password = useRef();
-    const rePassword = useRef();
+    const [inputs, setInputs] = useState({});
 
-    const componentRef = useRef();
-
-    const validateForm = () => {
-        let formValid = false;
-        if (
-            username.current.validity.valueMissing ||
-            email.current.validity.valueMissing ||
-            password.current.validity.valueMissing ||
-            rePassword.current.validity.valueMissing
-        ) {
-            alert("missing fields")
-        }
-        else if (email.current.validity.typeMismatch){
-            alert("Invalid e-mail address. Please enter your e-mail again.");
-        }
-        else if (password.current.validity.tooShort){
-            alert("Password is too short. Please select another password");
-        }
-        else if (password.current.value !== rePassword.current.value){
-            alert("Passwords do not match. Please retry");
-        }
-        else {
-            formValid = true;
-        }
-        return formValid;
-
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setInputs(values => ({... values, [name]: value}))
     }
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        validateForm();
+            const submitData = {
+            username: inputs.username,
+            email: inputs.email,
+            password_hash: inputs.password,
+        }
+
+        try {
+            const response = await fetch ("http://localhost:8080/api/user/register", {
+            method: "POST",
+            headers: {"Content-Type": "application/json" },
+            body: JSON.stringify(submitData)
+        })} 
+        catch (error) {    
+        }
+
     }
 
 
 
+const clearLocalStorage = () => {
+    localStorage.clear()
+    alert("Local storage cleared")
+}
+ 
     return(
             <div className="container">
             <div className="register-container">
                 <h1 className="formTitle">Thank you for signing up!</h1>
-                <form className="loginForm" onSubmit={handleSubmit} noValidate ref={componentRef}>
-                <input type="text" name="username" className="textfield" placeholder="username" ref={username} required/>
-                <input type="email" name="email" className="textfield" placeholder="Email" ref={email} required/>
-                <input type="password" name="password" className="textfield" placeholder="Password" ref={password} required minLength="8"/>
-                <input type="password" name="repassword" className="textfield" placeholder="Confirm Password" ref={rePassword} required/>
+                <form className="loginForm" onSubmit={handleSubmit}>
+                <input type="text" name="username" className="textfield" placeholder="username" value={inputs.username} onChange={handleChange}/>
+                <input type="text" name="email" className="textfield" placeholder="Email" value={inputs.email} onChange={handleChange}/>
+                <input type="password" name="password" className="textfield" placeholder="Password" value={inputs.password} onChange={handleChange}/>
+                <input type="password" name="repassword" className="textfield" placeholder="Confirm Password" value={inputs.repassword} onChange={handleChange}/>
                 <input className="button" type="submit" value="Sign Up"></input>
                 </form>
         </div>

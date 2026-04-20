@@ -4,6 +4,7 @@ import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import com.backend.app_core.model.Journey;
 import com.backend.app_core.dto.ProfileDTO;
+import com.backend.app_core.dto.UpdateProfileDTO;
 import com.backend.app_core.repository.JourneyRepository;
 import com.backend.app_core.repository.ProfileRepository;
 import com.backend.app_core.repository.TierRepository;
@@ -102,12 +103,11 @@ public class ProfileService {
 
 
 
-    public Profile updateProfile(Profile updatedProfile, Long profileId) {
+    public Profile updateProfile(UpdateProfileDTO updatedProfile, Long profileId) {
         Profile originalProfile = profileRepository.findById(profileId).orElseThrow(() -> new RuntimeException("No profile found for ID " + profileId));
-        originalProfile.setDisplay_name(updatedProfile.getDisplay_name());
+        originalProfile.setDisplay_name(updatedProfile.getProfileUsername());
         originalProfile.setBio(updatedProfile.getBio());
-        originalProfile.setPrivate_profile(updatedProfile.isPrivate_profile());
-        originalProfile.setProfile_image_url(updatedProfile.getProfile_image_url());
+        originalProfile.setProfile_image_url(updatedProfile.getProfileImageURL());
         return profileRepository.save(originalProfile);
     }
 
@@ -127,8 +127,9 @@ public class ProfileService {
     public ProfileDTO getProfileData(Long userId) {
         Profile profile = profileRepository.findByProfileId(userId)
         .orElseThrow(() -> new RuntimeException("Profile with user ID " + userId + " does not exist."));
+        updateProfileStats(profile.getProfile_id());
 
-
+        Long profile_id = profile.getProfile_id();
         String profileUsername = profile.getDisplay_name();
         String bio = profile.getBio();
         String profileImageURL = profile.getProfile_image_url();
@@ -161,7 +162,7 @@ public class ProfileService {
         }
 
         try {
-            Journey MonthlyRecordJourney = journeyRepository.findJourneyWithHighestCo2SavedByIdAndDateRange(userId, startOfMonth, endOfMonth).orElseThrow(() -> new RuntimeException("No Journeys found between " + startOfWeek + " and " + endOfWeek));
+            Journey MonthlyRecordJourney = journeyRepository.findJourneyWithHighestCo2SavedByIdAndDateRange(userId, startOfMonth, endOfMonth).orElseThrow(() -> new RuntimeException("No Journeys found between " + startOfMonth + " and " + endOfMonth));
             mostCo2SavedThisMonth = MonthlyRecordJourney.getCo2_saved();
             
         } catch (Exception e) {
@@ -169,9 +170,8 @@ public class ProfileService {
         }
 
         try {
-            Journey AlltimeRecordJourney = journeyRepository.findJourneyWithHighestCo2SavedByIdAndDateRange(userId, creationDate, now).orElseThrow(() -> new RuntimeException("No Journeys found between " + startOfWeek + " and " + endOfWeek));
+            Journey AlltimeRecordJourney = journeyRepository.findJourneyWithHighestCo2SavedById(userId).orElseThrow(() -> new RuntimeException("No Journeys found" ));
             mostCo2SavedAlltime = AlltimeRecordJourney.getCo2_saved();
-            
         } catch (Exception e) {
 
         }
@@ -186,7 +186,8 @@ public class ProfileService {
             privateProfile,
             mostCo2SavedThisWeek,
             mostCo2SavedThisMonth,
-            mostCo2SavedAlltime
+            mostCo2SavedAlltime,
+            profile_id
         );
 
     }

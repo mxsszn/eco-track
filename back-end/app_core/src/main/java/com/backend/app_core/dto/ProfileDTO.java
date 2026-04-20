@@ -13,6 +13,7 @@ public class ProfileDTO {
     private double co2RecordWeek;
     private double co2RecordMonth;
     private double co2RecordAlltime;
+    private Long profile_id;
 
 
     public ProfileDTO() {
@@ -20,7 +21,8 @@ public class ProfileDTO {
 
     public ProfileDTO(String profileUsername, String bio, String profileImageURL, String tier, int totalPoints,
             Float totalCo2Saved, boolean privateProfile, double mostCo2SavedWeek, double mostCo2SavedMonth,
-            double mostCo2SavedRecord) {
+            double mostCo2SavedRecord, Long profile_id) {
+        this.profile_id = profile_id;
         this.profileUsername = profileUsername;
         this.bio = bio;
         this.profileImageURL = profileImageURL;
@@ -31,6 +33,14 @@ public class ProfileDTO {
         this.co2RecordWeek = mostCo2SavedWeek;
         this.co2RecordMonth = mostCo2SavedMonth;
         this.co2RecordAlltime = mostCo2SavedRecord;
+    }
+
+    public Long getProfile_id() {
+        return profile_id;
+    }
+
+    public void setProfile_id(Long profile_id) {
+        this.profile_id = profile_id;
     }
 
     public String getProfileUsername() {

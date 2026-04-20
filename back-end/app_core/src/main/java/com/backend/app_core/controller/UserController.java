@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.backend.app_core.Security.JWTService;
 import com.backend.app_core.Security.UserDetailsServiceImpl;
 import com.backend.app_core.dto.LoginDTO;
-import com.backend.app_core.dto.ProfileDTO;
+import com.backend.app_core.dto.UpdateProfileDTO;
 import com.backend.app_core.dto.UserDTO;
 import com.backend.app_core.model.Profile;
 import com.backend.app_core.model.User;
