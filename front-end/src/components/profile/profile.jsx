@@ -19,16 +19,7 @@ const dummyUser = {
 
 function loadUserData() {
 
-
-
-
-
-
-
 }
-
-
-
 
 function toggleEditMode(state, setState) {
     if (state == false) {
@@ -39,7 +30,6 @@ function toggleEditMode(state, setState) {
         setState(false);
     }
 }
-
 
 function submitChanges(userData, userInput, setUserData, editMode, setEditMode) {
     if (!userInput.username || !userInput.description) {
@@ -63,13 +53,12 @@ function Editor(props) {
     const editMode = props.editMode
     const [userInput, setUserInput] = useState({});
 
-    
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
         setUserInput(values => ({...values, [name]: value}))
     }
-
+    
 
     return (
         <div className="parent">
@@ -117,12 +106,33 @@ function Editor(props) {
 
 
 function Profile() {
+    
+
+
+    const getProfileData = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch ("http://localhost:8080/")
+            
+        } catch (error) {
+            
+        }
+
+
+
+
+
+
+
+
+    }
+
 
     const [editMode, setEditMode] = useState(false);
-    const [userData, setUserData] = useState(testUserData);
+    const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("userdata")));
 
-
-
+    console.log(userData)
 
 
     return (

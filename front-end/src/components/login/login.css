@@ -84,7 +84,8 @@ label.formlabel {
 }
 
 .loginForm input[type="text"],
-.loginForm input[type="password"] {
+.loginForm input[type="password"],
+.loginForm input[type="email"] {
     margin-bottom: 20px;
     margin-top: 20px;
     margin-left: 10px;
@@ -104,6 +105,8 @@ label.formlabel {
 
 .loginForm [type=text]:focus,
 .loginForm input[type=text]:hover,
+.loginForm input[type="email"]:hover,
+.loginForm input[type="email"]:focus,
 .loginForm input[type=password]:hover,
 .loginForm input[type=password]:focus {
     background-color: #e3e3e3;

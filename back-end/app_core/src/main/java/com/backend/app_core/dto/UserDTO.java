@@ -1,18 +1,16 @@
 package com.backend.app_core.dto;
 
 
-
-
 public class UserDTO {
     String email;
     String username;
-    String password_hash;
+    String password;
 
     public UserDTO(String email, String username, String password_hash) {
         super();
         this.email = email;
         this.username = username;
-        this.password_hash = password_hash;
+        this.password = password_hash;
     }
 
     public String getEmail() {
@@ -31,12 +29,12 @@ public class UserDTO {
         this.username = username;
     }
 
-    public String getPassword_hash() {
-        return password_hash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPassword(String password_hash) {
+        this.password = password_hash;
     }
 
 

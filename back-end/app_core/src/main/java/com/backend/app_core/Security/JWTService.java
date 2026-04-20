@@ -7,19 +7,20 @@ import javax.crypto.SecretKey;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Service
 public class JWTService {
 	  static final String PREFIX = "Bearer";
 
 	  // Add token to Authorization header
 	  static public void addToken(HttpServletResponse res, String username) {
 		
-
 		SecretKey key=  Keys.hmacShaKeyFor(JWTConfig.getSigningKey().getBytes());
 	    String JwtToken = Jwts.builder()
 	    		.subject(username)
@@ -36,7 +37,6 @@ public class JWTService {
 	  static public Authentication getAuthentication(HttpServletRequest request) {
 	    String token = request.getHeader("Authorization");
 	    SecretKey key=  Keys.hmacShaKeyFor(JWTConfig.getSigningKey().getBytes());
-	    
 	    if (token != null) {
 	     try {
 	      String user = Jwts.parser()

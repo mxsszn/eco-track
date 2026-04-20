@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import './login.css'
 
 
 
-
 function LoginForm() {
+
+    const navigate = useNavigate();
 
     const [inputs, setInputs] = useState({});
 
@@ -13,25 +15,28 @@ function LoginForm() {
         const value = e.target.value;
         setInputs(values => ({... values, [name]: value}))
     }
-
-    const handleSubmit = (e) => {
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         const submitData = {
             username: inputs.username,
             password: inputs.password,
         }
-        handleLogin(submitData)
+        try {
+            const response = await fetch ("http://localhost:8080/api/user/login", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(submitData)
+            }).then(response => response.json())
+            localStorage.setItem("userdata", JSON.stringify(response))
+            navigate("/profile")
+
+        } catch (error) {
+            
+        }
     }
 
     
-
-    const handleLogin = (data) => {
-        if (data.username == localStorage.getItem("username") && data.password == localStorage.getItem("password")) {
-            alert("success!")
-            localStorage.setItem("loggedIn", true)
-
-        } 
-    }
-
     return(
             <div className="container">
             <div className="login-container">

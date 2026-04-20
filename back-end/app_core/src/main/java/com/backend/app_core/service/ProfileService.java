@@ -34,6 +34,15 @@ public class ProfileService {
         this.tierRepository = tierRepository;
     }
 
+
+
+    public Profile getProfileFromUser(Long userId) {
+        Profile profile = profileRepository.findByUserId(userId)
+        .orElseThrow(() -> new RuntimeException("No profile found for user ID " + userId));
+        return profile;
+    }
+
+
     public Profile createProfile(Long userId) {
         User user = userRepository.findUserById(userId);
         Tier tier = tierRepository.getDefaultTier();

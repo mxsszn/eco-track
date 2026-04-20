@@ -50,7 +50,7 @@ public class DatabaseInit implements CommandLineRunner {
 
 
 
-        User testUser = new User("testemail@sample.com", "testusername", encoder.encode("superhashedpassword"));
+        User testUser = new User("testemail@sample.com", "test", encoder.encode("test"));
         User testUser2 = new User("testemail2@gmail.com", "testusername2", "hashpsaasword");
         User testUser3 = new User("testemai2342@gmail.com", "testusername3", "hashpsaasword");
         userRepository.save(testUser);
@@ -65,7 +65,7 @@ public class DatabaseInit implements CommandLineRunner {
         tierRepository.save(testTier3);
 
 
-        Profile testProfile = new Profile(testUser2, "testUserIsCool", "hello im test user", "nourlfornow", 0, 0f, testTier, false);
+        Profile testProfile = new Profile(testUser, "testUserIsCool", "hello im test user", "nourlfornow", 0, 0f, testTier, false);
         Profile testProfile2 = new Profile(testUser3, "test profile 2", "some bio", "url", 0, 0f, testTier, false);
 
         profileRepository.save(testProfile);

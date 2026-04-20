@@ -2,7 +2,7 @@ import "./navbar.css"
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Home from "../home/home";
 import Profile from "../profile/profile";
-import RegisterForm from "../Register/register";
+import RegisterForm from "../register/register";
 import LoginForm from "../login/login";
 
 
