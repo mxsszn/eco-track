@@ -1,5 +1,4 @@
 import Imgwalk from "./edu-assets/walk.png";
-import LineRevealText from "./text-reveal";
 
 export default function CTA() {
   return (
@@ -21,7 +20,6 @@ export default function CTA() {
           several of the solutions outlined and acts as an essential tool in
           reducing the environmental impact of transport.
         </p> */}
-        <LineRevealText selector=".animate-lines" />
       </div>
       <div className="cta">
         <h2 className="cta width-fix">Start measuring your impact Today</h2>

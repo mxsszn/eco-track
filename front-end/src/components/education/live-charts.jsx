@@ -9,26 +9,38 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// Live updating chart component representing transportation emissions data and overall CO2 footprint trends.
+const API_KEY = "M9wXhWSV7Rr425FBspxA";
+const ZONE = "GB";
+
 export default function LiveChart() {
-  const [data, setData] = useState([{ time: 0, value: 10 }]);
+  const [data, setData] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `https://api.electricitymap.org/v3/carbon-intensity/history?zone=${ZONE}`,
+        {
+          headers: {
+            "auth-token": API_KEY,
+          },
+        },
+      );
+      const json = await response.json();
+
+      const formatted = json.history.slice(-24).map((entry) => ({
+        time: new Date(entry.datetime).getHours() + ":00",
+        value: entry.carbonIntensity,
+      }));
+
+      setData(formatted);
+    } catch (error) {
+      console.error("Failed to fetch carbon data:", error);
+    }
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setData((prev) => {
-        const nextTime = prev.length;
-        const prevValue = prev[prev.length - 1].value;
-        const target = Math.floor(Math.random() * 100);
-        const nextValue = prevValue + (target - prevValue) * 0.15; // 15% toward target
-
-        // Add new point
-        const updated = [...prev, { time: nextTime, value: nextValue }];
-
-        // Keep only last 24 points
-        return updated.slice(-24);
-      });
-    }, 60000); // speed of data update (60 seconds)
-
+    fetchData();
+    const interval = setInterval(fetchData, 3600000); // refresh every hour
     return () => clearInterval(interval);
   }, []);
 
@@ -39,10 +51,10 @@ export default function LiveChart() {
         <XAxis dataKey="time" />
         <YAxis />
         <Tooltip
-          formatter={(value) => value.toFixed(2) + " Mt CO2e"}
-          labelFormatter={(label) => `Time: ${label} hrs`}
+          formatter={(value) => value.toFixed(2) + " gCO2eq/kWh"}
+          labelFormatter={(label) => `Time: ${label}`}
         />
-        <Line type="monotone" dataKey="value" stroke="#00647bff" />
+        <Line type="monotone" dataKey="value" stroke="#00647bff" dot={false} />
       </LineChart>
     </ResponsiveContainer>
   );

@@ -1,4 +1,3 @@
-import LineRevealText from "./text-reveal";
 function Solutions() {
   return (
     <div className="solutions-section">
@@ -38,7 +37,6 @@ function Solutions() {
             fossil fuels can lower the carbon footprint of transport.
           </p>
         </div>
-        <LineRevealText selector="p, h2" />
       </div>
     </div>
   );

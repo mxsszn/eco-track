@@ -7,7 +7,6 @@ import TransportType from "./transport-type";
 import Impacts from "./impacts";
 import Solutions from "./solutions";
 import CTA from "./cta";
-import LineRevealText from "./text-reveal";
 
 function Page() {
   return (

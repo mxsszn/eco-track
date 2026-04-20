@@ -1,5 +1,4 @@
 import LiveChart from "./live-charts";
-import LineRevealText from "./text-reveal";
 
 function LiveData() {
   return (
@@ -13,9 +12,7 @@ function LiveData() {
       <div className="live-chart-container">
         <LiveChart />
       </div>
-      <div className="live-data">
-        <LineRevealText selector="p, h2" />
-      </div>
+      <div className="live-data"></div>
       <button className="timeframe">HOURLY</button>
       <button className="timeframe">DAILY</button>
       <button className="timeframe">MONTHLY</button>
@@ -23,4 +20,5 @@ function LiveData() {
     </div>
   );
 }
+
 export default LiveData;
