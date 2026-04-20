@@ -119,7 +119,6 @@ public class ProfileService {
         profileRepository.delete(profile);
     }
 
-
     public List<Profile> getAllProfiles() {
         return profileRepository.findAll();
     }

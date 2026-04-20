@@ -22,11 +22,14 @@ import org.springframework.web.bind.annotation.*;
 
 
 
+
 @RestController
 @RequestMapping("/api/profile")
 @CrossOrigin(origins = "*")
 
 public class ProfileController {
+
+
 
 
     private final ProfileService profileService;
@@ -39,6 +42,15 @@ public class ProfileController {
     public ResponseEntity<List<Profile>> getAllProfiles() {
         return ResponseEntity.ok(profileService.getAllProfiles());
     }
+
+    @GetMapping("/getTopFive")
+    public ResponseEntity<List<Profile>> GetTopFive() {
+        return ResponseEntity.ok(profileService.getAllProfiles());
+    }
+    
+
+
+
 
     @GetMapping("/{userId}")
     public ProfileDTO getProfile(@PathVariable Long userId) {
@@ -78,6 +90,9 @@ public class ProfileController {
     public ResponseEntity<Profile> updateProfile(@RequestBody UpdateProfileDTO profile, @PathVariable Long profileId) {
         return ResponseEntity.ok(profileService.updateProfile(profile, profileId));
     }
+
+
+
 
 
     @DeleteMapping("/{profileId}")

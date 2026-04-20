@@ -31,6 +31,29 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
         @Param("endDate") Date endDate
     );
 
+    
+    @Query(value = """
+    WITH ranked_journeys AS (
+        SELECT *,
+               ROW_NUMBER() OVER (
+                   PARTITION BY user_id
+                   ORDER BY points_awarded DESC
+               ) AS rn
+        FROM journey
+        WHERE journey_date >= NOW() - INTERVAL '7 days'
+    )
+    SELECT *
+    FROM ranked_journeys
+    WHERE rn = 1
+    ORDER BY points_awarded DESC
+    LIMIT 5
+    """, nativeQuery = true)
+    List<Journey> findTop5BestJourneysWeek();
+
+
+
+
+
     @Query("SELECT j FROM Journey j WHERE j.user.user_id = :userId ORDER BY j.co2_saved DESC LIMIT 1")
     Optional<Journey> findJourneyWithHighestCo2SavedById(
         @Param("userId") Long userId

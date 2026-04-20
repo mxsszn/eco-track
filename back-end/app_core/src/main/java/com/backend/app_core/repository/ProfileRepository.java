@@ -16,4 +16,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query("SELECT p FROM Profile p WHERE p.profile_id = :profileId")
     Optional<Profile> findByProfileId(@Param("profileId") Long profileId);
 
+
+    
+
 }
