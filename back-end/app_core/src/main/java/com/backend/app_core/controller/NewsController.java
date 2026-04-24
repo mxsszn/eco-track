@@ -48,6 +48,11 @@ public class NewsController {
     @GetMapping("/user/{userId}")
     public List<Content_item> getPersonalisedNews(@PathVariable Long userId) {
         List<User_preference> preferences = userPreferenceRepository.findByUserId(userId);
+
+        if (preferences.isEmpty()) {
+            return newsRepository.findAll();
+        }
+
         List<Long> topicIds = preferences.stream()
                 .map(p -> p.getTopic().getId())
                 .toList();
