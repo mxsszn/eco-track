@@ -1,74 +1,49 @@
 import "./navbar.css"
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
-import Home from "../home/home";
-import Profile from "../profile/profile";
-import RegisterForm from "../register/register";
-import LoginForm from "../login/login";
-
-
-
+import { Link, useNavigate } from 'react-router-dom';
+ 
 function AccountDropdown() {
-
-
-    const logoutLogic = (e) => {
+    const navigate = useNavigate();
+ 
+    const logoutLogic = () => {
         localStorage.clear();
-        localStorage.setItem("loggedIn", false)
-        Navigate("/");
+        localStorage.setItem("loggedIn", false);
+        navigate("/login");
     }
-
-
-
-
-
-    if (localStorage.getItem("loggedIn") == "false") {
-            return(
-                <>
+ 
+    if (!localStorage.getItem("userId")) {
+        return (
+            <>
                 <Link to="/login" className="login">Login</Link>
                 <Link to="/register" className="login">Register</Link>
-                </>
-            )
+            </>
+        )
     }
-
-    if (localStorage.getItem("loggedIn") == "true") {
-        return (
+ 
+    return (
         <div className="dropdown">
-            <button className="dropbtn">Account 
-            <i className="fa fa-caret-down"></i>
+            <button className="dropbtn">Account
+                <i className="fa fa-caret-down"></i>
             </button>
             <div className="dropdown-content">
                 <Link to="/profile">Profile</Link>
-                <Link to="settings">Settings</Link>
-                <Link to="/logout">Log Out</Link>
+                <a onClick={logoutLogic} style={{ cursor: 'pointer' }}>Log Out</a>
             </div>
         </div>
-
-        )
-
-    }
+    )
 }
-
-
+ 
 function Navbar() {
-    return(
-        <>
-    <BrowserRouter>
+    return (
         <header>
             <div className="navbar">
-                <Link to="/">Home</Link>
                 <Link to="/dashboard">Dashboard</Link>
-                <Link to="/about">About</Link>
-                <AccountDropdown/>
+                <Link to="/log-journey">Log Journey</Link>
+                <Link to="/calculator">Calculator</Link>
+                <Link to="/education">Learn</Link>
+                <AccountDropdown />
             </div>
         </header>
-    <Routes>
-    <Route path="/" element={<Home/>}/>
-    <Route path="/profile" element={<Profile/>}/>
-    <Route path="/register" element={<RegisterForm/>}/>
-    <Route path="/login" element={<LoginForm/>}/>
-    </Routes>
-    </BrowserRouter>
-    </>
     );
 }
-
+ 
 export default Navbar;
