@@ -1,7 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebase';
 import './App.css';
 
 import Navbar from './components/navbar/navbar.jsx';
@@ -11,59 +9,49 @@ import Profile from './components/profile/profile.jsx';
 import RegisterForm from './components/register/register.jsx';
 import LoginForm from './components/login/login.jsx';
 import CarbonCalculator from './components/carbon-calculator/CarbonCalculator.jsx';
-import Education from './components/education/edu.jsx'; 
+import Education from './components/education/edu.jsx';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true); 
+  // Check if user is logged in via localStorage
+  // This works with Patrick's backend login which stores userId in localStorage
+  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('userId'));
 
+  // Listen for storage changes so login/logout updates the UI automatically
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setAuthLoading(false); 
-      
-      if (currentUser) {
-        localStorage.setItem("loggedIn", "true");
-      } else {
-        localStorage.setItem("loggedIn", "false");
-      }
-    });
-    return () => unsubscribe();
+    const handleStorageChange = () => {
+      setLoggedIn(!!localStorage.getItem('userId'));
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
-
-  if (authLoading) {
-    return <div className="loading-screen">Loading App...</div>; 
-  }
 
   return (
     <>
-      <Navbar user={user} />
-      
+      <Navbar />
+
       <Routes>
-        {/* Public Routes - Landing page is Register/Signup */}
+        {/* Public Routes */}
         <Route path="/" element={<RegisterForm />} />
-        <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <RegisterForm />} />
-        <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <LoginForm />} />
+        <Route path="/register" element={loggedIn ? <Navigate to="/dashboard" /> : <RegisterForm />} />
+        <Route path="/login" element={loggedIn ? <Navigate to="/dashboard" /> : <LoginForm />} />
 
         {/* Protected Routes - Only accessible if logged in */}
-        <Route path="/dashboard" element={<RequireAuth user={user}><Dashboard /></RequireAuth>} />
-        <Route path="/log-journey" element={<RequireAuth user={user}><JourneyPage /></RequireAuth>} />
-        <Route path="/calculator" element={<RequireAuth user={user}><CarbonCalculator /></RequireAuth>} />
-        <Route path="/education" element={<RequireAuth user={user}><Education /></RequireAuth>} /> 
-        <Route path="/profile" element={<RequireAuth user={user}><Profile /></RequireAuth>} />
+        <Route path="/dashboard" element={<RequireAuth loggedIn={loggedIn}><Dashboard /></RequireAuth>} />
+        <Route path="/log-journey" element={<RequireAuth loggedIn={loggedIn}><JourneyPage /></RequireAuth>} />
+        <Route path="/calculator" element={<RequireAuth loggedIn={loggedIn}><CarbonCalculator /></RequireAuth>} />
+        <Route path="/education" element={<RequireAuth loggedIn={loggedIn}><Education /></RequireAuth>} />
+        <Route path="/profile" element={<RequireAuth loggedIn={loggedIn}><Profile /></RequireAuth>} />
       </Routes>
     </>
   );
 }
 
-// Gatekeeper Component
-function RequireAuth({ user, children }) {
+// Gatekeeper — redirects to login if not logged in
+function RequireAuth({ loggedIn, children }) {
   const location = useLocation();
-
-  if (!user) {
+  if (!loggedIn) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-
   return children;
 }
 
