@@ -1,0 +1,21 @@
+{
+  "username": "testuser123",
+  "creationDate": "18-06-2025",
+  "ecorank": 4,
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In commodo consequat convallis. Quisque et lorem ut quam interdum feugiat id nec sem. Sed vitae massa non mauris placerat gravida. Fusce volutpat est vitae tortor vehicula tempor vel non massa. In varius eros diam, eu laoreet sapien luctus sit amet. Aliquam pellentesque, magna sed placerat lobortis, est eros sollicitudin felis, quis scelerisque felis diam vitae dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "badges": {
+    "badge1": "testbadge1",
+    "badge2": "testbadge2",
+    "badge3": "testbadge3",
+    "badge4": "testbadge4"
+  },
+  "weeklyEP": {
+    "monday": 30,
+    "tuesday": 15,
+    "wednesday": 20,
+    "thursday": 10,
+    "friday": 5,
+    "saturday": 17,
+    "sunday": 41
+  }
+}

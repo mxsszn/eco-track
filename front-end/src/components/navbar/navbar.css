@@ -6,8 +6,8 @@ header {
 
 .navbar {
   overflow: hidden;
-  background-color: #F8FFF4;
-  box-shadow: 0px 3px 6px rgba(123, 123, 123, 0.522);
+  background-color: #FCFAF9;
+  box-shadow: 0px -3px 1px #DB5375 inset;
   min-height: 4rem;
 
 }
@@ -19,13 +19,14 @@ header {
 
 
 .navbar a {
-  font-weight: bold;
+  font-weight: 500;
   float: left;
   font-size: 16px;
   text-align: center;
   padding: 24px 16px;
   text-decoration: none;
-  transition: background 0.2s ease-in-out;
+  transition: text-shadow 0.3s ease-out;
+
 
 }
 
@@ -41,7 +42,8 @@ header {
 
 .dropdown .dropbtn {
   font-weight: bold;
-  transition: background 0.2s ease-in-out;
+  text-shadow: 0 0 1px #DB5375;
+  transition: text-shadow 1s ease-in-out;
   font-size: 16px;
   border: none;
   outline: none;
@@ -54,7 +56,9 @@ header {
 
 .navbar a:hover,
 .dropdown:hover .dropbtn {
-  background: #6FBF4A;
+  /*background: #DB5375; */
+  text-shadow: 0 0 3px #DB5375;
+
 
 
 }
@@ -84,22 +88,4 @@ header {
 
 .dropdown:hover .dropdown-content {
   display: block;
-}
-/* Add this to your existing CSS */
-.logout-btn {
-    background: none;
-    border: none;
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-    width: 100%;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: inherit;
-}
-
-.logout-btn:hover {
-    background-color: #ddd;
 }

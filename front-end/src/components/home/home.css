@@ -1,0 +1,46 @@
+.parent-home {
+display: grid;
+grid-template-columns: repeat(6, 1fr);
+grid-template-rows: repeat(6, 1fr);
+grid-column-gap: 0px;
+grid-row-gap: 0px;
+}
+
+.homeHeader {
+    text-align: center;
+}
+
+.choice-button {
+    padding: 15px;
+    margin: 10px;
+    background-color: #DB5375;
+    border-radius: 35px;
+    text-decoration: none;
+    transition: box-shadow 0.2s ease-out;
+
+}
+
+.choice-button:hover {
+    box-shadow: 0 0 5px #DB5375;
+}
+
+
+
+
+.choice-button:visited {
+  color: black;
+}
+
+.div1-home { 
+    grid-area: 2 / 3 / 3 / 5;
+    font-family: "SF Pro Rounded";
+    font-weight: 300;
+}
+.div2-home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-area: 3 / 2 / 3 / 6; 
+}
+
+

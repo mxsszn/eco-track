@@ -1,215 +1,142 @@
-/* Global Reset for Login Container Scope */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-/* Main Page Container - Holds the Background Image */
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-  
-  /* Background Image Setup */
-  background: url("https://cdn.wallpapersafari.com/48/69/HEPCs2.jpg") no-repeat center center fixed; 
-  background-size: cover;
-  
-  /* Optional: Dark overlay for better text readability if the image is too bright */
-  position: relative;
+    display: flex;
+    background-color: inherit;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    min-height: 90vh;
 }
 
-/* Add a subtle dark overlay on top of the image */
-.container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.4); /* 40% black overlay */
-  z-index: 1;
-}
-
-/* The Glassmorphism Card */
 .login-container {
-  position: relative;
-  z-index: 2; /* Sit on top of the overlay */
-  background: rgba(255, 255, 255, 0.95); /* White with slight transparency */
-  padding: 40px 50px;
-  border-radius: 16px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 420px;
-  text-align: center;
-  backdrop-filter: blur(10px); /* Blurs the background behind the card */
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  animation: slideUp 0.6s ease-out;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    background-color: #FCFAF9;
+    min-width: 70vh;
+    max-height: 90vh;
+    min-height: 40vh;
+    border-radius: 16px;
+    box-shadow: 0 4px 100px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-/* Title Styling */
-.formTitle {
-  color: #2c3e50;
-  margin-bottom: 30px;
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+.namediv {
+    display: flex;
+    justify-content: center;
 }
 
-/* Error Message Box */
-.error-message {
-  background-color: #fee2e2;
-  color: #dc2626;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: 1px solid #fecaca;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.namediv input.textfield {
+    width: 40%;
+    margin-left: 0px;
+    margin-right: 0px;
+    max-width: 250px;
+    padding-left: 0px;
+    padding-right: 0px;
+
+
 }
 
-/* Input Fields */
-.loginForm {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+
+.register-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    background-color: #FCFAF9;
+    min-width: 70vh;
+    max-height: 90vh;
+    min-height: 80vh;
+    border-radius: 16px;
+    box-shadow: 0 4px 100px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.textfield {
-  width: 100%;
-  padding: 14px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  background-color: #f8fafc;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  outline: none;
-  color: #334155;
+.form-container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
 }
 
-.textfield:focus {
-  border-color: #3b82f6; /* Blue border on focus */
-  background-color: #fff;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+
+h1.formTitle {
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 48px;
+    font-weight: bold;
+    border-style: none none solid none;
+    border-width: 0px;
+
 }
 
-.textfield::placeholder {
-  color: #94a3b8;
+
+
+label.formlabel {
+    font-size: 24px;
+    align-self: center;
+    text-align: center;
+    border-bottom: #e3e3e3;
+    border-width: 0px;
+    margin-bottom: 10px;
+    border-style: none none solid none;
+    width: 200px;
+    padding-bottom: 0px;
+    padding-top: 10px;
+    font-weight: 450;
+
 }
 
-/* Login Button */
-.button {
-  width: 100%;
-  padding: 14px;
-  background-color: #2563eb; /* Primary Blue */
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
-  margin-top: 10px;
+.loginForm input[type="text"],
+.loginForm input[type="password"],
+.loginForm input[type="email"] {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    border-style: none;
+    border-bottom: 2px solid #e3e3e3;
+    color: inherit;
+    background-color: inherit;
+    font-size: 32px;
+    outline: none;
+    text-align: center;
+    max-width: 500px;
+    transition: background-color 0.15s ease-out;
 }
 
-.button:hover {
-  background-color: #1d4ed8;
+.loginForm [type=text]:focus,
+.loginForm input[type=text]:hover,
+.loginForm input[type="email"]:hover,
+.loginForm input[type="email"]:focus,
+.loginForm input[type=password]:hover,
+.loginForm input[type=password]:focus {
+    background-color: #e3e3e3;
 }
 
-.button:active {
-  transform: scale(0.98);
+
+
+input.textfield {
+    align-self: center;
+    width: 80%;
+    margin-left: 0px;
+    margin-right: 0px;
+
 }
 
-/* Google Section */
-.google-section {
-  margin-top: 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+input[type="submit"] {
+    font-size: 28px;
+    max-width: 160px;
+    align-self: center;
+    border-style: none;
+    margin-top: 10px;
+    padding: 15px;
+    text-align: center;
+    color: inherit;
+    border-radius: 30px;
 }
 
-.divider-text {
-  color: #64748b;
-  font-size: 0.9rem;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.divider-text::before,
-.divider-text::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid #cbd5e1;
-  margin: 0 10px;
-}
-
-.google-btn {
-  background-color: #fff;
-  color: #334155;
-  border: 1px solid #cbd5e1;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.google-btn:hover {
-  background-color: #f8fafc;
-  border-color: #94a3b8;
-}
-
-/* Footer Link */
-.switch-auth {
-  margin-top: 25px;
-  font-size: 0.9rem;
-  color: #64748b;
-}
-
-.switch-auth a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 600;
-  margin-left: 5px;
-}
-
-.switch-auth a:hover {
-  text-decoration: underline;
-}
-
-/* Simple Entrance Animation */
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive Tweaks */
-@media (max-width: 480px) {
-  .login-container {
-    margin: 20px;
-    padding: 30px 20px;
-  }
-  
-  .formTitle {
-    font-size: 1.75rem;
-  }
+form.loginForm {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }

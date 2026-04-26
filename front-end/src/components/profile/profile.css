@@ -30,6 +30,38 @@ align-content: start;
 }
 
 
+.badgeTitle {
+    font-size: 20px;
+}
+
+.parent3 {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+grid-template-rows: 1fr;
+grid-column-gap: 0px;
+grid-row-gap: 0px;
+}
+
+
+.profileBadge {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    text-align: center;
+
+}
+
+.badgeImage {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    align-self: center;
+    max-width: 30%;
+}
+
+
+
+
+
 .leaderboardTitle {
     text-align: center;
     font-size: 2rem;
@@ -88,6 +120,49 @@ div.leaderboardTop .leaderboard-pfp {
     border-style: solid;
     border-color: #DB5375;
 }
+
+input.changeUsername {
+
+    font-weight: bold;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+    border-bottom: #c3c3c3;
+    border-style: none none solid none;
+    border-width: 2px;
+    font-size: 45px;
+    max-width: 70%;
+    font-weight: lighter;
+}
+
+
+textarea.changeDescription {
+    font-size: 25px;
+
+
+}
+
+
+
+
+
+
+button.editButton {
+    float: right;
+    color: white;
+    background-color: #DB5375;
+    border-radius: 35px;
+    border-style: solid;
+    border-color: #DB5375;
+    font-size: 1rem;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 8px;
+}
+
+
+
 
 div.leaderboardTop .ecorank {
     font-size: 1rem;
@@ -183,7 +258,6 @@ div .desctitle {
 div .description {
     font-size: 20px;
     text-align:justify;
-    background-color: #f6f6f6;
     border-radius: 35px;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
