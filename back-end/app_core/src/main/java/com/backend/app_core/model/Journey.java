@@ -14,14 +14,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.FetchType;
 
-
-
-
-
 @Entity
 @Table(name="Journeys")
 public class Journey {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,7 +52,7 @@ public class Journey {
     Integer points_awarded;
 
     String route_geometry;
-    
+
     @CreatedDate
     private Date created_at;
 
@@ -66,6 +61,18 @@ public class Journey {
 
     public Journey() {
         super();
+    }
+
+    public Journey(String start_location, String destination, Date journey_date, Float distance_km, Float selected_mode_emission, Float co2_saved, Integer points_awarded, String route_geometry) {
+        super();
+        this.start_location = start_location;
+        this.destination = destination;
+        this.journey_date = journey_date;
+        this.distance_km = distance_km;
+        this.selected_mode_emission = selected_mode_emission;
+        this.co2_saved = co2_saved;
+        this.points_awarded = points_awarded;
+        this.route_geometry = route_geometry;
     }
 
     public Journey(User user, Transport_mode transport_mode, String start_location, String destination, Date journey_date, Float distance_km, Float selected_mode_emission, Float co2_saved, Integer points_awarded, String route_geometry) {
@@ -185,7 +192,4 @@ public class Journey {
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
     }
-
-    
 }
-
