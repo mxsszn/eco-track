@@ -153,7 +153,7 @@ function Profile() {
     const [editMode, setEditMode] = useState(false);
     const [profileData, setProfileData] = useState(JSON.parse(localStorage.getItem("profiledata")));
     const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("userdata")));
-    const date = new Date(userData.created_at)
+    const date = userData?.created_at ? new Date(userData.created_at) : new Date();
 
 
 
