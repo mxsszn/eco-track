@@ -6,6 +6,7 @@ export default function JourneyForm({
   transportModes,
   distanceMiles,
   co2Kg,
+  co2Saved,
   isCalculating,
   error,
   saveMessage,
@@ -14,13 +15,11 @@ export default function JourneyForm({
 }) {
   return (
     <>
-      <h2 className="card-title">Log a journey</h2>
+      <h2 className="card-title">Journey Details</h2>
 
       <div className="form-grid">
         <div className="form-group">
-          <label>
-            From<span className="required">*</span>
-          </label>
+          <label>From <span style={{color:'#ef4444'}}>*</span></label>
           <input
             type="text"
             name="from"
@@ -31,9 +30,7 @@ export default function JourneyForm({
         </div>
 
         <div className="form-group">
-          <label>
-            To<span className="required">*</span>
-          </label>
+          <label>To <span style={{color:'#ef4444'}}>*</span></label>
           <input
             type="text"
             name="to"
@@ -44,9 +41,7 @@ export default function JourneyForm({
         </div>
 
         <div className="form-group">
-          <label>
-            Date<span className="required">*</span>
-          </label>
+          <label>Date <span style={{color:'#ef4444'}}>*</span></label>
           <input
             type="date"
             name="date"
@@ -56,9 +51,7 @@ export default function JourneyForm({
         </div>
 
         <div className="form-group">
-          <label>
-            Transport mode<span className="required">*</span>
-          </label>
+          <label>Transport Mode <span style={{color:'#ef4444'}}>*</span></label>
           <select name="mode" value={form.mode} onChange={onFieldChange}>
             {transportModes.map((m) => (
               <option key={m.value} value={m.value}>
@@ -73,44 +66,49 @@ export default function JourneyForm({
         <div className="distance-pill">
           <span className="distance-label">Distance</span>
           <span className="distance-value">
-            {distanceMiles != null
-              ? `${distanceMiles.toFixed(2)} miles`
-              : "-"}
+            {distanceMiles != null ? `${distanceMiles.toFixed(2)} mi` : "—"}
           </span>
         </div>
         <button
           type="button"
-          className="btn btn-primary full-radius"
+          className="btn btn-primary"
           onClick={onCalculate}
           disabled={isCalculating}
+          style={{width:'auto', padding:'12px 24px'}}
         >
-          {isCalculating ? "Calculating..." : "Calculate carbon"}
+          {isCalculating ? "Calculating..." : "Calculate Carbon"}
         </button>
       </div>
 
-      <div className="co2-row">
-        <span className="co2-label">Estimated CO₂</span>
-        <span className="co2-value">
-          {co2Kg != null
-            ? `${co2Kg.toFixed(2)} kg CO₂ for this journey`
-            : "-"}
-        </span>
-      </div>
+      {co2Kg !== null && (
+        <div className="co2-row">
+          <div>
+            <span className="co2-label">CO₂ Emitted</span>
+            <div className="co2-value">{co2Kg.toFixed(2)} kg</div>
+          </div>
+          {co2Saved !== null && (
+            <div style={{textAlign:'right'}}>
+              <span className="co2-label">CO₂ Saved vs Car</span>
+              <div className="co2-value">+{co2Saved.toFixed(2)} kg</div>
+            </div>
+          )}
+        </div>
+      )}
 
-      <div className="actions">
+      <div className="actions" style={{marginTop: '1.5rem'}}>
         <button
           type="button"
-          className="btn btn-blue"
+          className="btn btn-teal"
           onClick={onSaveJourney}
+          disabled={co2Kg === null}
+          style={{width:'100%', padding:'16px', fontSize:'1.05rem'}}
         >
-          Save journey
+          💾 Save Journey
         </button>
       </div>
 
-      {error && <div className="alert alert-error">{error}</div>}
-      {saveMessage && (
-        <div className="alert alert-success">{saveMessage}</div>
-      )}
+      {error && <div className="alert alert-error" style={{marginTop:'1rem'}}>{error}</div>}
+      {saveMessage && <div className="alert alert-success" style={{marginTop:'1rem'}}>{saveMessage}</div>}
     </>
   );
 }

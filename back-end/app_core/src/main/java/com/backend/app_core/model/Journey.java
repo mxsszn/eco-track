@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.Column;
 
 @Entity
 @Table(name="Journeys")
@@ -51,6 +52,7 @@ public class Journey {
     @NotNull
     Integer points_awarded;
 
+    @Column(columnDefinition = "TEXT")
     String route_geometry;
 
     @CreatedDate

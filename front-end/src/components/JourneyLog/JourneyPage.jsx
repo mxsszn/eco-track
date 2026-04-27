@@ -1,7 +1,9 @@
+import 'leaflet/dist/leaflet.css';
 import React, { useEffect, useState } from "react";
 import JourneyForm from "./JourneyForm";
 import MapPanel from "./MapPanel";
 import SavedJourneys from "./SavedJourneys";
+import "./JourneyLog.css";
 
 const ORS_API_KEY = "REMOVED_ORS_KEY";
 const API_BASE_URL = "http://localhost:8080/api";
@@ -32,8 +34,18 @@ async function getRoute(start, end) {
   };
 }
 
-function kmToMiles(km) { return km / 1.60934; }
 function milesToKm(miles) { return miles * 1.60934; }
+function kmToMiles(km) { return km / 1.60934; }
+
+function getModeEmoji(mode) {
+  if (!mode) return "🚶";
+  const m = mode.toLowerCase();
+  if (m.includes("car")) return "🚗";
+  if (m.includes("bus")) return "🚌";
+  if (m.includes("train")) return "🚆";
+  if (m.includes("bicycle") || m.includes("bike")) return "🚲";
+  return "🚶";
+}
 
 function formatTransportModes(apiModes) {
   return [
@@ -54,8 +66,10 @@ function formatJourneyFromApi(journey) {
     to: journey.destination,
     date: journey.journey_date,
     modeLabel: journey.transport_mode_name,
-    distanceMiles: Math.round(kmToMiles(Number(journey.distance_km)) * 100) / 100,
+    distanceKm: Number(journey.distance_km),
     co2Kg: Number(journey.selected_mode_emission),
+    co2Saved: Number(journey.co2_saved),
+    points: journey.points_awarded,
   };
 }
 
@@ -65,11 +79,14 @@ export default function JourneyPage() {
   const [form, setForm] = useState({ from: "", to: "", date: "", mode: "" });
   const [distanceMiles, setDistanceMiles] = useState(null);
   const [co2Kg, setCo2Kg] = useState(null);
+  const [co2Saved, setCo2Saved] = useState(null);
   const [routeCoords, setRouteCoords] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
   const [error, setError] = useState("");
   const [saveMessage, setSaveMessage] = useState("");
-  const [transportModes, setTransportModes] = useState([{ value: "", label: "Select mode", factor: 0, transportModeId: null }]);
+  const [transportModes, setTransportModes] = useState([
+    { value: "", label: "Select mode", factor: 0, transportModeId: null }
+  ]);
   const [journeys, setJourneys] = useState([]);
 
   useEffect(() => {
@@ -80,22 +97,22 @@ export default function JourneyPage() {
   const loadTransportModes = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/transport-modes`);
-      if (!res.ok) throw new Error("Failed to load transport modes.");
+      if (!res.ok) throw new Error();
       const data = await res.json();
       setTransportModes(formatTransportModes(data));
-    } catch (err) {
-      setError("Could not load transport modes from the backend.");
+    } catch {
+      setError("Could not load transport modes.");
     }
   };
 
   const loadJourneys = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/journeys/user/${userId}`);
-      if (!res.ok) throw new Error("Failed to load saved journeys.");
+      if (!res.ok) throw new Error();
       const data = await res.json();
       setJourneys(data.map(formatJourneyFromApi));
-    } catch (err) {
-      setError("Could not load saved journeys from the backend.");
+    } catch {
+      // silently fail — no journeys yet
     }
   };
 
@@ -111,22 +128,34 @@ export default function JourneyPage() {
     setSaveMessage("");
     setCo2Kg(null);
     setDistanceMiles(null);
+    setCo2Saved(null);
+
     if (!form.from || !form.to || !form.date || !form.mode) {
-      setError("Please fill in all required fields.");
+      setError("Please fill in all fields before calculating.");
       return;
     }
+
     try {
       setIsCalculating(true);
       const [fromLoc, toLoc] = await Promise.all([geocode(form.from), geocode(form.to)]);
       const { distanceMeters, coordinates } = await getRoute(fromLoc, toLoc);
+
       const miles = Math.round((distanceMeters / 1609.34) * 100) / 100;
+      const km = milesToKm(miles);
       setDistanceMiles(miles);
       setRouteCoords(coordinates);
+
       const selectedMode = transportModes.find((m) => m.value === form.mode) || { factor: 0 };
-      const co2 = Math.round(milesToKm(miles) * selectedMode.factor * 100) / 100;
-      setCo2Kg(co2);
+      const emission = Math.round(km * selectedMode.factor * 100) / 100;
+      setCo2Kg(emission);
+
+      // CO2 saved vs driving a car (baseline ~0.17 kg/km)
+      const baselineFactor = 0.17;
+      const saved = Math.max(0, Math.round((baselineFactor - selectedMode.factor) * km * 100) / 100);
+      setCo2Saved(saved);
+
     } catch (err) {
-      setError(err.message || "Something went wrong while calculating.");
+      setError(err.message || "Could not calculate route. Check your locations.");
     } finally {
       setIsCalculating(false);
     }
@@ -135,11 +164,19 @@ export default function JourneyPage() {
   const handleSaveJourney = async () => {
     setError("");
     setSaveMessage("");
-    if (!distanceMiles || !co2Kg) { setError("Calculate the carbon for this journey before saving."); return; }
-    const selectedMode = transportModes.find((m) => m.value === form.mode) || null;
-    if (!selectedMode?.transportModeId) { setError("Please select a valid transport mode."); return; }
 
-    const journeyPayload = {
+    if (distanceMiles === null || co2Kg === null) {
+      setError("Please calculate the carbon first.");
+      return;
+    }
+
+    const selectedMode = transportModes.find((m) => m.value === form.mode);
+    if (!selectedMode?.transportModeId) {
+      setError("Please select a valid transport mode.");
+      return;
+    }
+
+    const payload = {
       user_id: userId,
       transport_mode_id: selectedMode.transportModeId,
       start_location: form.from,
@@ -153,51 +190,95 @@ export default function JourneyPage() {
       const res = await fetch(`${API_BASE_URL}/journeys`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(journeyPayload),
+        body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(await res.text() || "Failed to save journey.");
+      if (!res.ok) throw new Error(await res.text() || "Failed to save.");
       const saved = await res.json();
       setJourneys((prev) => [formatJourneyFromApi(saved), ...prev]);
-      setSaveMessage("Journey saved successfully.");
+      setSaveMessage(`Journey saved! You earned ${saved.points_awarded} points and saved ${saved.co2_saved?.toFixed(2)} kg CO₂.`);
+
+      // Store flash message for dashboard
+      localStorage.setItem('dashboardFlashMessage', JSON.stringify({
+        co2: saved.co2_saved,
+        points: saved.points_awarded,
+        timestamp: Date.now()
+      }));
+
+      // Reset form
+      setForm({ from: "", to: "", date: "", mode: "" });
+      setDistanceMiles(null);
+      setCo2Kg(null);
+      setCo2Saved(null);
+      setRouteCoords(null);
+
     } catch (err) {
       setError(err.message || "Something went wrong while saving.");
     }
   };
 
   const handleDeleteJourney = async (id) => {
-    setError("");
-    setSaveMessage("");
     try {
       const res = await fetch(`${API_BASE_URL}/journeys/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error(await res.text() || "Failed to delete journey.");
+      if (!res.ok) throw new Error();
       setJourneys((prev) => prev.filter((j) => j.id !== id));
-    } catch (err) {
-      setError(err.message || "Something went wrong while deleting.");
+    } catch {
+      setError("Could not delete journey.");
     }
   };
 
+  const handleSelectJourney = (j) => {
+  const modeMatch = transportModes.find(
+    (m) => m.label.toLowerCase() === j.modeLabel?.toLowerCase()
+  );
+  setForm({
+    from: j.from || "",
+    to: j.to || "",
+    date: j.date ? new Date(j.date).toISOString().split('T')[0] : "",
+    mode: modeMatch?.value || "",
+  });
+  setDistanceMiles(null);
+  setCo2Kg(null);
+  setCo2Saved(null);
+  setRouteCoords(null);
+  setSaveMessage("");
+  setError("");
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
   return (
-    <div className="app-root">
-      <main className="layout">
-        <section className="card form-card">
+    <div className="journey-page-container">
+      <h1 className="page-main-title">🗺️ Log a Journey</h1>
+      <p className="page-subtitle">Track your travel and see your carbon impact in real time.</p>
+
+      <div className="journey-grid">
+        {/* LEFT — Form */}
+        <div className="card">
           <JourneyForm
             form={form}
             onFieldChange={handleFieldChange}
             transportModes={transportModes}
             distanceMiles={distanceMiles}
             co2Kg={co2Kg}
+            co2Saved={co2Saved}
             isCalculating={isCalculating}
             error={error}
             saveMessage={saveMessage}
             onCalculate={handleCalculate}
             onSaveJourney={handleSaveJourney}
+            getModeEmoji={getModeEmoji}
           />
-        </section>
-        <section className="right-column">
+        </div>
+
+        {/* RIGHT — Map + Saved Journeys */}
+        <div className="journey-right">
           <MapPanel routeCoords={routeCoords} />
-          <SavedJourneys journeys={journeys} onDeleteJourney={handleDeleteJourney} />
-        </section>
-      </main>
+          <SavedJourneys
+            journeys={journeys}
+            onDeleteJourney={handleDeleteJourney}
+            getModeEmoji={getModeEmoji}
+          />
+        </div>
+      </div>
     </div>
   );
 }
