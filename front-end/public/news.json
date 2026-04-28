@@ -1,0 +1,94 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "Global Transport Emissions Rise in 2024",
+      "summary": "According to the latest reports, global transport emissions have risen by 3% in the first quarter of 2024, driven primarily by increased air travel and freight transport.",
+      "link": "#",
+      "category": "transport"
+    },
+    {
+      "id": 2,
+      "title": "New Electric Bus Fleet Launched in Major Cities",
+      "summary": "Several major cities worldwide have launched new electric bus fleets as part of their efforts to reduce urban air pollution and lower carbon footprints.",
+      "link": "#",
+      "category": "transport"
+    },
+    {
+      "id": 3,
+      "title": "Innovations in Sustainable Aviation Fuel",
+      "summary": "Researchers have made significant advancements in sustainable aviation fuel, which could reduce the carbon emissions of air travel by up to 80% compared to traditional jet fuels.",
+      "link": "#",
+      "category": "transport"
+    },
+    {
+      "id": 4,
+      "title": "Carbon Tax Policies Expanded in EU",
+      "summary": "EU governments have implemented new carbon tax policies to incentivize cleaner energy usage across industries.",
+      "link": "#",
+      "category": "carbon"
+    },
+    {
+      "id": 5,
+      "title": "Renewable Energy Investment Hits Record High",
+      "summary": "Investments in renewable energy sources have hit a record high in 2024, signaling a major shift toward green energy.",
+      "link": "#",
+      "category": "energy"
+    },
+    {
+      "id": 6,
+      "title": "Urban Cycling Programs Reduce Emissions",
+      "summary": "Cities adopting large-scale urban cycling programs have seen measurable reductions in carbon emissions from daily commuting.",
+      "link": "#",
+      "category": "transport"
+    },
+    
+    
+    {
+      "id": 7,
+      "title": "Rising Transport Emissions Threaten Key Wildlife Habitats",
+      "summary": "Conservationists report that increased emissions from road and air transport are accelerating habitat degradation, especially in regions already vulnerable to climate change.",
+      "link": "#",
+      "category": "wildlife"
+    },
+    {
+      "id": 8,
+      "title": "Shipping Pollution Linked to Declines in Marine Wildlife",
+      "summary": "New data shows that emissions from global shipping routes are contributing to ocean acidification, disrupting ecosystems essential for marine mammals and fish species.",
+      "link": "#",
+      "category": "wildlife"
+    },
+    {
+      "id": 9,
+      "title": "Transport Emissions Cost Global Economies Billions Annually",
+      "summary": "A recent economic review reveals that rising transport-sector emissions are leading to significant financial losses due to climate-related damages and health impacts.",
+      "link": "#",
+      "category": "economy"
+    },
+    {
+      "id": 10,
+      "title": "Clean Transport Investments Boost Economic Growth",
+      "summary": "Nations investing heavily in electric public transport and low-emission freight systems are seeing strong economic returns and job creation in green industries.",
+      "link": "#",
+      "category": "economy"
+    },
+    {
+      "id": 11,
+      "title": "Wildlife Migration Routes Affected by Transport-Driven Climate Shifts",
+      "summary": "Researchers warn that emission-induced warming patterns are altering migration timelines for birds and large mammals, disrupting long-standing ecological cycles.",
+      "link": "#",
+      "category": "wildlife"
+    },
+    {
+      "id": 12,
+      "title": "Airline Emission Fees Shape New Economic Policies",
+      "summary": "Governments are introducing higher carbon fees on airlines, reshaping travel demand and encouraging carriers to adopt more fuel-efficient fleets.",
+      "link": "#",
+      "category": "economy"
+    }
+  ]
+}
+
+
+
+

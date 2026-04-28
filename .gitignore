@@ -1,0 +1,7 @@
+node_modules/
+target/
+back-end/target/
+.vscode/
+.DS_Store
+dist/
+build/
