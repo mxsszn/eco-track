@@ -13,10 +13,10 @@ function LiveData() {
         <LiveChart />
       </div>
       <div className="live-data"></div>
-      <button className="timeframe">HOURLY</button>
+      {/* <button className="timeframe">HOURLY</button>
       <button className="timeframe">DAILY</button>
       <button className="timeframe">MONTHLY</button>
-      <button className="timeframe">YEARLY</button>
+      <button className="timeframe">YEARLY</button> */}
     </div>
   );
 }
