@@ -1,152 +1,339 @@
-import ProfileChart from "./ProfileChart"
-import "./profile.css"
-import pfp from "./testimg1.jpg"
-import Leaderboard from "./ProfileLeaderboard"
-import { useState } from "react"
-import badge from "./badge.png"
+import { useEffect, useState } from "react";
+import "./profile.css";
 
-function toggleEditMode(state, setState) {
-    if (state == false) {
-        setState(true);
-    } else if (state == true) {
-        setState(false);
-    }
+import pfp from "./testimg1.jpg";
+import badge from "./badge.png";
+import Leaderboard from "./ProfileLeaderboard";
+import ProfileChart from "./ProfileChart";
+
+const API_BASE_URL = "http://localhost:8080/api";
+
+function getStoredProfile() {
+  try {
+    return JSON.parse(localStorage.getItem("profiledata")) || null;
+  } catch {
+    return null;
+  }
 }
 
-async function submitChanges(profileData, userInput, setProfileData, editMode, setEditMode) {
-    if (!userInput.username) {
-        userInput.username = profileData.profileUsername;
+export default function Profile() {
+  const userId = localStorage.getItem("userId");
+  const [editMode, setEditMode] = useState(false);
+  const [profileData, setProfileData] = useState(
+    getStoredProfile() || {
+      profile_id: null,
+      profileUsername: "User",
+      bio: "",
+      profileImageURL: pfp,
+      tierName: "Eco Starter",
+      createdAt: "28/04/2026",
     }
-    if (!userInput.description) {
-        userInput.description = "";
+  );
+
+  useEffect(() => {
+    async function loadProfile() {
+      if (!userId) return;
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/profile/${userId}`);
+
+        if (!res.ok) {
+          throw new Error("Profile not found");
+        }
+
+        const data = await res.json();
+
+        const formattedProfile = {
+          profile_id: data.profile_id || data.profileId || data.id,
+          profileUsername:
+            data.display_name ||
+            data.profileUsername ||
+            data.username ||
+            profileData.profileUsername,
+          bio: data.bio || "",
+          profileImageURL: data.profileImageURL || data.profile_image_url || pfp,
+          tierName: data.tierName || data.tier_name || "Eco Starter",
+          createdAt: data.created_at || data.createdAt || "28/04/2026",
+        };
+
+        setProfileData(formattedProfile);
+        localStorage.setItem("profiledata", JSON.stringify(formattedProfile));
+      } catch (err) {
+        console.warn("Using local profile fallback:", err);
+      }
     }
+
+    loadProfile();
+  }, [userId]);
+
+  return (
+    <main className="profile-page">
+      <section className="profile-main">
+        {editMode ? (
+          <ProfileEditor
+            profileData={profileData}
+            setProfileData={setProfileData}
+            setEditMode={setEditMode}
+          />
+        ) : (
+          <ProfileView
+            profileData={profileData}
+            setEditMode={setEditMode}
+          />
+        )}
+
+        <StatsBadges />
+
+        <div className="profile-chart-card">
+          <h2>Your CO₂ Progress</h2>
+          <ProfileChart />
+        </div>
+      </section>
+
+      <aside className="profile-sidebar">
+        <Leaderboard />
+      </aside>
+    </main>
+  );
+}
+
+function ProfileView({ profileData, setEditMode }) {
+  return (
+    <section className="profile-card">
+      <div className="profile-header">
+        <div className="profile-image-wrapper readonly">
+          <img
+            className="profile-picture"
+            src={profileData.profileImageURL || pfp}
+            alt="Profile"
+          />
+        </div>
+
+        <div className="profile-info">
+          <div className="profile-name-row">
+            <h1>{profileData.profileUsername || "User"}</h1>
+            <span className="tier-pill">{profileData.tierName || "Eco Starter"}</span>
+          </div>
+
+          <p className="member-date">
+            A user since <strong>{formatDate(profileData.createdAt)}</strong>
+          </p>
+        </div>
+      </div>
+
+      <div className="profile-about">
+        <div className="profile-section-title">
+          <h2>About me</h2>
+          <button className="editButton" onClick={() => setEditMode(true)}>
+            Edit Profile
+          </button>
+        </div>
+
+        <p className="description">
+          {profileData.bio && profileData.bio.trim()
+            ? profileData.bio
+            : "No bio yet."}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function ProfileEditor({ profileData, setProfileData, setEditMode }) {
+  const [userInput, setUserInput] = useState({
+    username: profileData.profileUsername || "",
+    description: profileData.bio || "",
+    profileImageURL: profileData.profileImageURL || pfp,
+  });
+
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setUserInput((prev) => ({
+        ...prev,
+        profileImageURL: reader.result,
+      }));
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError("");
+
+    const updatedProfile = {
+      ...profileData,
+      profileUsername: userInput.username || profileData.profileUsername || "User",
+      bio: userInput.description || "",
+      profileImageURL: userInput.profileImageURL || pfp,
+    };
+
     const submitData = {
-        profileUsername: userInput.username,
-        bio: userInput.description,
-        profileImageURL: profileData.profileImageURL,
-        profile_id: profileData.profile_id
-    }
+      profileUsername: updatedProfile.profileUsername,
+      bio: updatedProfile.bio,
+      profileImageURL: updatedProfile.profileImageURL,
+      profile_id: updatedProfile.profile_id,
+    };
+
     try {
-        const response = await fetch(`http://localhost:8080/api/profile/update/${profileData.profile_id}`, {
+      if (updatedProfile.profile_id) {
+        const res = await fetch(
+          `${API_BASE_URL}/profile/update/${updatedProfile.profile_id}`,
+          {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(submitData)
-        }).then(response => response.json())
-        profileData.profileUsername = response.display_name;
-        profileData.bio = response.bio;
-    } catch (error) {
-        console.error("Profile update error:", error);
-    }
-    localStorage.setItem("profiledata", JSON.stringify(profileData))
-    setEditMode(false);
-}
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(submitData),
+          }
+        );
 
-function Editor(props) {
-    const profileData = props.profileData
-    const setProfileData = props.setProfileData
-    const setEditMode = props.setEditMode
-    const editMode = props.editMode
-    const [userInput, setUserInput] = useState({});
-
-    const handleChange = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-        setUserInput(values => ({...values, [name]: value}))
-    }
-
-    return (
-        <div className="parent">
-            <div className="div1">
-                <div className="flexitem1">
-                    <img className="profile-picture" src={pfp} alt="profile"/>
-                    <div className="userdata">
-                        <div className="line1">
-                            <input type="text" name="username" className="changeUsername" placeholder={profileData.profileUsername || "Username"} value={userInput.profileUsername} onChange={handleChange}/>
-                        </div>
-                    </div>
-                </div>
-                <div className="infobox">
-                    <div className="desctitle">About me
-                        <button className="editButton" onClick={() => toggleEditMode(editMode, setEditMode)}>Cancel</button>
-                        <button className="editButton" onClick={() => submitChanges(profileData, userInput, setProfileData, editMode, setEditMode)}>Save</button>
-                    </div>
-                    <textarea className="changeDescription" placeholder={profileData.bio || "Bio"} value={userInput.description} name="description" onChange={handleChange}></textarea>
-                </div>
-            </div>
-            <div className="div2">
-                <div className="leaderboardTitle">Weekly Leaderboard</div>
-                <Leaderboard/>
-            </div>
-        </div>
-    )
-}
-
-function Profile() {
-    const [editMode, setEditMode] = useState(false);
-    const [profileData, setProfileData] = useState(JSON.parse(localStorage.getItem("profiledata")) || {});
-    const [userData, setUserData] = useState(JSON.parse(localStorage.getItem("userdata")) || {});
-    const date = userData?.created_at ? new Date(userData.created_at) : new Date();
-
-    return (
-        <>
-        {!editMode &&
-        <div className="parent">
-            <div className="div1">
-                <div className="flexitem1">
-                    <img className="profile-picture" src={profileData.profileImageURL || pfp} alt="profile"/>
-                    <div className="userdata">
-                        <div className="line1">
-                            <p>{profileData.profileUsername || userData.username || "User"}</p>
-                            <p>{profileData.tier || "Eco Starter"}</p>
-                        </div>
-                        <p>A user since <b>{date.toLocaleDateString('en-GB')}</b></p>
-                    </div>
-                </div>
-                <div className="infobox">
-                    <div className="desctitle">About me
-                        <button className="editButton" onClick={() => toggleEditMode(editMode, setEditMode)}>Edit Profile</button>
-                    </div>
-                    <div className="description">
-                        {profileData.bio || "No bio yet."}
-                    </div>
-                </div>
-            </div>
-            <div className="div2">
-                <div className="leaderboardTitle">Weekly Leaderboard</div>
-                <Leaderboard/>
-            </div>
-            <div className="div3">
-                <div className="divTitle">Most CO2 Saved</div>
-                <div className="parent3">
-                    <div className="profileBadge">
-                        <div className="badgeTitle">This Week</div>
-                        <img src={badge} className="badgeImage" alt="badge"/>
-                        <div className="badgeValue">{profileData.co2RecordWeek || 0} Kg of Co2</div>
-                    </div>
-                    <div className="profileBadge">
-                        <div className="badgeTitle">This Month</div>
-                        <img src={badge} className="badgeImage" alt="badge"/>
-                        <div className="badgeValue">{profileData.co2RecordMonth || 0} Kg of Co2</div>
-                    </div>
-                    <div className="profileBadge">
-                        <div className="badgeTitle">All Time!</div>
-                        <img src={badge} className="badgeImage" alt="badge"/>
-                        <div className="badgeValue">{profileData.co2RecordAlltime || 0} Kg of Co2</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        if (!res.ok) {
+          throw new Error("Backend update failed");
         }
-        {editMode && 
-            <Editor 
-                profileData={profileData} 
-                setProfileData={setProfileData} 
-                setEditMode={setEditMode} 
-                editMode={editMode} 
-            />
-        }
-        </>
-    )
+
+        const data = await res.json();
+
+        updatedProfile.profileUsername =
+          data.display_name ||
+          data.profileUsername ||
+          submitData.profileUsername;
+
+        updatedProfile.bio = data.bio || submitData.bio;
+      }
+
+      setProfileData(updatedProfile);
+      localStorage.setItem("profiledata", JSON.stringify(updatedProfile));
+      setEditMode(false);
+    } catch (err) {
+      console.error("Profile update error:", err);
+
+      setProfileData(updatedProfile);
+      localStorage.setItem("profiledata", JSON.stringify(updatedProfile));
+      setError("Saved locally. Backend update was unavailable.");
+      setEditMode(false);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <section className="profile-card">
+      <div className="profile-header">
+        <label className="profile-image-wrapper">
+          <img
+            className="profile-picture"
+            src={userInput.profileImageURL || pfp}
+            alt="Profile"
+          />
+          <span className="image-overlay">Change</span>
+          <input
+            type="file"
+            accept="image/*"
+            className="image-input"
+            onChange={handleImageChange}
+          />
+        </label>
+
+        <div className="profile-info">
+          <input
+            type="text"
+            name="username"
+            className="changeUsername"
+            placeholder="Username"
+            value={userInput.username}
+            onChange={handleChange}
+          />
+
+          <span className="tier-pill">{profileData.tierName || "Eco Starter"}</span>
+
+          <p className="member-date">
+            A user since <strong>{formatDate(profileData.createdAt)}</strong>
+          </p>
+        </div>
+      </div>
+
+      <div className="profile-about">
+        <div className="profile-section-title">
+          <h2>About me</h2>
+
+          <div className="button-group">
+            <button
+              className="editButton secondary"
+              onClick={() => setEditMode(false)}
+              disabled={saving}
+            >
+              Cancel
+            </button>
+
+            <button
+              className="editButton"
+              onClick={handleSave}
+              disabled={saving}
+            >
+              {saving ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </div>
+
+        <textarea
+          className="changeDescription"
+          placeholder="Write something about yourself..."
+          value={userInput.description}
+          name="description"
+          onChange={handleChange}
+        />
+
+        {error && <p className="profile-error">{error}</p>}
+      </div>
+    </section>
+  );
 }
 
-export default Profile;
+function StatsBadges() {
+  return (
+    <section className="profile-badges-card">
+      <div className="profileBadge">
+        <h3>This Week</h3>
+        <img className="badgeImage" src={badge} alt="Badge" />
+        <p>0 kg of CO₂</p>
+      </div>
+
+      <div className="profileBadge">
+        <h3>Most CO₂ Saved This Month</h3>
+        <img className="badgeImage" src={badge} alt="Badge" />
+        <p>0 kg of CO₂</p>
+      </div>
+
+      <div className="profileBadge">
+        <h3>All Time</h3>
+        <img className="badgeImage" src={badge} alt="Badge" />
+        <p>0 kg of CO₂</p>
+      </div>
+    </section>
+  );
+}
+
+function formatDate(dateValue) {
+  if (!dateValue) return "28/04/2026";
+
+  const date = new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) {
+    return dateValue;
+  }
+
+  return date.toLocaleDateString("en-GB");
+}

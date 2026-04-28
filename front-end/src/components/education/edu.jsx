@@ -1,5 +1,4 @@
 import "./edu-styles.css";
-import Navbar from "../navbar/navbar";
 import Hero from "./hero";
 import LiveData from "./live-data";
 import LiveNews from "./live-news";
@@ -11,7 +10,6 @@ import CTA from "./cta";
 function Page() {
   return (
     <div className="edu-page">
-      <Navbar />
       <Hero />
       <LiveData />
       <LiveNews />
