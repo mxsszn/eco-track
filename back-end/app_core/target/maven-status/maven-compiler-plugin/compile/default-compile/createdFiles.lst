@@ -19,10 +19,13 @@ com/backend/app_core/repository/Content_itemRepository.class
 com/backend/app_core/model/User.class
 com/backend/app_core/Security/JWTService.class
 com/backend/app_core/model/Content_item.class
+com/backend/app_core/service/CarbonCalculatorService.class
 com/backend/app_core/controller/Saved_routeController.class
 com/backend/app_core/model/Journey.class
 com/backend/app_core/repository/Saved_routeRepository.class
 com/backend/app_core/AppCoreApplication$1.class
+com/backend/app_core/controller/CarbonCalculatorController.class
+com/backend/app_core/dto/CarbonCalculationDTO.class
 com/backend/app_core/repository/Transport_modeRepository.class
 com/backend/app_core/model/Achievement.class
 com/backend/app_core/repository/TopicRepository.class

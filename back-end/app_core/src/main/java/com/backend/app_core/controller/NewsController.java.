@@ -8,11 +8,13 @@ import com.backend.app_core.repository.Content_itemRepository;
 import com.backend.app_core.repository.TopicRepository;
 import com.backend.app_core.repository.UserRepository;
 import com.backend.app_core.repository.User_preferenceRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,7 +37,9 @@ public class NewsController {
     // GET all news
     @GetMapping
     public List<Content_item> getAllNews() {
-        return newsRepository.findAll();
+        List<Content_item> news = new ArrayList<>();
+        newsRepository.findAll().forEach(news::add);
+        return news;
     }
 
     // GET news filtered by topic
@@ -50,12 +54,13 @@ public class NewsController {
         List<User_preference> preferences = userPreferenceRepository.findByUserId(userId);
 
         if (preferences.isEmpty()) {
-            return newsRepository.findAll();
+            return getAllNews();
         }
 
         List<Long> topicIds = preferences.stream()
-                .map(p -> p.getTopic().getId())
+                .map(p -> p.getTopic().getTopic_id())
                 .toList();
+
         return newsRepository.findByTopic_IdIn(topicIds);
     }
 
@@ -67,15 +72,16 @@ public class NewsController {
             @RequestBody List<Long> topicIds) {
 
         User user = userRepository.findById(userId).orElse(null);
-        if (user == null)
-            return ResponseEntity.notFound().build();
 
-        // Delete existing preferences
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         userPreferenceRepository.deleteByUserId(userId);
 
-        // Save new preferences
         for (Long topicId : topicIds) {
             Topic topic = topicRepository.findById(topicId).orElse(null);
+
             if (topic != null) {
                 userPreferenceRepository.save(new User_preference(user, topic));
             }

@@ -9,6 +9,7 @@
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/Security/SecurityConfiguration.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/Security/UserDetailsServiceImpl.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/controller/AchievementController.java
+/Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/controller/CarbonCalculatorController.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/controller/DashboardController.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/controller/JourneyController.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/controller/ProfileController.java
@@ -17,6 +18,7 @@
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/controller/UserController.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/dto/AchievementDTO.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/dto/AuthDTO.java
+/Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/dto/CarbonCalculationDTO.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/dto/DashboardDTO.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/dto/JourneyRequestDto.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/dto/JourneyResponseDto.java
@@ -52,6 +54,7 @@
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/repository/User_achievementRepository.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/repository/User_preferenceRepository.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/service/AchievementService.java
+/Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/service/CarbonCalculatorService.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/service/DashboardService.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/service/JourneyService.java
 /Users/mekaelsyed/github-classroom/BrunelCS/cs2701-2025-26-groupa11-startup2/back-end/app_core/src/main/java/com/backend/app_core/service/LeaderboardService.java
