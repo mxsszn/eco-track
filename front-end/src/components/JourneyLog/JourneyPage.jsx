@@ -1,4 +1,3 @@
-import 'leaflet/dist/leaflet.css';
 import React, { useEffect, useState } from "react";
 import JourneyForm from "./JourneyForm";
 import MapPanel from "./MapPanel";
@@ -8,11 +7,17 @@ import "./JourneyLog.css";
 const ORS_API_KEY = "REMOVED_ORS_KEY";
 const API_BASE_URL = "http://localhost:8080/api";
 
+async function safeJson(res) {
+  const text = await res.text();
+  try { return JSON.parse(text); }
+  catch { throw new Error("Invalid JSON from server"); }
+}
+
 async function geocode(place) {
   const url = `https://api.openrouteservice.org/geocode/search?api_key=${ORS_API_KEY}&text=${encodeURIComponent(place)}&size=1`;
   const res = await fetch(url);
   if (!res.ok) throw new Error("Geocoding failed");
-  const data = await res.json();
+  const data = await safeJson(res);
   if (!data.features || data.features.length === 0) throw new Error(`Could not find "${place}"`);
   const [lon, lat] = data.features[0].geometry.coordinates;
   return { lat, lon };
@@ -26,7 +31,7 @@ async function getRoute(start, end) {
     body: JSON.stringify({ coordinates: [[start.lon, start.lat], [end.lon, end.lat]] }),
   });
   if (!res.ok) throw new Error("Route request failed");
-  const data = await res.json();
+  const data = await safeJson(res);
   const feature = data.features[0];
   return {
     distanceMeters: feature.properties.summary.distance,
@@ -35,7 +40,6 @@ async function getRoute(start, end) {
 }
 
 function milesToKm(miles) { return miles * 1.60934; }
-function kmToMiles(km) { return km / 1.60934; }
 
 function getModeEmoji(mode) {
   if (!mode) return "🚶";
@@ -74,7 +78,7 @@ function formatJourneyFromApi(journey) {
 }
 
 export default function JourneyPage() {
-  const userId = parseInt(localStorage.getItem('userId')) || 1;
+  const userId = localStorage.getItem('userId');
 
   const [form, setForm] = useState({ from: "", to: "", date: "", mode: "" });
   const [distanceMiles, setDistanceMiles] = useState(null);
@@ -88,74 +92,64 @@ export default function JourneyPage() {
     { value: "", label: "Select mode", factor: 0, transportModeId: null }
   ]);
   const [journeys, setJourneys] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadTransportModes();
-    loadJourneys();
-  }, []);
+    let cancelled = false;
 
-  const loadTransportModes = async () => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/transport-modes`);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setTransportModes(formatTransportModes(data));
-    } catch {
-      setError("Could not load transport modes.");
+    async function loadData() {
+      try {
+        setLoading(true);
+        const [modesRes, journeysRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/transport-modes`),
+          fetch(`${API_BASE_URL}/journeys/user/${userId}`)
+        ]);
+        if (!modesRes.ok) throw new Error("Transport modes failed");
+        if (!journeysRes.ok) throw new Error("Journeys failed");
+        const modesData = await safeJson(modesRes);
+        const journeysData = await safeJson(journeysRes);
+        if (!cancelled) {
+          setTransportModes(formatTransportModes(modesData));
+          setJourneys(journeysData.map(formatJourneyFromApi));
+        }
+      } catch (err) {
+        if (!cancelled) setError("Failed to load data. Check backend is running.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     }
-  };
 
-  const loadJourneys = async () => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/journeys/user/${userId}`);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setJourneys(data.map(formatJourneyFromApi));
-    } catch {
-      // silently fail — no journeys yet
-    }
-  };
+    if (userId) loadData();
+    return () => { cancelled = true; };
+  }, [userId]);
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
     setError("");
     setSaveMessage("");
   };
 
   const handleCalculate = async () => {
     setError("");
-    setSaveMessage("");
-    setCo2Kg(null);
-    setDistanceMiles(null);
-    setCo2Saved(null);
-
     if (!form.from || !form.to || !form.date || !form.mode) {
-      setError("Please fill in all fields before calculating.");
+      setError("Please fill in all fields.");
       return;
     }
-
+    setIsCalculating(true);
     try {
-      setIsCalculating(true);
       const [fromLoc, toLoc] = await Promise.all([geocode(form.from), geocode(form.to)]);
       const { distanceMeters, coordinates } = await getRoute(fromLoc, toLoc);
-
-      const miles = Math.round((distanceMeters / 1609.34) * 100) / 100;
+      const miles = distanceMeters / 1609.34;
       const km = milesToKm(miles);
       setDistanceMiles(miles);
       setRouteCoords(coordinates);
-
-      const selectedMode = transportModes.find((m) => m.value === form.mode) || { factor: 0 };
-      const emission = Math.round(km * selectedMode.factor * 100) / 100;
-      setCo2Kg(emission);
-
-      // CO2 saved vs driving a car (baseline ~0.17 kg/km)
-      const baselineFactor = 0.17;
-      const saved = Math.max(0, Math.round((baselineFactor - selectedMode.factor) * km * 100) / 100);
-      setCo2Saved(saved);
-
+      const selectedMode = transportModes.find(m => m.value === form.mode);
+      if (!selectedMode) throw new Error("Invalid transport mode");
+      setCo2Kg(km * selectedMode.factor);
+      setCo2Saved(Math.max(0, (0.17 - selectedMode.factor) * km));
     } catch (err) {
-      setError(err.message || "Could not calculate route. Check your locations.");
+      setError(err.message || "Could not calculate route.");
     } finally {
       setIsCalculating(false);
     }
@@ -164,53 +158,38 @@ export default function JourneyPage() {
   const handleSaveJourney = async () => {
     setError("");
     setSaveMessage("");
-
     if (distanceMiles === null || co2Kg === null) {
       setError("Please calculate the carbon first.");
       return;
     }
-
-    const selectedMode = transportModes.find((m) => m.value === form.mode);
+    const selectedMode = transportModes.find(m => m.value === form.mode);
     if (!selectedMode?.transportModeId) {
       setError("Please select a valid transport mode.");
       return;
     }
-
-    const payload = {
-      user_id: userId,
-      transport_mode_id: selectedMode.transportModeId,
-      start_location: form.from,
-      destination: form.to,
-      journey_date: form.date,
-      distance_km: Math.round(milesToKm(distanceMiles) * 100) / 100,
-      route_geometry: JSON.stringify(routeCoords || []),
-    };
-
     try {
       const res = await fetch(`${API_BASE_URL}/journeys`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          user_id: parseInt(userId),
+          transport_mode_id: selectedMode.transportModeId,
+          start_location: form.from,
+          destination: form.to,
+          journey_date: form.date,
+          distance_km: Math.round(milesToKm(distanceMiles) * 100) / 100,
+          route_geometry: JSON.stringify(routeCoords || []),
+        }),
       });
-      if (!res.ok) throw new Error(await res.text() || "Failed to save.");
-      const saved = await res.json();
-      setJourneys((prev) => [formatJourneyFromApi(saved), ...prev]);
-      setSaveMessage(`Journey saved! You earned ${saved.points_awarded} points and saved ${saved.co2_saved?.toFixed(2)} kg CO₂.`);
-
-      // Store flash message for dashboard
-      localStorage.setItem('dashboardFlashMessage', JSON.stringify({
-        co2: saved.co2_saved,
-        points: saved.points_awarded,
-        timestamp: Date.now()
-      }));
-
-      // Reset form
+      if (!res.ok) throw new Error("Failed to save journey.");
+      const saved = await safeJson(res);
+      setJourneys(prev => [formatJourneyFromApi(saved), ...prev]);
+      setSaveMessage(`✅ Journey saved! +${saved.points_awarded} points, ${saved.co2_saved?.toFixed(2)} kg CO₂ saved.`);
       setForm({ from: "", to: "", date: "", mode: "" });
       setDistanceMiles(null);
       setCo2Kg(null);
       setCo2Saved(null);
       setRouteCoords(null);
-
     } catch (err) {
       setError(err.message || "Something went wrong while saving.");
     }
@@ -219,31 +198,34 @@ export default function JourneyPage() {
   const handleDeleteJourney = async (id) => {
     try {
       const res = await fetch(`${API_BASE_URL}/journeys/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error();
-      setJourneys((prev) => prev.filter((j) => j.id !== id));
+      if (!res.ok) throw new Error("Failed to delete.");
+      setJourneys(prev => prev.filter(j => j.id !== id));
     } catch {
       setError("Could not delete journey.");
     }
   };
 
   const handleSelectJourney = (j) => {
-  const modeMatch = transportModes.find(
-    (m) => m.label.toLowerCase() === j.modeLabel?.toLowerCase()
-  );
-  setForm({
-    from: j.from || "",
-    to: j.to || "",
-    date: j.date ? new Date(j.date).toISOString().split('T')[0] : "",
-    mode: modeMatch?.value || "",
-  });
-  setDistanceMiles(null);
-  setCo2Kg(null);
-  setCo2Saved(null);
-  setRouteCoords(null);
-  setSaveMessage("");
-  setError("");
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
+    const modeMatch = transportModes.find(
+      m => m.label.toLowerCase() === j.modeLabel?.toLowerCase()
+    );
+    setForm({
+      from: j.from || "",
+      to: j.to || "",
+      date: j.date ? new Date(j.date).toISOString().split('T')[0] : "",
+      mode: modeMatch?.value || "",
+    });
+    setDistanceMiles(null);
+    setCo2Kg(null);
+    setCo2Saved(null);
+    setRouteCoords(null);
+    setSaveMessage("");
+    setError("");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (!userId) return <p style={{padding:'2rem'}}>Please log in again.</p>;
+  if (loading) return <p style={{padding:'2rem'}}>Loading...</p>;
 
   return (
     <div className="journey-page-container">
@@ -251,7 +233,6 @@ export default function JourneyPage() {
       <p className="page-subtitle">Track your travel and see your carbon impact in real time.</p>
 
       <div className="journey-grid">
-        {/* LEFT — Form */}
         <div className="card">
           <JourneyForm
             form={form}
@@ -269,12 +250,12 @@ export default function JourneyPage() {
           />
         </div>
 
-        {/* RIGHT — Map + Saved Journeys */}
         <div className="journey-right">
           <MapPanel routeCoords={routeCoords} />
           <SavedJourneys
             journeys={journeys}
             onDeleteJourney={handleDeleteJourney}
+            onSelectJourney={handleSelectJourney}
             getModeEmoji={getModeEmoji}
           />
         </div>
