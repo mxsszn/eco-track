@@ -10,27 +10,28 @@ function Navbar({ loggedIn, onLogout }) {
     }
 
     return (
-        <header>
-            <div className="navbar">
+        <nav className="navbar">
+            <div className="navbar-left">
                 {loggedIn && <Link to="/dashboard">Dashboard</Link>}
                 {loggedIn && <Link to="/log-journey">Log Journey</Link>}
                 {loggedIn && <Link to="/calculator">Calculator</Link>}
                 {loggedIn && <Link to="/education">Learn</Link>}
+                {!loggedIn && <Link to="/login">Login</Link>}
+                {!loggedIn && <Link to="/register">Register</Link>}
+            </div>
 
-                {!loggedIn && <Link to="/login" className="login">Login</Link>}
-                {!loggedIn && <Link to="/register" className="login">Register</Link>}
-
-                {loggedIn && (
+            {loggedIn && (
+                <div className="navbar-right">
                     <div className="dropdown">
-                        <button className="dropbtn">Account</button>
+                        <button className="dropbtn">Account ▾</button>
                         <div className="dropdown-content">
                             <Link to="/profile">Profile</Link>
-                            <a onClick={handleLogout} style={{ cursor: 'pointer' }}>Log Out</a>
+                            <a onClick={handleLogout} style={{cursor:'pointer'}}>Log Out</a>
                         </div>
                     </div>
-                )}
-            </div>
-        </header>
+                </div>
+            )}
+        </nav>
     );
 }
 
