@@ -5,7 +5,7 @@ import MapPanel from "./MapPanel";
 import SavedJourneys from "./SavedJourneys";
 import "./JourneyLog.css";
 
-const ORS_API_KEY = "REMOVED_ORS_KEY";
+const ORS_API_KEY = import.meta.env.VITE_ORS_API_KEY;
 const API_BASE_URL = "http://localhost:8080/api";
 
 async function geocode(place) {

@@ -5,3 +5,5 @@ back-end/target/
 .DS_Store
 dist/
 build/
+.env
+.env.local
